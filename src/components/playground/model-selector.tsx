@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-
 import { cn } from "@/utils/class-merge";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,24 +17,33 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function ModelSelector({ models }: { models: string[] }) {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("text-davinci-003");
-  console.log(models);
-  if (models?.length === 0) {
+export function ModelSelector({
+  modelsList,
+  currentModel,
+  setCurrentModel,
+}: {
+  modelsList: string[];
+  currentModel?: string;
+  setCurrentModel: (model: string) => void;
+}) {
+  const [popoverOpen, setPopoverOpen] = React.useState(false);
+
+  if (modelsList?.length === 0) {
     return null;
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
-          aria-expanded={open}
+          aria-expanded={popoverOpen}
           className="w-[200px] justify-between"
         >
-          {value ? models.find((model) => model === value) : "Select model..."}
+          {currentModel
+            ? modelsList.find((model) => model === currentModel)
+            : "Select model..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -44,18 +52,20 @@ export function ModelSelector({ models }: { models: string[] }) {
           <CommandInput placeholder="Search model..." />
           <CommandEmpty>No framework found.</CommandEmpty>
           <CommandGroup className="max-h-64 overflow-y-auto">
-            {models.map((model) => (
+            {modelsList.map((model) => (
               <CommandItem
                 key={model}
                 onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
-                  setOpen(false);
+                  setCurrentModel(
+                    currentValue === currentModel ? "" : currentValue
+                  );
+                  setPopoverOpen(false);
                 }}
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === model ? "opacity-100" : "opacity-0"
+                    currentModel === model ? "opacity-100" : "opacity-0"
                   )}
                 />
                 {model}

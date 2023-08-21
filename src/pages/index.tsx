@@ -1,30 +1,25 @@
 import Head from "next/head";
-
-import { api } from "@/utils/api";
-import { Button } from "@/components/ui/button";
 import PlaygroundPage from "@/components/playground/openai-playground";
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 
-import OpenAI from "openai";
-import { env } from "@/env.mjs";
+// import type { InferGetStaticPropsType, GetStaticProps } from "next";
+// import OpenAI from "openai";
+// import { env } from "@/env.mjs";
 
-//
-export const getServerSideProps: GetServerSideProps<{
-  models: string[];
-}> = async () => {
-  const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
-  const list = await openai.models.list();
-  const modelsList = list.data.map((model) => model.id);
-  return {
-    props: {
-      models: modelsList,
-    },
-  };
-};
+// get models from openai and revalidate every 24 hours
+// export const getStaticProps: GetStaticProps<{
+//   models: string[];
+// }> = async () => {
+//   const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
+//   const list = await openai.models.list();
+//   const modelsList = list.data.map((model) => model.id);
+//   return {
+//     props: {
+//       models: modelsList,
+//     },
+//   };
+// };
 
-export default function Home({
-  models,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Home() {
   return (
     <>
       <Head>
@@ -33,7 +28,7 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="bg-new-red flex min-h-screen  items-center justify-center">
-        <PlaygroundPage models={models} />
+        <PlaygroundPage />
       </main>
     </>
   );
