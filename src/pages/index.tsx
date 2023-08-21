@@ -1,35 +1,25 @@
 import Head from "next/head";
-import PlaygroundPage from "@/components/playground/openai-playground";
-
-// import type { InferGetStaticPropsType, GetStaticProps } from "next";
-// import OpenAI from "openai";
-// import { env } from "@/env.mjs";
-
-// get models from openai and revalidate every 24 hours
-// export const getStaticProps: GetStaticProps<{
-//   models: string[];
-// }> = async () => {
-//   const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
-//   const list = await openai.models.list();
-//   const modelsList = list.data.map((model) => model.id);
-//   return {
-//     props: {
-//       models: modelsList,
-//     },
-//   };
-// };
+import { Layout } from "@/components/layout";
 
 export default function Home() {
   return (
     <>
       <Head>
-        <title>Create T3 App</title>
+        <title>Cybercap | Home</title>
         <meta name="description" content="Cybercap " />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="bg-new-red flex min-h-screen  items-center justify-center">
-        <PlaygroundPage />
-      </main>
+      <Layout>
+        <main className="bg-new-red container items-center justify-center">
+          <h1 className="py-5 text-center text-4xl font-bold">
+            Welcome to <span className="uppercase">Cybercap</span>
+          </h1>
+          <p>
+            The website provides a playground for OpenAI chat and image
+            generation models.
+          </p>
+        </main>
+      </Layout>
     </>
   );
 }

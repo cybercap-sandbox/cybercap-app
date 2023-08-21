@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "The OpenAI Playground built using the components.",
 };
 
-export default function PlaygroundPage() {
+export default function ChatPlaygroundPage() {
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
     useChat();
   const messagesRef = React.useRef<HTMLDivElement>(null);
@@ -43,11 +43,11 @@ export default function PlaygroundPage() {
                   value={input}
                   onChange={handleInputChange}
                   placeholder="Start chatting with the AI..."
-                  className="h-full min-h-[300px] text-lg lg:min-h-[600px]"
+                  className="h-full min-h-[300px] text-lg lg:min-h-[500px]"
                   onKeyDown={handleKeyDown}
                 />
                 <div
-                  className="flex max-h-[600px] flex-col gap-5 overflow-auto rounded-md border bg-muted p-3"
+                  className="flex max-h-[500px] flex-col gap-5 overflow-auto rounded-md border bg-muted p-3"
                   ref={messagesRef}
                 >
                   {messages.map((m) => (
