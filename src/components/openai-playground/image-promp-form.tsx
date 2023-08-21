@@ -78,7 +78,6 @@ export function ImageGenerationPromptForm({
   function onSubmit(values: z.infer<typeof imgGenFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log("generateImg");
 
     submitHandler(values);
   }

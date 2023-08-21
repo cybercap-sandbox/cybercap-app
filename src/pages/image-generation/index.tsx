@@ -21,15 +21,15 @@ export default function Home() {
   >([]);
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {
-      console.log("pending");
+      // console.log("pending");
       setImgGenStatus("pending");
     },
     onError: (error) => {
-      console.log(error);
+      // console.log(error);
       setImgGenStatus("rejected");
     },
     onSuccess: (data) => {
-      console.log("success");
+      // console.log("success");
       if (!data.response) return;
       setImgGenStatus("fulfilled");
       const imgUrls = data.response?.map((d) => d.url);

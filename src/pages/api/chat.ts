@@ -11,7 +11,7 @@ const openai = new OpenAI({
 export const runtime = "edge";
 
 export default async function POST(req: Request) {
-  console.log(req);
+  // console.log(req);
   // Extract the `messages` from the body of the request
   const { messages } = await req.json();
 
