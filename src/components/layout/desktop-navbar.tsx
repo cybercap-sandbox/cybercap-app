@@ -7,34 +7,29 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-
-const menuItems: { title: string; href: string; description?: string }[] = [
-  {
-    title: "Home",
-    href: "/",
-  },
-  {
-    title: "Chat playground",
-    href: "/chat",
-  },
-  {
-    title: "Image generation",
-    href: "/image-generation",
-  },
-];
+import { usePathname } from "next/navigation";
+import { menuItems } from "@/data/navigation";
+import Link from "next/link";
 
 export function DesktopNavbar() {
+  const pathname = usePathname();
+
   return (
     <NavigationMenu>
       <NavigationMenuList>
         {menuItems.map((item) => (
           <NavigationMenuItem key={item.href}>
-            <NavigationMenuLink
-              className={navigationMenuTriggerStyle()}
+            <Link
+              className={cn(
+                navigationMenuTriggerStyle(),
+                pathname === item.href
+                  ? " border  text-accent-foreground"
+                  : "text-accent-foreground"
+              )}
               href={item.href}
             >
               {item.title}
-            </NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
         ))}
       </NavigationMenuList>

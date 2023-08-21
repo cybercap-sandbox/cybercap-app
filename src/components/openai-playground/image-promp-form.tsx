@@ -21,19 +21,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Icons } from "../icons";
 
 const sizeOptions = [
   { label: "256x256", value: "256x256" },
   { label: "512x512", value: "512x512" },
   { label: "1024x1024", value: "1024x1024" },
 ];
-const formSchema = z.object({
+export const imgGenFormSchema = z.object({
   prompt: z.string().min(5, {
     message: "Prompt must be at least 5 characters long",
   }),
-  n: z.number().int().min(1).max(10, {
-    message: "Number of responses must be between 1 and 10",
-  }),
+  n: z.preprocess((a) => parseInt(z.string().parse(String(a)), 10), z.number()),
   size: z.enum(["256x256", "512x512", "1024x1024"]),
 });
 
@@ -58,10 +57,16 @@ const formFields = {
   },
 };
 
-export function ImageGenerationPromptForm() {
+export function ImageGenerationPromptForm({
+  submitHandler,
+  isLoading,
+}: {
+  submitHandler: (values: z.infer<typeof imgGenFormSchema>) => void;
+  isLoading: boolean;
+}) {
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof imgGenFormSchema>>({
+    resolver: zodResolver(imgGenFormSchema),
     defaultValues: {
       prompt: "",
       n: 1,
@@ -70,10 +75,12 @@ export function ImageGenerationPromptForm() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof imgGenFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    console.log("generateImg");
+
+    submitHandler(values);
   }
   return (
     <Form {...form}>
@@ -131,7 +138,10 @@ export function ImageGenerationPromptForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button disabled={isLoading} type="submit">
+          {isLoading && <Icons.spinner className="animate-spin" />}
+          Submit
+        </Button>
       </form>
     </Form>
   );

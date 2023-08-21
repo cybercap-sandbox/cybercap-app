@@ -2,7 +2,6 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { env } from "@/env.mjs";
 import { z } from "zod";
 import OpenAI from "openai";
-import { OpenAIStream, StreamingTextResponse } from "ai";
 
 const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY });
 
@@ -37,4 +36,28 @@ export const openAiRouter = createTRPCRouter({
   //       console.log(error);
   //     }
   //   }),
+
+  generateImage: publicProcedure
+    .input(
+      z.object({
+        prompt: z.string(),
+        numberOfImages: z.number(),
+        size: z.enum(["256x256", "512x512", "1024x1024"]),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const response = await openai.images
+        .generate({
+          prompt: input.prompt,
+          n: input.numberOfImages,
+          size: input.size,
+        })
+        .then((response) => {
+          // console.log(response);
+          return {
+            response: response?.data,
+          };
+        });
+      return response;
+    }),
 });
