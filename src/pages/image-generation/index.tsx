@@ -24,7 +24,7 @@ export default function Home() {
       // console.log("pending");
       setImgGenStatus("pending");
     },
-    onError: (error) => {
+    onError: () => {
       // console.log(error);
       setImgGenStatus("rejected");
     },
@@ -66,8 +66,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        <main className="bg-new-red container flex items-center justify-center">
-          <div className="mt-16 grid w-full grid-cols-[300px_1fr] gap-8">
+        <main className="bg-new-red container flex items-center justify-center ">
+          <div className="mt-16 grid w-full grid-cols-1 gap-8 md:grid-cols-[300px_1fr]">
             <ImageGenerationPromptForm
               submitHandler={submitHandler}
               isLoading={imgGenStatus === "pending"}
