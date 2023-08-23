@@ -1,8 +1,11 @@
 import Head from "next/head";
 import { roboto_font } from "@/components/layout/logo";
 import { Layout } from "@/components/layout";
+import { useSession } from "next-auth/react";
+import { Icons } from "@/components/icons";
 
 export default function Home() {
+  const { data: session, status } = useSession();
   return (
     <>
       <Head>
@@ -19,6 +22,15 @@ export default function Home() {
             The website provides a playground for OpenAI chat and image
             generation models.
           </p>
+          {status === "loading" && (
+            <Icons.spinner className="h-5 w-5 animate-spin" />
+          )}
+          {status === "authenticated" && (
+            <>
+              <p>Welcome, {session?.user?.name}!</p>
+              <p>Your email is {session?.user?.email}.</p>
+            </>
+          )}
         </main>
       </Layout>
     </>
