@@ -27,6 +27,12 @@ const config = {
         pathname: "/**/*",
         port: "",
       },
+      // {
+      //   hostname: "lh3.googleusercontent.com",
+      //   protocol: "https",
+      //   pathname: "/**/*",
+      //   port: "",
+      // },
     ],
   },
 };

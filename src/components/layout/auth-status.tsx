@@ -2,7 +2,6 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { Icons } from "@/components/icons";
-import Image from "next/image";
 
 export function AuthStatus() {
   const { data: session, status } = useSession();
@@ -12,25 +11,24 @@ export function AuthStatus() {
       {status === "authenticated" && (
         <div className="flex items-center gap-2">
           {session?.user?.image && (
-            <Image
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
               alt="user profile image"
               src={session?.user?.image}
-              width={40}
-              height={40}
-              className="rounded-full"
+              className="h-10 w-10 rounded-full"
             />
           )}
           <span className="whitespace-nowrap text-lg">
             {session?.user?.name}
           </span>
 
-          <Button variant={"outline"} onClick={() => signOut()}>
+          <Button variant={"secondary"} onClick={() => signOut()}>
             Logout
           </Button>
         </div>
       )}
       {status === "unauthenticated" && (
-        <Button variant={"outline"} onClick={() => signIn()}>
+        <Button variant={"secondary"} onClick={() => signIn()}>
           Login
         </Button>
       )}
