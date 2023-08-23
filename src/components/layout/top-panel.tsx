@@ -1,6 +1,7 @@
 import { Logo } from "./logo";
 import { DesktopNavbar } from "./desktop-navbar";
 import { MobileNavbar } from "./mobile-navbar";
+import { AuthStatus } from "./auth-status";
 
 export function TopPanel() {
   return (
@@ -14,7 +15,9 @@ export function TopPanel() {
           <MobileNavbar />
         </div>
       </div>
-      {/* <div className="flex w-fit justify-end gap-4 md:gap-3"></div> */}
+      <div className="flex w-fit justify-end gap-4 md:gap-3">
+        <AuthStatus />
+      </div>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import {
 } from "next-auth";
 import { env } from "@/env.mjs";
 import { prisma } from "@/server/db";
-
+import AzureADProvider from "next-auth/providers/azure-ad";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -55,6 +55,11 @@ export const authOptions: NextAuthOptions = {
      *
      * @see https://next-auth.js.org/providers/github
      */
+    AzureADProvider({
+      clientId: env.AZURE_AD_CLIENT_ID,
+      clientSecret: env.AZURE_AD_CLIENT_SECRET,
+      tenantId: env.AZURE_AD_TENANT_ID,
+    }),
   ],
 };
 
