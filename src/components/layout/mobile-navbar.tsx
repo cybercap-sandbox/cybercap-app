@@ -22,13 +22,13 @@ export function MobileNavbar() {
           <NavigationMenuContent>
             <ul className=" w-40 p-2">
               {menuItems.map((component) => (
-                <ListItem
+                <Link
                   key={component.title}
-                  title={component.title}
                   href={component.href}
+                  className={cn(navigationMenuTriggerStyle())}
                 >
-                  {component.description}
-                </ListItem>
+                  {component.title}
+                </Link>
               ))}
             </ul>
           </NavigationMenuContent>

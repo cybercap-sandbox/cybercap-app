@@ -7,13 +7,26 @@ export const roboto_font = Roboto_Slab({
   weight: ["700"],
 });
 
-export function Logo() {
+export function Logo({
+  variant = "default",
+  size = "default",
+}: {
+  size?: "default" | "small";
+  variant?: "default" | "white";
+}) {
   return (
     <Link
       href={"/"}
       className="flex items-center justify-center duration-100 hover:scale-110"
     >
-      <span className={cn("text-2xl font-bold ", roboto_font.className)}>
+      <span
+        className={cn(
+          "font-bold ",
+          variant === "white" ? "text-white" : "text-black",
+          size === "small" ? "text-lg" : "text-2xl",
+          roboto_font.className
+        )}
+      >
         CyberCap
       </span>
     </Link>

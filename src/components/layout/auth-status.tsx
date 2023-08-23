@@ -8,24 +8,35 @@ export function AuthStatus() {
 
   return (
     <>
+      <div className="hidden lg:block">
+        {status === "authenticated" && (
+          <div className="flex items-center gap-2">
+            {session?.user?.image && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                alt="user profile image"
+                src={session?.user?.image}
+                className="h-10 w-10 rounded-full"
+              />
+            )}
+            {session?.user?.name && (
+              <span className="whitespace-nowrap text-lg">
+                {session?.user?.name}
+              </span>
+            )}
+            {/* If user doesn't provide name use email */}
+            {!session?.user?.name && session?.user?.email && (
+              <span className="whitespace-nowrap text-lg">
+                {session?.user?.email}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
       {status === "authenticated" && (
-        <div className="flex items-center gap-2">
-          {session?.user?.image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              alt="user profile image"
-              src={session?.user?.image}
-              className="h-10 w-10 rounded-full"
-            />
-          )}
-          <span className="whitespace-nowrap text-lg">
-            {session?.user?.name}
-          </span>
-
-          <Button variant={"secondary"} onClick={() => signOut()}>
-            Logout
-          </Button>
-        </div>
+        <Button variant={"secondary"} onClick={() => signOut()}>
+          Logout
+        </Button>
       )}
       {status === "unauthenticated" && (
         <Button variant={"secondary"} onClick={() => signIn()}>

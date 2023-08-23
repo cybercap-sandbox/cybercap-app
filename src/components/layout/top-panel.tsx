@@ -5,9 +5,14 @@ import { AuthStatus } from "./auth-status";
 
 export function TopPanel() {
   return (
-    <div className="container mx-auto flex items-center justify-between gap-4 border-b-2 py-5 md:gap-7">
-      <div className="flex w-fit justify-between gap-14 md:justify-start">
-        <Logo />
+    <div className="container mx-auto flex items-center justify-between gap-2 border-b-2 py-5 md:gap-7">
+      <div className="flex w-fit items-center justify-between gap-2 md:justify-start md:gap-14">
+        <div className="hidden md:block">
+          <Logo />
+        </div>
+        <div className="block md:hidden">
+          <Logo size="small" />
+        </div>
         <div className="hidden md:block">
           <DesktopNavbar />
         </div>

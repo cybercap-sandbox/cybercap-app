@@ -38,12 +38,12 @@ export default function ChatPlaygroundPage() {
         <div className="container h-full py-6">
           <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr]">
             <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
-              <div className="grid h-full grid-rows-[300px_300px] gap-6 lg:grid-cols-2 lg:grid-rows-1">
+              <div className="grid h-full grid-rows-[200px_200px] gap-6 lg:grid-cols-2 lg:grid-rows-1">
                 <Textarea
                   value={input}
                   onChange={handleInputChange}
                   placeholder="Start chatting with the AI..."
-                  className="h-full min-h-[300px] text-lg lg:min-h-[500px]"
+                  className="h-full min-h-[200px] text-lg lg:min-h-[500px]"
                   onKeyDown={handleKeyDown}
                 />
                 <div
