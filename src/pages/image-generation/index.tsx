@@ -3,7 +3,7 @@ import { ImageGenerationPromptForm } from "@/components/openai-playground/image-
 import { Layout } from "@/components/layout";
 import { api } from "@/utils/api";
 import { useState } from "react";
-import * as z from "zod";
+import type * as z from "zod";
 import { type imgGenFormSchema } from "@/components/openai-playground/image-promp-form";
 import { ImgGallery } from "@/components/openai-playground/image-gallery";
 

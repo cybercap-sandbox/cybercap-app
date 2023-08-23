@@ -9,7 +9,6 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { usePathname } from "next/navigation";
 import { menuItems } from "@/data/navigation";
 import Link from "next/link";
 
