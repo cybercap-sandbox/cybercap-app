@@ -20,7 +20,7 @@ export function TopPanel() {
           <MobileNavbar />
         </div>
       </div>
-      <div className="flex w-fit justify-end gap-4 md:gap-3">
+      <div className="flex w-fit items-center justify-end gap-4 md:gap-3">
         <AuthStatus />
       </div>
     </div>
