@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function ChatPlaygroundPage() {
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
-    useChat();
+    useChat({ body: { model: "gpt-4" } });
   const messagesRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
     if (!messagesRef.current) return;
