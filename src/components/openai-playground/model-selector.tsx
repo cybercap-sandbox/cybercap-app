@@ -50,7 +50,7 @@ export function ModelSelector({
       <PopoverContent className=" w-full p-0">
         <Command>
           <CommandInput placeholder="Search model..." />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandEmpty>No model found.</CommandEmpty>
           <CommandGroup className="max-h-64 overflow-y-auto">
             {modelsList.map((model) => (
               <CommandItem
