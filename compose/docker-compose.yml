@@ -1,36 +1,36 @@
 version: "3.9"
 services:
-  cybercap-app:
-    platform: "linux/amd64"
+  web:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../
+      dockerfile: compose/web.Dockerfile
       args:
         NEXT_PUBLIC_CLIENTVAR: "clientvar"
-    working_dir: /app
     ports:
       - 3000:3000
-    image: cybercapapp
     volumes:
-      - .:/app
-      - /app/node_modules
+      - ../:/app
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/cybercap-storage?schema=public
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/cybercap-db?schema=public
       # ONLY FOR TEST
       # You can generate a new secret on the command line with:
       # openssl rand -base64 32
       - NEXTAUTH_SECRET=dnupaXm2lOB00SJpuZbN2wuKplbjC4fUq5mOnZIqwkw=
       - NEXTAUTH_URL=http://localhost:3000
-  postgres:
+    links:
+      - db
+    depends_on:
+      - db
+
+  db:
     image: postgres:15.3
     container_name: postgres
-    hostname: postgres
     ports:
       - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: cybercap-storage
+      POSTGRES_DB: cybercap-db
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
