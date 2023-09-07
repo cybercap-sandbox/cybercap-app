@@ -13,12 +13,11 @@ export const runtime = "edge";
 export default async function POST(req: Request) {
   // console.log(req);
   // Extract the `messages` from the body of the request
-  const { messages, body } = await req.json();
-  console.log(body);
+  const { messages, model } = await req.json();
+
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.chat.completions.create({
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    model: body.model,
+    model: model,
     stream: true,
     messages,
   });
