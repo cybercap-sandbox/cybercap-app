@@ -2,10 +2,12 @@ import Head from "next/head";
 import { ImageGenerationPromptForm } from "@/components/openai-playground/image-promp-form";
 import { Layout } from "@/components/layout";
 import { api } from "@/utils/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type * as z from "zod";
 import { type imgGenFormSchema } from "@/components/openai-playground/image-promp-form";
 import { ImgGallery } from "@/components/openai-playground/image-gallery";
+import { useSession } from "next-auth/react";
+import { Icons } from "@/components/icons";
 
 export type GenerateImageParams = {
   prompt: string;
@@ -13,6 +15,7 @@ export type GenerateImageParams = {
   size: "256x256" | "512x512" | "1024x1024";
 };
 export default function Home() {
+  const { data: session } = useSession();
   const [imgGenStatus, setImgGenStatus] = useState<
     "idle" | "pending" | "fulfilled" | "rejected"
   >("idle");
@@ -27,6 +30,24 @@ export default function Home() {
     api.imageGenerationLog.saveUserRequest.useMutation();
   const saveGeneratedImagesMutation =
     api.imageGenerationLog.saveGeneratedImages.useMutation();
+
+  const getGeneratedImagesQuery =
+    api.imageGenerationLog.getAllImagesGeneratedByUser.useQuery(
+      { numberOfImages: 10 },
+      {
+        enabled: !!session,
+      }
+    );
+
+  useEffect(() => {
+    if (!getGeneratedImagesQuery.data) return;
+    const requests = getGeneratedImagesQuery.data?.map(
+      (d) => d.generatedImages
+    );
+    if (!requests) return;
+    const images = requests.flat().map((d) => d.imageUrl);
+    setGeneratedImages(images);
+  }, [getGeneratedImagesQuery.data]);
 
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {
@@ -80,7 +101,9 @@ export default function Home() {
       size: values.size,
     });
   };
-
+  const isLoading =
+    imgGenStatus === "pending" ||
+    (session && getGeneratedImagesQuery.isLoading);
   return (
     <>
       <Head>
@@ -96,7 +119,17 @@ export default function Home() {
               submitHandler={submitHandler}
               isLoading={imgGenStatus === "pending"}
             />
-            <ImgGallery images={generatedImages as string[]} />
+            <div>
+              {isLoading && (
+                <div className="flex h-full w-full items-center justify-center">
+                  <Icons.spinner
+                    className="h-10 w-10 animate-spin"
+                    fill="black"
+                  />
+                </div>
+              )}
+              <ImgGallery images={generatedImages as string[]} />
+            </div>
           </div>
         </main>
       </Layout>

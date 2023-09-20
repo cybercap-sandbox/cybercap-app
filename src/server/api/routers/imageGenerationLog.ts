@@ -25,7 +25,7 @@ export const imageGenerationLogRouter = createTRPCRouter({
       });
     }),
 
-  saveGeneratedImages: protectedProcedure
+  saveGeneratedImages: publicProcedure
     .input(
       z.object({
         imageGenerationRequestId: z.string(),
@@ -41,17 +41,24 @@ export const imageGenerationLogRouter = createTRPCRouter({
       });
     }),
 
-  getAllImagesGeneratedByUser: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.imageGenerationRequest.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      where: {
-        userId: ctx.session.user.id,
-      },
-      include: {
-        generatedImages: true,
-      },
-    });
-  }),
+  getAllImagesGeneratedByUser: protectedProcedure
+    .input(
+      z.object({
+        numberOfImages: z.number().default(10),
+      })
+    )
+    .query(({ input, ctx }) => {
+      return ctx.prisma.imageGenerationRequest.findMany({
+        take: input.numberOfImages,
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: {
+          userId: ctx.session.user.id,
+        },
+        include: {
+          generatedImages: true,
+        },
+      });
+    }),
 });
