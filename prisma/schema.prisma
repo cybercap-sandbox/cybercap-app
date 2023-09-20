@@ -89,12 +89,12 @@ model ImageGenerationRequest {
     id              String            @id @default(cuid())
     createdAt       DateTime          @default(now())
     requestText     String
-    imageSize       ImageSize         @relation(fields: [imageSizeId], references: [id])
     numberOfImages  Int
     generatedImages GeneratedImages[]
     User            User?             @relation(fields: [userId], references: [id])
     userId          String?
-    imageSizeId     String
+    ImageSize       ImageSize?        @relation(fields: [imageSizeTitle], references: [size])
+    imageSizeTitle  String?
 }
 
 model GeneratedImages {
@@ -106,7 +106,6 @@ model GeneratedImages {
 }
 
 model ImageSize {
-    id                     String                   @id @default(cuid())
-    size                   String                   @unique
+    size                   String                   @id
     ImageGenerationRequest ImageGenerationRequest[]
 }
