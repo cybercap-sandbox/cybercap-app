@@ -107,6 +107,6 @@ model GeneratedImages {
 
 model ImageSize {
     id                     String                   @id @default(cuid())
-    size                   String
+    size                   String                   @unique
     ImageGenerationRequest ImageGenerationRequest[]
 }
