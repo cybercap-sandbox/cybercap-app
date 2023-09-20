@@ -1,8 +1,12 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 
 export const imageGenerationLogRouter = createTRPCRouter({
-  saveUserRequest: protectedProcedure
+  saveUserRequest: publicProcedure
     .input(
       z.object({
         requestText: z.string(),
@@ -18,6 +22,22 @@ export const imageGenerationLogRouter = createTRPCRouter({
           numberOfImages: input.numberOfImages,
           imageSizeTitle: input.imageSize,
         },
+      });
+    }),
+
+  saveGeneratedImages: protectedProcedure
+    .input(
+      z.object({
+        imageGenerationRequestId: z.string(),
+        generatedImages: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.generatedImages.createMany({
+        data: input.generatedImages.map((generatedImage) => ({
+          imageGenerationRequestId: input.imageGenerationRequestId,
+          imageUrl: generatedImage,
+        })),
       });
     }),
 

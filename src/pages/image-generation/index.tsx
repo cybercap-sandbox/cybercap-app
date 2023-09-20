@@ -19,6 +19,15 @@ export default function Home() {
   const [generatedImages, setGeneratedImages] = useState<
     (string | undefined)[]
   >([]);
+  const [userRequestId, setUserRequestId] = useState<string | undefined>(
+    undefined
+  );
+
+  const saveUserRequestMutation =
+    api.imageGenerationLog.saveUserRequest.useMutation();
+  const saveGeneratedImagesMutation =
+    api.imageGenerationLog.saveGeneratedImages.useMutation();
+
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {
       // console.log("pending");
@@ -32,9 +41,16 @@ export default function Home() {
       // console.log("success");
       if (!data.response) return;
       setImgGenStatus("fulfilled");
-      const imgUrls = data.response?.map((d) => d.url);
+      const imgUrls = data.response?.map((d) => d.url!);
       if (!imgUrls) return;
       setGeneratedImages((prev) => [...imgUrls, ...prev]);
+      // save generated images urls to db
+      if (userRequestId) {
+        saveGeneratedImagesMutation.mutate({
+          imageGenerationRequestId: userRequestId,
+          generatedImages: imgUrls,
+        });
+      }
     },
   });
 
@@ -50,7 +66,14 @@ export default function Home() {
       size,
     });
   };
-  const submitHandler = (values: z.infer<typeof imgGenFormSchema>) => {
+  const submitHandler = async (values: z.infer<typeof imgGenFormSchema>) => {
+    //save user request and get id
+    const userRequest = await saveUserRequestMutation.mutateAsync({
+      requestText: values.prompt,
+      imageSize: values.size,
+      numberOfImages: values.n,
+    });
+    setUserRequestId(userRequest.id);
     generateImg({
       prompt: values.prompt,
       numberOfImages: values.n,
@@ -69,6 +92,7 @@ export default function Home() {
         <main className="bg-new-red container flex items-center justify-center ">
           <div className="mt-16 grid w-full grid-cols-1 gap-8 md:grid-cols-[300px_1fr]">
             <ImageGenerationPromptForm
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               submitHandler={submitHandler}
               isLoading={imgGenStatus === "pending"}
             />
