@@ -1,37 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
-  // Image Sizes
-  const imageSize256x256 = await prisma.imageSize.upsert({
-    where: {
-      size: "256x256",
-    },
-    update: {},
-    create: {
-      size: "256x256",
-    },
-  });
-
-  const imageSize512x512 = await prisma.imageSize.upsert({
-    where: {
-      size: "512x512",
-    },
-    update: {},
-    create: {
-      size: "512x512",
-    },
-  });
-
-  const imageSize1024x1024 = await prisma.imageSize.upsert({
-    where: {
-      size: "1024x1024",
-    },
-    update: {},
-    create: {
-      size: "1024x1024",
-    },
-  });
-
   //Text models
   const gpt4 = await prisma.openAIModels.upsert({
     where: {

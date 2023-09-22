@@ -49,14 +49,14 @@ export default function Home() {
       size,
     });
   };
-  const submitHandler = async (values: z.infer<typeof imgGenFormSchema>) => {
+  const submitHandler = async (value: z.infer<typeof imgGenFormSchema>) => {
     generateImg({
-      prompt: values.prompt,
-      numberOfImages: values.n,
-      size: values.size,
+      prompt: value.prompt,
+      numberOfImages: value.n,
+      size: value.size,
     });
     //save user request and get id
-    await saveUserRequest({ values });
+    await saveUserRequest({ value });
   };
 
   const isMutating = imgGenStatus === "pending" || isMutationLoading;

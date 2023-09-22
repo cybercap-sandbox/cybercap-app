@@ -10,8 +10,8 @@ export const imageGenerationLogRouter = createTRPCRouter({
     .input(
       z.object({
         requestText: z.string(),
-        imageSize: z.string(),
         numberOfImages: z.number(),
+        imageSize: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -20,7 +20,7 @@ export const imageGenerationLogRouter = createTRPCRouter({
           userId: ctx.session?.user.id,
           requestText: input.requestText,
           numberOfImages: input.numberOfImages,
-          imageSizeTitle: input.imageSize,
+          imageSize: input.imageSize,
         },
       });
     }),

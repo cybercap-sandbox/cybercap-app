@@ -31,14 +31,14 @@ export function useSaveImageRequest() {
   //   }, [getGeneratedImagesQuery.data, setGeneratedImages]);
 
   const saveUserRequest = async ({
-    values,
+    value,
   }: {
-    values: { prompt: string; size: string; n: number };
+    value: { prompt: string; size: string; n: number };
   }) => {
     const userRequest = await saveUserRequestMutation.mutateAsync({
-      requestText: values.prompt,
-      imageSize: values.size,
-      numberOfImages: values.n,
+      requestText: value.prompt,
+      imageSize: value.size,
+      numberOfImages: value.n,
     });
     setUserRequestId(userRequest.id);
   };
