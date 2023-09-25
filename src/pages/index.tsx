@@ -11,12 +11,12 @@ export default function Home(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
   const { data: session, status } = useSession();
-  const { t } = useTranslation("main-page");
-
+  const { i18n, t } = useTranslation("main-page");
+  console.log(i18n.language);
   return (
     <>
       <Head>
-        <title>Cybercap {t("title")}</title>
+        <title>{t("title")}</title>
         <meta name="description" content="Cybercap " />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -46,8 +46,16 @@ export default function Home(
   );
 }
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+export const getStaticProps: GetStaticProps = async ({
+  locale,
+  defaultLocale,
+}) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? "en", ["main-page"])),
+    ...(await serverSideTranslations(
+      locale ?? defaultLocale ?? "en",
+      ["main-page", "top-panel"],
+      null,
+      ["en", "fr"]
+    )),
   },
 });

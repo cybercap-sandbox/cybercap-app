@@ -1,0 +1,7 @@
+{
+    "h2": "Chat Playground",
+    "message-placeholder": "Start chatting with the AI...",
+    "submit-button": "Submit (Ctrl+Enter)",
+    "stop-button": "Stop",
+    "model-selector-title": "Model"
+}

@@ -1,0 +1,14 @@
+{
+    "menu-items": {
+        "home": "Home",
+        "home-link": "/",
+        "chat-playground": "Chat playground",
+        "chat-playground-link": "/chat",
+        "image-generation" : "Image generation",
+        "image-generation-link": "/image-generation"
+    },
+    "auth-status": {
+        "login": "Login",
+        "logout": "Logout"
+    }
+}

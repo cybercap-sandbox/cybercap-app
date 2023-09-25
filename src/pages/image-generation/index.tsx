@@ -1,9 +1,11 @@
-import Head from "next/head";
-import { ImageGenerationPromptForm } from "@/components/openai-playground/image-promp-form";
-import { Layout } from "@/components/layout";
-import { api } from "@/utils/api";
-import { useState } from "react";
 import type * as z from "zod";
+import { useState } from "react";
+import Head from "next/head";
+import type { GetStaticProps, InferGetStaticPropsType } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { ImageGenerationPromptForm } from "@/components/openai-playground/image-promp-form";
+import { api } from "@/utils/api";
+import { Layout } from "@/components/layout";
 import { type imgGenFormSchema } from "@/components/openai-playground/image-promp-form";
 import { ImgGallery } from "@/components/openai-playground/image-gallery";
 
@@ -12,7 +14,9 @@ export type GenerateImageParams = {
   numberOfImages: number;
   size: "256x256" | "512x512" | "1024x1024";
 };
-export default function Home() {
+export default function Home(
+  _props: InferGetStaticPropsType<typeof getStaticProps>
+) {
   const [imgGenStatus, setImgGenStatus] = useState<
     "idle" | "pending" | "fulfilled" | "rejected"
   >("idle");
@@ -79,3 +83,17 @@ export default function Home() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async ({
+  locale,
+  defaultLocale,
+}) => ({
+  props: {
+    ...(await serverSideTranslations(
+      locale ?? defaultLocale ?? "en",
+      ["image-generation-page", "top-panel"],
+      null,
+      ["en", "fr"]
+    )),
+  },
+});

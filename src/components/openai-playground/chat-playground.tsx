@@ -8,6 +8,7 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ModelSelector } from "@/components/openai-playground/model-selector";
+import { useTranslation } from "next-i18next";
 
 export const metadata: Metadata = {
   title: "Playground",
@@ -15,7 +16,9 @@ export const metadata: Metadata = {
 };
 const defaultModel = "gpt-3.5-turbo";
 
-export default function ChatPlaygroundPage() {
+export default function ChatPlayground() {
+  const { t } = useTranslation("chat-playground-component");
+
   const [currentModel, setCurrentModel] = React.useState<string>(defaultModel);
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
     useChat({ body: { model: currentModel } });
@@ -42,7 +45,7 @@ export default function ChatPlaygroundPage() {
     <>
       <div className=" h-full w-full flex-col md:flex">
         <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
-          <h2 className="text-lg font-semibold">Chat Playground</h2>
+          <h2 className="text-lg font-semibold">{t("h2")}</h2>
         </div>
         <div className="container h-full py-6">
           <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr]">

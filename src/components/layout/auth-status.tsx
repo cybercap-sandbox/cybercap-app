@@ -6,7 +6,7 @@ import { useTranslation } from "next-i18next";
 
 export function AuthStatus() {
   const { data: session, status } = useSession();
-  const { t } = useTranslation("auth-status");
+  const { t } = useTranslation("top-panel");
 
   return (
     <>
@@ -37,12 +37,12 @@ export function AuthStatus() {
       </div>
       {status === "authenticated" && (
         <Button variant={"secondary"} onClick={() => signOut()}>
-          {t("logout")}
+          {t("auth-status.logout")}
         </Button>
       )}
       {status === "unauthenticated" && (
         <Button variant={"secondary"} onClick={() => signIn()}>
-          {t("login")}
+          {t("auth-status.login")}
         </Button>
       )}
       {status === "loading" && (

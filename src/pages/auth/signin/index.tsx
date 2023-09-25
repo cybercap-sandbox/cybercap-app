@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { GetStaticProps, InferGetStaticPropsType } from "next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { UserAuthForm } from "@/components/authentication/user-auth-form";
 import { Logo } from "@/components/layout/logo";
 
@@ -8,7 +10,9 @@ export const metadata: Metadata = {
   description: "Authentication page",
 };
 
-export default function AuthenticationPage() {
+export default function AuthenticationPage(
+  _props: InferGetStaticPropsType<typeof getStaticProps>
+) {
   return (
     <>
       <div className="container relative flex h-screen flex-col items-center justify-center lg:grid lg:max-w-none lg:grid-cols-3 lg:px-0">
@@ -48,3 +52,17 @@ export default function AuthenticationPage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async ({
+  locale,
+  defaultLocale,
+}) => ({
+  props: {
+    ...(await serverSideTranslations(
+      locale ?? defaultLocale ?? "en",
+      ["authentication-page"],
+      null,
+      ["en", "fr"]
+    )),
+  },
+});
