@@ -2,9 +2,11 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { Icons } from "@/components/icons";
+import { useTranslation } from "next-i18next";
 
 export function AuthStatus() {
   const { data: session, status } = useSession();
+  const { t } = useTranslation("auth-status");
 
   return (
     <>
@@ -35,12 +37,12 @@ export function AuthStatus() {
       </div>
       {status === "authenticated" && (
         <Button variant={"secondary"} onClick={() => signOut()}>
-          Logout
+          {t("logout")}
         </Button>
       )}
       {status === "unauthenticated" && (
         <Button variant={"secondary"} onClick={() => signIn()}>
-          Login
+          {t("login")}
         </Button>
       )}
       {status === "loading" && (
