@@ -5,7 +5,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 
 const locales = [
   {
@@ -19,18 +20,22 @@ const locales = [
 ];
 
 export function LocaleSelect() {
-  const { i18n } = useTranslation();
+  const { i18n } = useTranslation("top-panel");
+  const router = useRouter();
 
   const defaultLocale = "en"; // load from the user's preferences
-  const clientSideLanguageChange = async (newLocale: "en" | "fr") => {
-    await i18n.changeLanguage(newLocale);
+
+  const onToggleLanguageClick = async (newLocale: string) => {
+    const { pathname, asPath, query } = router;
+    await router.push({ pathname, query }, asPath, { locale: newLocale });
   };
 
   return (
     <Select
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      onValueChange={clientSideLanguageChange}
-      // defaultValue={i18n.language}
+      onValueChange={onToggleLanguageClick}
+      value={i18n.language}
+      defaultValue={defaultLocale}
     >
       <SelectTrigger className="w-24">
         <SelectValue placeholder="Locale" />

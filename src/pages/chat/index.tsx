@@ -3,7 +3,7 @@ import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import ChatPlayground from "@/components/openai-playground/chat-playground";
 import { Layout } from "@/components/layout";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "next-i18next";
 
 export default function Home(
   _props: InferGetStaticPropsType<typeof getStaticProps>

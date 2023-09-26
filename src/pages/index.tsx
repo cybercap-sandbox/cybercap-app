@@ -11,8 +11,7 @@ export default function Home(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
   const { data: session, status } = useSession();
-  const { i18n, t } = useTranslation("main-page");
-  console.log(i18n.language);
+  const { t } = useTranslation("main-page");
   return (
     <>
       <Head>

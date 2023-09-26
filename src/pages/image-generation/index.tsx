@@ -2,7 +2,9 @@ import type * as z from "zod";
 import { useState } from "react";
 import Head from "next/head";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
+
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 import { ImageGenerationPromptForm } from "@/components/openai-playground/image-promp-form";
 import { api } from "@/utils/api";
 import { Layout } from "@/components/layout";
@@ -14,7 +16,7 @@ export type GenerateImageParams = {
   numberOfImages: number;
   size: "256x256" | "512x512" | "1024x1024";
 };
-export default function Home(
+export default function Page(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
   const [imgGenStatus, setImgGenStatus] = useState<

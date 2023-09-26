@@ -105,7 +105,11 @@ export function ImageGenerationPromptForm({
             <FormItem>
               <FormLabel>{formFields.n.label}</FormLabel>
               <FormControl>
-                <Input type={"number"} placeholder="1" {...field} />
+                <Input
+                  type={"number"}
+                  placeholder={formFields.n.placeholder}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>{formFields.n.description}</FormDescription>
               <FormMessage />
