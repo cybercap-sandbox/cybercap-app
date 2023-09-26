@@ -5,6 +5,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation, Trans } from "next-i18next";
 import { UserAuthForm } from "@/components/authentication/user-auth-form";
 import { Logo } from "@/components/layout/logo";
+import { LocaleSelect } from "@/components/layout/locale-select";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -18,6 +19,9 @@ export default function AuthenticationPage(
   return (
     <>
       <div className="container relative flex h-screen flex-col items-center justify-center lg:grid lg:max-w-none lg:grid-cols-3 lg:px-0">
+        <div className="absolute right-3 top-3">
+          <LocaleSelect />
+        </div>
         <div className="relative hidden h-full flex-col justify-center bg-muted p-10 text-white dark:border-r lg:flex">
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="relative z-20">
