@@ -51,6 +51,7 @@ export function LocaleSelect() {
       setIsLoading(false);
       await update({ interfaceLanguage: newLocale });
     }
+    setIsLoading(false);
   };
 
   if (isLoading) {
