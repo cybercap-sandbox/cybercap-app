@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -10,6 +10,7 @@ import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import { Icons } from "../icons";
 
 const locales = [
   {
@@ -24,7 +25,8 @@ const locales = [
 
 export function LocaleSelect() {
   const { i18n } = useTranslation("top-panel");
-  const { data: session, update } = useSession();
+  const { data: session, update, status } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const userInterfaceLanguageMutation =
     api.user.setInterfaceLanguage.useMutation();
@@ -41,13 +43,22 @@ export function LocaleSelect() {
   }, [defaultLocale, i18n]);
 
   const onToggleLanguageClick = async (newLocale: string) => {
+    setIsLoading(true);
     const { pathname, asPath, query } = router;
     await router.push({ pathname, query }, asPath, { locale: newLocale });
     if (session?.user) {
       await userInterfaceLanguageMutation.mutateAsync({ language: newLocale });
+      setIsLoading(false);
       await update({ interfaceLanguage: newLocale });
     }
   };
+
+  if (isLoading) {
+    return <Icons.spinner className="animate-spin" fill="black" />;
+  }
+  if (status === "loading") {
+    return null;
+  }
 
   return (
     <Select
