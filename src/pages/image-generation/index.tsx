@@ -4,6 +4,7 @@ import Head from "next/head";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 import { ImageGenerationPromptForm } from "@/components/openai-playground/image-promp-form";
 import { api } from "@/utils/api";
@@ -19,6 +20,8 @@ export type GenerateImageParams = {
 export default function Page(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
+  const { t } = useTranslation("image-generation");
+
   const [imgGenStatus, setImgGenStatus] = useState<
     "idle" | "pending" | "fulfilled" | "rejected"
   >("idle");
@@ -67,7 +70,7 @@ export default function Page(
   return (
     <>
       <Head>
-        <title>Cybercap | Image generation</title>
+        <title>{t("title")}</title>
         <meta name="description" content="Cybercap " />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -93,7 +96,7 @@ export const getStaticProps: GetStaticProps = async ({
   props: {
     ...(await serverSideTranslations(
       locale ?? defaultLocale ?? "en",
-      ["image-generation-page", "top-panel"],
+      ["image-generation", "top-panel"],
       null,
       ["en", "fr"]
     )),

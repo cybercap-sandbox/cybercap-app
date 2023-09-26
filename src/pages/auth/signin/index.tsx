@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import Head from "next/head";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -7,17 +7,17 @@ import { UserAuthForm } from "@/components/authentication/user-auth-form";
 import { Logo } from "@/components/layout/logo";
 import { LocaleSelect } from "@/components/layout/locale-select";
 
-export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication page",
-};
-
 export default function AuthenticationPage(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
   const { t } = useTranslation("authentication-page");
   return (
     <>
+      <Head>
+        <title>{t("title")}</title>
+        <meta name="description" content="Cybercap " />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="container relative flex h-screen flex-col items-center justify-center lg:grid lg:max-w-none lg:grid-cols-3 lg:px-0">
         <div className="absolute right-3 top-3">
           <LocaleSelect />
