@@ -1,18 +1,17 @@
 export const menuItems: {
-  title: string;
+  key: string;
   href: string;
-  description?: string;
 }[] = [
   {
-    title: "Home",
+    key: "home",
     href: "/",
   },
   {
-    title: "Chat playground",
+    key: "chat-playground",
     href: "/chat",
   },
   {
-    title: "Image generation",
+    key: "image-generation",
     href: "/image-generation",
   },
 ];

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
+import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation, Trans } from "next-i18next";
 import { UserAuthForm } from "@/components/authentication/user-auth-form";
 import { Logo } from "@/components/layout/logo";
 
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 export default function AuthenticationPage(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
+  const { t } = useTranslation("authentication-page");
   return (
     <>
       <div className="container relative flex h-screen flex-col items-center justify-center lg:grid lg:max-w-none lg:grid-cols-3 lg:px-0">
@@ -27,24 +29,26 @@ export default function AuthenticationPage(
             <Logo />
           </div>
           <div className="mx-auto flex h-full w-full flex-col justify-center space-y-6  sm:w-[350px]">
-            <h1 className="text-center text-2xl font-semibold ">Sign in</h1>
+            <h1 className="text-center text-2xl font-semibold ">{t("h1")}</h1>
             <UserAuthForm />
             <p className="px-8 text-center text-sm text-muted-foreground">
-              By clicking continue, you agree to our{" "}
-              <Link
-                href="#"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link
-                href="#"
-                className="underline underline-offset-4 hover:text-primary"
-              >
-                Privacy Policy
-              </Link>
-              .
+              <Trans ns="authentication-page" i18nKey="terms-paragraph">
+                By clicking continue, you agree to our
+                <Link
+                  href="#"
+                  className="underline underline-offset-4 hover:text-primary"
+                >
+                  Terms of Service
+                </Link>
+                and
+                <Link
+                  href="#"
+                  className="underline underline-offset-4 hover:text-primary"
+                >
+                  Privacy Policy
+                </Link>
+                .
+              </Trans>
             </p>
           </div>
         </div>
@@ -60,7 +64,7 @@ export const getStaticProps: GetStaticProps = async ({
   props: {
     ...(await serverSideTranslations(
       locale ?? defaultLocale ?? "en",
-      ["authentication-page"],
+      ["authentication-page", "common"],
       null,
       ["en", "fr"]
     )),

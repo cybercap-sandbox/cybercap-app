@@ -1,4 +1,6 @@
 {
-    "google": "Sign in with Google",
-    "microsoft": "Sign in with Microsoft"
+    "h1": "Se connecter",
+    "sign-in-with-google": "Connectez-vous avec Google",
+    "sign-in-with-microsoft": "Connectez-vous avec Microsoft",
+    "terms-paragraph": "En cliquant sur Continuer, vous acceptez nos <1>Conditions d'utilisation</1> et notre <3>Politique de confidentialité</3>."
 }

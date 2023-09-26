@@ -1,14 +1,15 @@
 import Head from "next/head";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import ChatPlayground from "@/components/openai-playground/chat-playground";
-import { Layout } from "@/components/layout";
 import { useTranslation } from "next-i18next";
 
-export default function Home(
+import ChatPlayground from "@/components/openai-playground/chat-playground";
+import { Layout } from "@/components/layout";
+
+export default function Page(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
-  const { t } = useTranslation("chat-playground-page");
+  const { t } = useTranslation("chat-playground");
   return (
     <>
       <Head>
@@ -32,7 +33,7 @@ export const getStaticProps: GetStaticProps = async ({
   props: {
     ...(await serverSideTranslations(
       locale ?? defaultLocale ?? "en",
-      ["chat-playground-page", "chat-playground-component", "top-panel"],
+      ["chat-playground", "top-panel"],
       null,
       ["en", "fr"]
     )),

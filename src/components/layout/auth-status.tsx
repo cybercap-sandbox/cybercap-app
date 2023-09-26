@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { signIn, signOut, useSession } from "next-auth/react";
-import { Button } from "../ui/button";
-import { Icons } from "@/components/icons";
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { useTranslation } from "next-i18next";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
 
 export function AuthStatus() {
   const { data: session, status } = useSession();
@@ -41,9 +42,12 @@ export function AuthStatus() {
         </Button>
       )}
       {status === "unauthenticated" && (
-        <Button variant={"secondary"} onClick={() => signIn()}>
+        <Link
+          className="inline-flex h-10 items-center justify-center rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground ring-offset-background  transition-colors hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          href={"/auth/signin"}
+        >
           {t("auth-status.login")}
-        </Button>
+        </Link>
       )}
       {status === "loading" && (
         <Icons.spinner className="animate-spin" fill="black" />

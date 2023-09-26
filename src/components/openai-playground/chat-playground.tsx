@@ -12,7 +12,7 @@ import { useTranslation } from "next-i18next";
 const defaultModel = "gpt-3.5-turbo";
 
 export default function ChatPlayground() {
-  const { t } = useTranslation("chat-playground-component");
+  const { t } = useTranslation("chat-playground");
 
   const [currentModel, setCurrentModel] = React.useState<string>(defaultModel);
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =

@@ -7,7 +7,7 @@ import { roboto_font } from "@/components/layout/logo";
 import { Layout } from "@/components/layout";
 import { Icons } from "@/components/icons";
 
-export default function Home(
+export default function Page(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
   const { data: session, status } = useSession();
