@@ -31,7 +31,9 @@ const sizeOptions = [
 ];
 export const imgGenFormSchema = z.object({
   prompt: z.string().min(5, {
-    message: i18n?.t("image-generation:prompt-length-error"),
+    message: i18n?.isInitialized
+      ? i18n?.t("image-generation:prompt-length-error")
+      : "",
   }),
   n: z.preprocess((a) => parseInt(z.string().parse(String(a)), 10), z.number()),
   size: z.enum(["256x256", "512x512", "1024x1024"]),
