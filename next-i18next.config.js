@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // @ts-check
 
 /**
@@ -5,7 +6,6 @@
  */
 module.exports = {
   // https://www.i18next.com/overview/configuration-options#logging
-  debug: true,
   i18n: {
     defaultLocale: "en",
     locales: ["en", "fr"],
