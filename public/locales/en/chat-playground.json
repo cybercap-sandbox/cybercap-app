@@ -4,5 +4,7 @@
     "message-placeholder": "Start chatting with the AI...",
     "submit-button": "Submit (Ctrl+Enter)",
     "stop-button": "Stop",
-    "model-selector-title": "Model"
+    "model-selector-title": "Model",
+    "user-badge": "You",
+    "assistance-badge": "AI Assistant"
 }

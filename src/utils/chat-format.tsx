@@ -1,3 +1,4 @@
+import { Trans } from "next-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/icons";
 
@@ -9,14 +10,18 @@ export const formatChatMembers = (
     formatted = (
       <>
         <Icons.user className="h-4 w-4" />
-        <Badge>You</Badge>
+        <Badge>
+          <Trans ns="chat-playground" i18nKey="user-badge" />
+        </Badge>
       </>
     );
   else if (role === "assistant")
     formatted = (
       <>
         <Icons.openapi className="h-4 w-4" />
-        <Badge>AI Assistant</Badge>
+        <Badge>
+          <Trans ns="chat-playground" i18nKey="assistance-badge" />
+        </Badge>
       </>
     );
 
