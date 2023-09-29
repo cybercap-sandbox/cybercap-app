@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  web:
+    platform: "linux/amd64"
+    build:
+      context: ../
+      dockerfile: compose/web.Dockerfile
+      args:
+        NEXT_PUBLIC_CLIENTVAR: "clientvar"
+    ports:
+      - 3000:3000
+    volumes:
+      - ../:/app
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/cybercap-db?schema=public
+      # ONLY FOR TEST
+      # You can generate a new secret on the command line with:
+      # openssl rand -base64 32
+      - NEXTAUTH_SECRET=dnupaXm2lOB00SJpuZbN2wuKplbjC4fUq5mOnZIqwkw=
+      - NEXTAUTH_URL=http://localhost:3000
+    links:
+      - db
+    depends_on:
+      - db
+  db:
+    image: postgres:15.3
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cybercap-db
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+volumes:
+  postgres-data:
