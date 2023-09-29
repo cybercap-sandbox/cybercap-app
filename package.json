@@ -9,6 +9,9 @@
     "lint": "next lint",
     "start": "next start"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "dependencies": {
     "@hookform/resolvers": "^3.2.0",
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -48,7 +51,7 @@
   "devDependencies": {
     "@t3-oss/env-nextjs": "0.6.1",
     "@types/eslint": "^8.37.0",
-    "@types/node": "18.17.12",
+    "@types/node": "^18.17.13",
     "@types/prettier": "^2.7.2",
     "@types/react": "18.2.21",
     "@types/react-dom": "^18.2.4",
@@ -62,7 +65,8 @@
     "prettier-plugin-tailwindcss": "^0.2.8",
     "prisma": "^5.1.1",
     "tailwindcss": "^3.3.3",
-    "typescript": "5.2.2"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   },
   "ct3aMetadata": {
     "initVersion": "7.18.0"

@@ -1,6 +1,7 @@
 version: "3.9"
 services:
   web:
+    platform: "linux/amd64"
     build:
       context: ../
       dockerfile: compose/web.Dockerfile
@@ -21,7 +22,6 @@ services:
       - db
     depends_on:
       - db
-
   db:
     image: postgres:15.3
     container_name: postgres
