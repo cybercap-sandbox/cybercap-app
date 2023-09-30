@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useChat } from "ai/react";
+import { type Message as OpenAIMessage } from "ai";
+
 import { useTranslation } from "next-i18next";
 import { formatChatMembers, formatChatMessage } from "@/utils/chat-format";
 import { Separator } from "@/components//ui/separator";
@@ -8,15 +11,66 @@ import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ModelSelector } from "@/components/openai-playground/model-selector";
-import { useChatModelSelector } from "@/hooks/useChatModelSelector";
 import { ChatSessionBar } from "@/components/openai-playground/chat-sessions/chat-sessions-bar";
+import { AllChatSessionsContext } from "@/components/openai-playground/chat-sessions/context/chat-sessions-context";
+import { useChatModelSelector } from "@/hooks/useChatModelSelector";
+import { useSaveChatMessage } from "@/hooks/useSaveMessage";
 
 export default function ChatPlayground() {
   const { t } = useTranslation("chat-playground");
+  const { allChatSessions } = useContext(AllChatSessionsContext);
+  const activeSession = allChatSessions.find((s) => s.isActive);
+  console.log(allChatSessions);
+  const { saveOpenAiMessage } = useSaveChatMessage({ activeSession });
+
   const { currentModel, setCurrentModel, modelsList, modelsListString } =
     useChatModelSelector();
-  const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
-    useChat({ body: { model: currentModel } });
+  const {
+    messages,
+    setMessages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+    stop,
+  } = useChat({
+    initialMessages: activeSession?.messages ?? [],
+    body: { model: currentModel },
+    onFinish: async (message) => {
+      console.log(message);
+      await saveOpenAiMessage(message);
+    },
+  });
+
+  // Set messages from active session to openAI messages
+  useEffect(() => {
+    if (!activeSession) setMessages([]);
+    if (activeSession?.messages) setMessages(activeSession.messages);
+  }, [activeSession, setMessages]);
+
+  const handleSubmitMessageFromUser = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+    if (!activeSession?.id) return;
+
+    await saveOpenAiMessage({
+      content: input,
+      role: "user",
+    } as OpenAIMessage);
+    handleSubmit(e);
+    // Save message from user to db
+    console.log(input);
+  };
+
+  // Handle ctrl+enter to submit
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+      await handleSubmitMessageFromUser(
+        e as unknown as React.FormEvent<HTMLFormElement>
+      );
+    }
+  };
 
   const messagesRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -24,13 +78,6 @@ export default function ChatPlayground() {
     // Scroll to the bottom of the messages div
     messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
   }, [messages]);
-
-  // Handle ctrl+enter to submit
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
-      handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
-    }
-  };
 
   return (
     <>
@@ -42,7 +89,10 @@ export default function ChatPlayground() {
         </div>
         <div className="container h-full py-6">
           <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr]">
-            <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
+            <form
+              className="flex flex-col space-y-4"
+              onSubmit={handleSubmitMessageFromUser}
+            >
               <div className="grid h-full grid-rows-[auto_200px_200px] gap-6 lg:grid-cols-[1fr_1fr_200px] lg:grid-rows-1">
                 <Textarea
                   value={input}

@@ -2,7 +2,7 @@ import { type ChatSessionWithMessages } from "@/components/openai-playground/cha
 import { api } from "@/utils/api";
 import { type Message as OpenAIMessage } from "ai";
 
-export function useSaveMessage({
+export function useSaveChatMessage({
   activeSession,
 }: {
   activeSession: ChatSessionWithMessages | undefined;
@@ -11,6 +11,7 @@ export function useSaveMessage({
 
   const saveOpenAiMessage = async (message: OpenAIMessage) => {
     if (!activeSession?.id) return;
+    console.log(message);
     await saveMessageInDbMutation.mutateAsync({
       chatSessionId: activeSession.id,
       message: message.content,

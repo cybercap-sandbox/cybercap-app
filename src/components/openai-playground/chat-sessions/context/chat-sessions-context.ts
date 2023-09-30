@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { ChatSession, Message } from "@prisma/client";
+import type { ChatMessage, ChatSession } from "@prisma/client";
 import { setFirstSessionActive } from "./chat-sessions-reducer-functions";
 
 export function chatSessionsReducer(
@@ -117,6 +117,8 @@ type ALL_CHAT_SESSIONS_ACTION_TYPE =
       type: "setFirstSessionActive";
     };
 
-export type ChatSessionWithMessages = ChatSession & { messages: Message[] } & {
+export type ChatSessionWithMessages = ChatSession & {
+  messages: ChatMessage[];
+} & {
   isActive?: boolean;
 };

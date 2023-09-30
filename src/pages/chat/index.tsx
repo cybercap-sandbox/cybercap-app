@@ -33,6 +33,7 @@ export default function Page(
         enabled: !!session && !isLoadedFromServer,
       }
     );
+
   // Update the context with the sessions from the DB
   useEffect(() => {
     if (isLoadedFromServer) return;

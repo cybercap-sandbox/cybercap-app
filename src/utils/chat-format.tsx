@@ -31,6 +31,6 @@ export const formatChatMembers = (
 };
 
 export const formatChatMessage = (message: string) => {
-  const formatted = message.split("\n").map((m, i) => <p key={i}>{m}</p>);
+  const formatted = message?.split("\n").map((m, i) => <p key={i}>{m}</p>);
   return <div className="flex flex-col  justify-center gap-4">{formatted}</div>;
 };

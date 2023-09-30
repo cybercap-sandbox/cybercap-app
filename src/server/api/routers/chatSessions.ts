@@ -11,10 +11,10 @@ export const chatSessionRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.message.create({
+      return await ctx.prisma.chatMessage.create({
         data: {
           sessionId: input.chatSessionId,
-          messageText: input.message,
+          content: input.message,
           role: input.role,
         },
       });

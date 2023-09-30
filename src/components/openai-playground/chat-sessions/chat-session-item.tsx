@@ -36,6 +36,7 @@ export function ChatSessionItem({
 
   return (
     <Button
+      type="button"
       variant={"ghost"}
       className={cn(
         "relative flex w-full justify-between px-2",
