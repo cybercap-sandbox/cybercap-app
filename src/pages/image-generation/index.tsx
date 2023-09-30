@@ -1,9 +1,14 @@
-import Head from "next/head";
-import { ImageGenerationPromptForm } from "@/components/openai-playground/image-promp-form";
-import { Layout } from "@/components/layout";
-import { api } from "@/utils/api";
-import { useState } from "react";
 import type * as z from "zod";
+import { useState } from "react";
+import Head from "next/head";
+import type { GetStaticProps, InferGetStaticPropsType } from "next";
+
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
+import { ImageGenerationPromptForm } from "@/components/openai-playground/image-promp-form";
+import { api } from "@/utils/api";
+import { Layout } from "@/components/layout";
 import { type imgGenFormSchema } from "@/components/openai-playground/image-promp-form";
 import { ImgGallery } from "@/components/openai-playground/image-gallery";
 import { useSaveImageRequest } from "@/hooks/saveImageRequest";
@@ -13,7 +18,11 @@ export type GenerateImageParams = {
   numberOfImages: number;
   size: "256x256" | "512x512" | "1024x1024";
 };
-export default function Home() {
+export default function Page(
+  _props: InferGetStaticPropsType<typeof getStaticProps>
+) {
+  const { t } = useTranslation("image-generation");
+
   const [imgGenStatus, setImgGenStatus] = useState<
     "idle" | "pending" | "fulfilled" | "rejected"
   >("idle");
@@ -63,7 +72,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Cybercap | Image generation</title>
+        <title>{t("page-title")}</title>
         <meta name="description" content="Cybercap " />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -82,3 +91,17 @@ export default function Home() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async ({
+  locale,
+  defaultLocale,
+}) => ({
+  props: {
+    ...(await serverSideTranslations(
+      locale ?? defaultLocale ?? "en",
+      ["image-generation", "top-panel"],
+      null,
+      ["en", "fr"]
+    )),
+  },
+});

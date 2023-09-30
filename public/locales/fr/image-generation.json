@@ -1,0 +1,24 @@
+{
+    "page-title": "Cybercap | Génération d'images",
+    "prompt": {
+        "name": "invite",
+        "label": "Invite",
+        "description": "L'invite pour générer des images à partir de",
+        "placeholder": "Un chat mignon"
+      },
+      "n": {
+        "name": "n",
+        "label": "Nombre de réponses",
+        "description": "Le nombre d'images à générer",
+        "placeholder": "1"
+      },
+      "size": {
+        "name":  "taille",
+        "label": "Taille de l'image",
+        "description": "La taille des images générées",
+        "placeholder": "Sélectionnez une taille d'image"
+      },
+      "submit-button": "Soumettre",
+      "prompt-length-error": "L'invite doit comporter au moins 5 caractères"
+
+}

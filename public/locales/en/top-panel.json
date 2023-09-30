@@ -1,0 +1,12 @@
+{
+    "mobile-menu-label": "Getting started",
+    "menu-items": {
+        "home": "Home",
+        "chat-playground": "Chat playground",
+        "image-generation" : "Image generation"
+    },
+    "auth-status": {
+        "login": "Login",
+        "logout": "Logout"
+    }
+}

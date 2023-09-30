@@ -2,6 +2,7 @@ import { Logo } from "./logo";
 import { DesktopNavbar } from "./desktop-navbar";
 import { MobileNavbar } from "./mobile-navbar";
 import { AuthStatus } from "./auth-status";
+import { LocaleSelect } from "./locale-select";
 
 export function TopPanel() {
   return (
@@ -21,6 +22,7 @@ export function TopPanel() {
         </div>
       </div>
       <div className="flex w-fit items-center justify-end gap-4 md:gap-3">
+        <LocaleSelect />
         <AuthStatus />
       </div>
     </div>

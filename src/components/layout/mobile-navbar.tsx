@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useTranslation } from "next-i18next";
+import Link from "next/link";
 import { cn } from "@/utils/class-merge";
 import {
   NavigationMenu,
@@ -10,23 +12,25 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { menuItems } from "@/data/navigation";
-import Link from "next/link";
 
 export function MobileNavbar() {
+  const { t } = useTranslation("top-panel");
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+          <NavigationMenuTrigger>
+            {t("mobile-menu-label")}
+          </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <ul className=" w-40 p-2">
+            <ul className=" w-fit p-2">
               {menuItems.map((component) => (
                 <Link
-                  key={component.title}
+                  key={component.key}
                   href={component.href}
                   className={cn(navigationMenuTriggerStyle())}
                 >
-                  {component.title}
+                  {t(`menu-items.${component.key}`)}
                 </Link>
               ))}
             </ul>

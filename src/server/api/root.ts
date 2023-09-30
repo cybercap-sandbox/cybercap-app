@@ -1,6 +1,7 @@
 import { createTRPCRouter } from "@/server/api/trpc";
 import { openAiRouter } from "./routers/openai";
 import { openAiModels } from "./routers/openAiModels";
+import { userRouter } from "./routers/user";
 import { imageGenerationLogRouter } from "./routers/imageGenerationLog";
 
 /**
@@ -11,6 +12,7 @@ import { imageGenerationLogRouter } from "./routers/imageGenerationLog";
 export const appRouter = createTRPCRouter({
   openai: openAiRouter,
   openAiModels: openAiModels,
+  user: userRouter,
   imageGenerationLog: imageGenerationLogRouter,
 });
 

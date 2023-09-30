@@ -1,17 +1,19 @@
 import * as React from "react";
 import { cn } from "@/utils/class-merge";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { usePathname } from "next/navigation";
 import { menuItems } from "@/data/navigation";
-import Link from "next/link";
+import { useTranslation } from "next-i18next";
 
 export function DesktopNavbar() {
   const pathname = usePathname();
+  const { t } = useTranslation("top-panel");
 
   return (
     <NavigationMenu>
@@ -27,7 +29,7 @@ export function DesktopNavbar() {
               )}
               href={item.href}
             >
-              {item.title}
+              {t(`menu-items.${item.key}`)}
             </Link>
           </NavigationMenuItem>
         ))}

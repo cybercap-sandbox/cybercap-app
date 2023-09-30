@@ -1,34 +1,42 @@
+import type { GetStaticProps, InferGetStaticPropsType } from "next";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
+import { useSession } from "next-auth/react";
 import { roboto_font } from "@/components/layout/logo";
 import { Layout } from "@/components/layout";
-import { useSession } from "next-auth/react";
 import { Icons } from "@/components/icons";
 
-export default function Home() {
+export default function Page(
+  _props: InferGetStaticPropsType<typeof getStaticProps>
+) {
   const { data: session, status } = useSession();
+  const { t } = useTranslation("main-page");
   return (
     <>
       <Head>
-        <title>Cybercap | Home</title>
+        <title>{t("page-title")}</title>
         <meta name="description" content="Cybercap " />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
         <main className="bg-new-red container items-center justify-center">
           <h1 className="py-5 text-center text-4xl font-bold">
-            Welcome to <span className={roboto_font.className}>CyberCap</span>
+            {t("welcome-header")}
+            <span className={roboto_font.className}>CyberCap</span>
           </h1>
-          <p>
-            The website provides a playground for OpenAI chat and image
-            generation models.
-          </p>
+          <p>{t("playground-description")}</p>
           {status === "loading" && (
             <Icons.spinner className="h-5 w-5 animate-spin" />
           )}
           {status === "authenticated" && (
             <>
-              <p>Welcome, {session?.user?.name}!</p>
-              <p>Your email is {session?.user?.email}.</p>
+              <p>
+                {t("p-welcome-name")} {session?.user?.name}!
+              </p>
+              <p>
+                {t("p-welcome-email")} {session?.user?.email}.
+              </p>
             </>
           )}
         </main>
@@ -36,3 +44,17 @@ export default function Home() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async ({
+  locale,
+  defaultLocale,
+}) => ({
+  props: {
+    ...(await serverSideTranslations(
+      locale ?? defaultLocale ?? "en",
+      ["main-page", "top-panel"],
+      null,
+      ["en", "fr"]
+    )),
+  },
+});

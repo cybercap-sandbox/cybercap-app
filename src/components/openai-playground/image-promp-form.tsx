@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 
+import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
+import { i18n, useTranslation } from "next-i18next";
 import {
   Form,
   FormControl,
@@ -21,7 +21,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Icons } from "../icons";
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
 
 const sizeOptions = [
   { label: "256x256", value: "256x256" },
@@ -30,32 +31,13 @@ const sizeOptions = [
 ];
 export const imgGenFormSchema = z.object({
   prompt: z.string().min(5, {
-    message: "Prompt must be at least 5 characters long",
+    message: i18n?.isInitialized
+      ? i18n?.t("image-generation:prompt-length-error")
+      : "",
   }),
   n: z.preprocess((a) => parseInt(z.string().parse(String(a)), 10), z.number()),
   size: z.enum(["256x256", "512x512", "1024x1024"]),
 });
-
-const formFields = {
-  prompt: {
-    name: "prompt",
-    label: "Prompt",
-    description: "The prompt to generate images from",
-    placeholder: "A cute cat",
-  },
-  n: {
-    name: "n",
-    label: "Number of responses",
-    description: "The number of images to generate",
-    placeholder: "1",
-  },
-  size: {
-    name: "size",
-    label: "Image size",
-    description: "The size of the generated images",
-    placeholder: "Select an image size",
-  },
-};
 
 export function ImageGenerationPromptForm({
   submitHandler,
@@ -64,6 +46,8 @@ export function ImageGenerationPromptForm({
   submitHandler: (values: z.infer<typeof imgGenFormSchema>) => void;
   isLoading: boolean;
 }) {
+  const { t } = useTranslation("image-generation");
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof imgGenFormSchema>>({
     resolver: zodResolver(imgGenFormSchema),
@@ -76,9 +60,6 @@ export function ImageGenerationPromptForm({
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof imgGenFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-
     submitHandler(values);
   }
   return (
@@ -89,11 +70,11 @@ export function ImageGenerationPromptForm({
           name="prompt"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{formFields.prompt.label}</FormLabel>
+              <FormLabel>{t("prompt.label")}</FormLabel>
               <FormControl>
-                <Input placeholder={formFields.prompt.placeholder} {...field} />
+                <Input placeholder={t("prompt.placeholder")} {...field} />
               </FormControl>
-              <FormDescription>{formFields.prompt.description}</FormDescription>
+              <FormDescription>{t("prompt.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -103,11 +84,17 @@ export function ImageGenerationPromptForm({
           name="n"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{formFields.n.label}</FormLabel>
+              <FormLabel>{t("n.label")}</FormLabel>
               <FormControl>
-                <Input type={"number"} placeholder="1" {...field} />
+                <Input
+                  min={1}
+                  max={10}
+                  type={"number"}
+                  placeholder={t("n.placeholder")}
+                  {...field}
+                />
               </FormControl>
-              <FormDescription>{formFields.n.description}</FormDescription>
+              <FormDescription>{t("n.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -117,11 +104,11 @@ export function ImageGenerationPromptForm({
           name="size"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{formFields.size.label}</FormLabel>
+              <FormLabel>{t("size.label")}</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder={formFields.size.placeholder} />
+                    <SelectValue placeholder={t("size.placeholder")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -132,14 +119,14 @@ export function ImageGenerationPromptForm({
                   ))}
                 </SelectContent>
               </Select>
-              <FormDescription>{formFields.size.description}</FormDescription>
+              <FormDescription>{t("size.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button disabled={isLoading} type="submit">
           {isLoading && <Icons.spinner className="animate-spin" />}
-          Submit
+          {t("submit-button")}
         </Button>
       </form>
     </Form>

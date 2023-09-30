@@ -10,7 +10,6 @@ async function main() {
     create: {
       name: "gpt-4",
       availableForChat: true,
-      availableForImageGeneration: false,
       availableForEmbeddings: false,
       availableForAudioTranscript: false,
       availableForFineTuningJobs: false,
@@ -29,7 +28,6 @@ async function main() {
     create: {
       name: "gpt-4-0613",
       availableForChat: true,
-      availableForImageGeneration: false,
       availableForEmbeddings: false,
       availableForAudioTranscript: false,
       availableForFineTuningJobs: false,
@@ -48,7 +46,6 @@ async function main() {
     create: {
       name: "gpt-3.5-turbo",
       availableForChat: true,
-      availableForImageGeneration: false,
       availableForEmbeddings: false,
       availableForAudioTranscript: false,
       availableForFineTuningJobs: true,
@@ -67,7 +64,6 @@ async function main() {
     create: {
       name: "gpt-3.5-turbo-16k",
       availableForChat: true,
-      availableForImageGeneration: false,
       availableForEmbeddings: false,
       availableForAudioTranscript: false,
       availableForFineTuningJobs: false,
@@ -86,7 +82,6 @@ async function main() {
     create: {
       name: "gpt-3.5-turbo-0613",
       availableForChat: true,
-      availableForImageGeneration: false,
       availableForEmbeddings: false,
       availableForAudioTranscript: false,
       availableForFineTuningJobs: false,

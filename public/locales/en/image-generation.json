@@ -1,0 +1,23 @@
+{
+    "page-title": "Cybercap | Image generation",
+    "prompt": {
+        "name": "prompt",
+        "label": "Prompt",
+        "description": "The prompt to generate images from",
+        "placeholder": "A cute cat"
+      },
+      "n": {
+        "name": "n",
+        "label": "Number of responses",
+        "description": "The number of images to generate",
+        "placeholder": "1"
+      },
+      "size": {
+        "name": "size",
+        "label": "Image size",
+        "description": "The size of the generated images",
+        "placeholder": "Select an image size"
+      },
+      "submit-button": "Submit",
+      "prompt-length-error": "Prompt must be at least 5 characters long"
+}

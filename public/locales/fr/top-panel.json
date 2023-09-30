@@ -1,0 +1,12 @@
+{
+    "mobile-menu-label": "Commencer", 
+    "menu-items": {
+        "home": "Page d'accueil", 
+        "chat-playground": "Aire de jeux pour discuter", 
+        "image-generation" : "Génération d'images"
+    },
+    "auth-status": {
+        "login": "Se connecter",
+        "logout": "Se déconnecter"
+    }
+}

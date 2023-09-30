@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-
+import { useTranslation } from "next-i18next";
 import { cn } from "@/utils/class-merge";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { signIn } from "next-auth/react";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+  const { t } = useTranslation("authentication-page");
   const [isLoading, setIsLoading] = React.useState({
     google: false,
     microsoft: false,
@@ -47,7 +48,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </div>
         )}
         <Icons.google className="mr-2 h-4 w-4" />
-        Sign in with Google
+        {t("sign-in-with-google")}
       </Button>
 
       <Button
@@ -63,7 +64,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </div>
         )}
         <Icons.microsoft className="mr-2 h-4 w-4" />
-        Sign in with Microsoft
+        {t("sign-in-with-microsoft")}
       </Button>
     </div>
   );
