@@ -3,8 +3,8 @@
 
 generator client {
     provider      = "prisma-client-js"
-    engineType    = "binary"
-    binaryTargets = ["linux-musl-openssl-3.0.x"]
+    // engineType    = "binary" // uncomment for docker deployment on Alpine 3.17 https://github.com/t3-oss/create-t3-app/issues/975
+    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
