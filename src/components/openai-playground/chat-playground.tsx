@@ -40,7 +40,9 @@ export default function ChatPlayground() {
     <>
       <div className=" h-full w-full flex-col md:flex">
         <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
-          <h2 className="text-lg font-semibold">{t("h2")}</h2>
+          <h2 className="text-lg font-semibold">
+            {t("chat-playground-title")}
+          </h2>
         </div>
         <div className="container h-full py-6">
           <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr]">

@@ -15,14 +15,14 @@ export default function Page(
   return (
     <>
       <Head>
-        <title>{t("title")}</title>
+        <title>{t("page-title")}</title>
         <meta name="description" content="Cybercap " />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
         <main className="bg-new-red container items-center justify-center">
           <h1 className="py-5 text-center text-4xl font-bold">
-            {t("h1")}
+            {t("welcome-header")}
             <span className={roboto_font.className}>CyberCap</span>
           </h1>
           <p>{t("playground-description")}</p>

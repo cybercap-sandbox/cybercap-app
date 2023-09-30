@@ -1,6 +1,6 @@
 {
-    "title": "Cybercap | Chat playground",
-    "h2": "Chat Playground",
+    "page-title": "Cybercap | Chat playground",
+    "chat-playground-title": "Chat Playground",
     "message-placeholder": "Start chatting with the AI...",
     "submit-button": "Submit (Ctrl+Enter)",
     "stop-button": "Stop",

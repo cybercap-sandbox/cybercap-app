@@ -13,7 +13,7 @@ export default function Page(
   return (
     <>
       <Head>
-        <title>{t("title")}</title>
+        <title>{t("page-title")}</title>
         <meta name="description" content="Cybercap " />
         <link rel="icon" href="/favicon.ico" />
       </Head>

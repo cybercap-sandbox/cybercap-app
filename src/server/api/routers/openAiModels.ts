@@ -7,7 +7,6 @@ export const openAiModels = createTRPCRouter({
       z.object({
         name: z.string().optional(),
         availableForChat: z.boolean().optional(),
-        availableForImageGeneration: z.boolean().optional(),
         availableForEmbeddings: z.boolean().optional(),
         availableForAudioTranscript: z.boolean().optional(),
         availableForFineTuningJobs: z.boolean().optional(),
@@ -24,7 +23,6 @@ export const openAiModels = createTRPCRouter({
         where: {
           name: input.name,
           availableForChat: input.availableForChat,
-          availableForImageGeneration: input.availableForImageGeneration,
           availableForEmbeddings: input.availableForEmbeddings,
           availableForAudioTranscript: input.availableForAudioTranscript,
           availableForFineTuningJobs: input.availableForFineTuningJobs,

@@ -14,7 +14,7 @@ export default function AuthenticationPage(
   return (
     <>
       <Head>
-        <title>{t("title")}</title>
+        <title>{t("page-title")}</title>
         <meta name="description" content="Cybercap " />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -33,23 +33,25 @@ export default function AuthenticationPage(
             <Logo />
           </div>
           <div className="mx-auto flex h-full w-full flex-col justify-center space-y-6  sm:w-[350px]">
-            <h1 className="text-center text-2xl font-semibold ">{t("h1")}</h1>
+            <h1 className="text-center text-2xl font-semibold ">
+              {t("form-header")}
+            </h1>
             <UserAuthForm />
             <p className="px-8 text-center text-sm text-muted-foreground">
               <Trans ns="authentication-page" i18nKey="terms-paragraph">
-                By clicking continue, you agree to our
+                [MISSING TRANSLATION]
                 <Link
                   href="#"
                   className="underline underline-offset-4 hover:text-primary"
                 >
-                  Terms of Service
+                  [MISSING TRANSLATION]
                 </Link>
-                and
+                [MISSING TRANSLATION]
                 <Link
                   href="#"
                   className="underline underline-offset-4 hover:text-primary"
                 >
-                  Privacy Policy
+                  [MISSING TRANSLATION]
                 </Link>
                 .
               </Trans>
