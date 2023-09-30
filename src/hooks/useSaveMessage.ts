@@ -10,8 +10,9 @@ export function useSaveChatMessage({
   const saveMessageInDbMutation = api.chatSession.saveMessage.useMutation();
 
   const saveOpenAiMessage = async (message: OpenAIMessage) => {
-    if (!activeSession?.id) return;
     console.log(message);
+    if (!activeSession?.id) return;
+    if (!message.content) return;
     await saveMessageInDbMutation.mutateAsync({
       chatSessionId: activeSession.id,
       message: message.content,

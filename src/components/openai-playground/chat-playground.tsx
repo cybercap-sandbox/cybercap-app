@@ -52,6 +52,8 @@ export default function ChatPlayground() {
     e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
+    // prevent empty messages
+    if (!input) return;
     if (!activeSession?.id) return;
 
     await saveOpenAiMessage({
