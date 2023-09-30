@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -30,26 +30,36 @@ export function LocaleSelect() {
   const router = useRouter();
   const userInterfaceLanguageMutation =
     api.user.setInterfaceLanguage.useMutation();
-  const defaultLocale = session?.user.interfaceLanguage; // load from the user's preferences
+  // load from the user's preferences
+
+  const updateLocale = useCallback(
+    async (newLocale: string) => {
+      const { pathname, asPath, query } = router;
+      await router.push({ pathname, query }, asPath, { locale: newLocale });
+    },
+    [router]
+  );
 
   useEffect(() => {
+    const defaultLocale = session?.user.interfaceLanguage;
     const changeLanguage = async () => {
       if (defaultLocale) {
-        await i18n.changeLanguage(defaultLocale);
+        await updateLocale(defaultLocale);
       }
     };
-
     void changeLanguage();
-  }, [defaultLocale, i18n]);
+  }, [session, updateLocale]);
 
   const onToggleLanguageClick = async (newLocale: string) => {
     setIsLoading(true);
-    const { pathname, asPath, query } = router;
-    await router.push({ pathname, query }, asPath, { locale: newLocale });
+    // update the locale in the router
+    await updateLocale(newLocale);
     if (session?.user) {
+      // save language preference to the user's preferences
       await userInterfaceLanguageMutation.mutateAsync({ language: newLocale });
       setIsLoading(false);
-      await update({ interfaceLanguage: newLocale });
+      // update user session
+      await update();
     }
     setIsLoading(false);
   };
@@ -66,7 +76,6 @@ export function LocaleSelect() {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onValueChange={onToggleLanguageClick}
       value={i18n.language}
-      defaultValue={defaultLocale}
     >
       <SelectTrigger className="w-24">
         <SelectValue placeholder="Locale" />
