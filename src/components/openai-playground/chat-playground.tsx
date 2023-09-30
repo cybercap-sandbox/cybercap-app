@@ -18,9 +18,10 @@ import { useSaveChatMessage } from "@/hooks/useSaveMessage";
 
 export default function ChatPlayground() {
   const { t } = useTranslation("chat-playground");
-  const { allChatSessions } = useContext(AllChatSessionsContext);
+  const { allChatSessions, dispatchChatSessions } = useContext(
+    AllChatSessionsContext
+  );
   const activeSession = allChatSessions.find((s) => s.isActive);
-  console.log(allChatSessions);
   const { saveOpenAiMessage } = useSaveChatMessage({ activeSession });
 
   const { currentModel, setCurrentModel, modelsList, modelsListString } =
@@ -37,13 +38,22 @@ export default function ChatPlayground() {
     initialMessages: activeSession?.messages ?? [],
     body: { model: currentModel },
     onFinish: async (message) => {
-      console.log(message);
       await saveOpenAiMessage(message);
+      if (activeSession)
+        dispatchChatSessions({
+          type: "addMessageToSession",
+          payload: {
+            message,
+            sessionId: activeSession.id,
+          },
+        });
     },
   });
 
   // Set messages from active session to openAI messages
   useEffect(() => {
+    console.log(activeSession);
+
     if (!activeSession) setMessages([]);
     if (activeSession?.messages) setMessages(activeSession.messages);
   }, [activeSession, setMessages]);
@@ -56,13 +66,23 @@ export default function ChatPlayground() {
     if (!input) return;
     if (!activeSession?.id) return;
 
+    handleSubmit(e);
+    // Save message from user to db
+    console.log(input);
     await saveOpenAiMessage({
       content: input,
       role: "user",
     } as OpenAIMessage);
-    handleSubmit(e);
-    // Save message from user to db
-    console.log(input);
+    dispatchChatSessions({
+      type: "addMessageToSession",
+      payload: {
+        message: {
+          content: input,
+          role: "user",
+        } as OpenAIMessage,
+        sessionId: activeSession.id,
+      },
+    });
   };
 
   // Handle ctrl+enter to submit

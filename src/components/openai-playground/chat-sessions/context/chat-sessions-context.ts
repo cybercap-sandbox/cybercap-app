@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import type { ChatMessage, ChatSession } from "@prisma/client";
 import { setFirstSessionActive } from "./chat-sessions-reducer-functions";
+import { type Message } from "ai";
 
 export function chatSessionsReducer(
   allChatSessions: ChatSessionWithMessages[],
@@ -47,6 +48,18 @@ export function chatSessionsReducer(
       const newSessions = allChatSessions.map((session) => {
         if (session.id === action.payload.id) {
           return action.payload;
+        }
+        return session;
+      });
+      return newSessions;
+    }
+    case "addMessageToSession": {
+      const newSessions = allChatSessions.map((session) => {
+        if (session.id === action.payload.sessionId) {
+          return {
+            ...session,
+            messages: [...session.messages, action.payload.message],
+          };
         }
         return session;
       });
@@ -106,6 +119,13 @@ type ALL_CHAT_SESSIONS_ACTION_TYPE =
   | {
       type: "updateChatSession";
       payload: ChatSessionWithMessages;
+    }
+  | {
+      type: "addMessageToSession";
+      payload: {
+        sessionId: string;
+        message: Message;
+      };
     }
   | {
       type: "setActiveChatSession";
