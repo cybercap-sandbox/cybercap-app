@@ -1,27 +1,26 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
+
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useTranslation } from "next-i18next";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
+import { getNameAbbreviation } from "@/utils/name-abbreviation";
 
 export function AuthStatus() {
   const { data: session, status } = useSession();
   const { t } = useTranslation("top-panel");
-
+  const nameAbbreviation = getNameAbbreviation(session?.user?.name ?? "");
   return (
     <>
       <div className="hidden lg:block">
         {status === "authenticated" && (
           <div className="flex items-center gap-2">
-            {session?.user?.image && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                alt="user profile image"
-                src={session?.user?.image}
-                className="h-10 w-10 rounded-full"
-              />
-            )}
+            <Avatar>
+              <AvatarImage src={session?.user?.image ?? ""} />
+              <AvatarFallback>{nameAbbreviation}</AvatarFallback>
+            </Avatar>
             {session?.user?.name && (
               <span className="whitespace-nowrap text-lg">
                 {session?.user?.name}

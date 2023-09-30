@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
+  //Text models
   const gpt4 = await prisma.openAIModels.upsert({
     where: {
       name: "gpt-4",

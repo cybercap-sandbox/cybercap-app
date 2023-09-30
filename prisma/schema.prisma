@@ -2,7 +2,9 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+    provider      = "prisma-client-js"
+    engineType    = "binary"
+    binaryTargets = ["linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -50,14 +52,15 @@ model Session {
 }
 
 model User {
-    id                String    @id @default(cuid())
-    name              String?
-    email             String?   @unique
-    emailVerified     DateTime?
-    image             String?
-    interfaceLanguage String?
-    accounts          Account[]
-    sessions          Session[]
+    id                     String                   @id @default(cuid())
+    name                   String?
+    email                  String?                  @unique
+    emailVerified          DateTime?
+    image                  String?
+    interfaceLanguage      String?
+    accounts               Account[]
+    sessions               Session[]
+    ImageGenerationRequest ImageGenerationRequest[]
 }
 
 model VerificationToken {
@@ -80,4 +83,23 @@ model OpenAIModels {
     TrainingDataDate            DateTime?
     deprecated                  Boolean?
     userId                      String?
+}
+
+model ImageGenerationRequest {
+    id              String            @id @default(cuid())
+    createdAt       DateTime          @default(now())
+    requestText     String
+    numberOfImages  Int
+    generatedImages GeneratedImages[]
+    User            User?             @relation(fields: [userId], references: [id])
+    userId          String?
+    imageSize       String?
+}
+
+model GeneratedImages {
+    id                       String                  @id @default(cuid())
+    createdAt                DateTime                @default(now())
+    imageUrl                 String
+    ImageGenerationRequest   ImageGenerationRequest? @relation(fields: [imageGenerationRequestId], references: [id])
+    imageGenerationRequestId String?
 }

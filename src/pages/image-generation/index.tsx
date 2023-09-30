@@ -11,6 +11,7 @@ import { api } from "@/utils/api";
 import { Layout } from "@/components/layout";
 import { type imgGenFormSchema } from "@/components/openai-playground/image-promp-form";
 import { ImgGallery } from "@/components/openai-playground/image-gallery";
+import { useSaveImageRequest } from "@/hooks/saveImageRequest";
 
 export type GenerateImageParams = {
   prompt: string;
@@ -28,21 +29,19 @@ export default function Page(
   const [generatedImages, setGeneratedImages] = useState<
     (string | undefined)[]
   >([]);
+  const { saveUserRequest, isMutationLoading } = useSaveImageRequest();
+
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {
-      // console.log("pending");
       setImgGenStatus("pending");
     },
     onError: () => {
-      // console.log(error);
       setImgGenStatus("rejected");
     },
     onSuccess: (data) => {
-      // console.log("success");
       if (!data.response) return;
       setImgGenStatus("fulfilled");
-      const imgUrls = data.response?.map((d) => d.url);
-      if (!imgUrls) return;
+      const imgUrls = data.response?.map((d) => d.url!);
       setGeneratedImages((prev) => [...imgUrls, ...prev]);
     },
   });
@@ -59,14 +58,17 @@ export default function Page(
       size,
     });
   };
-  const submitHandler = (values: z.infer<typeof imgGenFormSchema>) => {
+  const submitHandler = async (value: z.infer<typeof imgGenFormSchema>) => {
     generateImg({
-      prompt: values.prompt,
-      numberOfImages: values.n,
-      size: values.size,
+      prompt: value.prompt,
+      numberOfImages: value.n,
+      size: value.size,
     });
+    //save user request and get id
+    await saveUserRequest({ value });
   };
 
+  const isMutating = imgGenStatus === "pending" || isMutationLoading;
   return (
     <>
       <Head>
@@ -78,8 +80,9 @@ export default function Page(
         <main className="bg-new-red container flex items-center justify-center ">
           <div className="mt-16 grid w-full grid-cols-1 gap-8 md:grid-cols-[300px_1fr]">
             <ImageGenerationPromptForm
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               submitHandler={submitHandler}
-              isLoading={imgGenStatus === "pending"}
+              isLoading={isMutating}
             />
             <ImgGallery images={generatedImages as string[]} />
           </div>
