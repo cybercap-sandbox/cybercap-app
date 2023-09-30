@@ -1,29 +1,25 @@
 "use client";
-import * as React from "react";
+import { useEffect, useRef } from "react";
 import { useChat } from "ai/react";
-import { api } from "@/utils/api";
+import { useTranslation } from "next-i18next";
 import { formatChatMembers, formatChatMessage } from "@/utils/chat-format";
+import { Separator } from "@/components//ui/separator";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ModelSelector } from "@/components/openai-playground/model-selector";
-import { useTranslation } from "next-i18next";
-
-const defaultModel = "gpt-3.5-turbo";
+import { useChatModelSelector } from "@/hooks/useChatModelSelector";
+import { ChatSessionBar } from "@/components/openai-playground/chat-sessions/chat-sessions-bar";
 
 export default function ChatPlayground() {
   const { t } = useTranslation("chat-playground");
-
-  const [currentModel, setCurrentModel] = React.useState<string>(defaultModel);
+  const { currentModel, setCurrentModel, modelsList, modelsListString } =
+    useChatModelSelector();
   const { messages, input, handleInputChange, handleSubmit, isLoading, stop } =
     useChat({ body: { model: currentModel } });
 
-  const modelsList = api.openAiModels.getModels.useQuery({
-    availableForChat: true,
-  }).data;
-  const modelsListString = modelsList?.map((m) => m.name) ?? ([] as string[]);
-  const messagesRef = React.useRef<HTMLDivElement>(null);
-  React.useEffect(() => {
+  const messagesRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
     if (!messagesRef.current) return;
     // Scroll to the bottom of the messages div
     messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
@@ -80,6 +76,8 @@ export default function ChatPlayground() {
                         setCurrentModel={setCurrentModel}
                         modelsList={modelsListString}
                       />
+                      <Separator />
+                      <ChatSessionBar />
                     </>
                   )}
                 </div>

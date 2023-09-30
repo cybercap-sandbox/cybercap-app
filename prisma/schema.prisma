@@ -3,8 +3,8 @@
 
 generator client {
     provider      = "prisma-client-js"
-    engineType    = "binary"
-    binaryTargets = ["linux-musl-openssl-3.0.x"]
+    // engineType    = "binary"
+    binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -61,6 +61,7 @@ model User {
     accounts               Account[]
     sessions               Session[]
     ImageGenerationRequest ImageGenerationRequest[]
+    ChatSession            ChatSession[]
 }
 
 model VerificationToken {
@@ -83,6 +84,7 @@ model OpenAIModels {
     TrainingDataDate            DateTime?
     deprecated                  Boolean?
     userId                      String?
+    Message                     Message[]
 }
 
 model ImageGenerationRequest {
@@ -102,4 +104,32 @@ model GeneratedImages {
     imageUrl                 String
     ImageGenerationRequest   ImageGenerationRequest? @relation(fields: [imageGenerationRequestId], references: [id])
     imageGenerationRequestId String?
+}
+
+model Message {
+    id          String        @id @default(cuid())
+    createdAt   DateTime      @default(now())
+    messageText String
+    role        role
+    session     ChatSession   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+    model       OpenAIModels? @relation(fields: [modelName], references: [name])
+    modelName   String?
+    sessionId   String
+}
+
+model ChatSession {
+    id        String    @id @default(cuid())
+    name      String?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    messages  Message[]
+}
+
+enum role {
+    user
+    assistant
+    system
+    function
 }
