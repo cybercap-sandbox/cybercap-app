@@ -75,8 +75,8 @@ export default function ChatPlayground() {
     }
     setActiveSession(activeSessionInContext);
   }, [allChatSessions, dispatchChatSessions, setMessages, activeSession?.id]);
-
   const { handleCreateSession, renameChatSession } = useChatSession();
+
   const handleSubmitMessageFromUser = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
@@ -133,6 +133,7 @@ export default function ChatPlayground() {
       handleSubmitMessageFromUser={handleSubmitMessageFromUser}
       isLoading={isLoading}
       stop={stop}
+      input={input}
     >
       <div className="grid h-full grid-rows-[auto_200px_200px] gap-6 lg:grid-cols-[1fr_1fr_250px] lg:grid-rows-1">
         <Textarea

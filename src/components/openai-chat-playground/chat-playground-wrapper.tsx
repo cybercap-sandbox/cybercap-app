@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 export function ChatPlaygroundWrapper({
   children,
   handleSubmitMessageFromUser,
+  input,
   isLoading,
   stop,
 }: {
   children: React.ReactNode;
   handleSubmitMessageFromUser: (e: React.FormEvent<HTMLFormElement>) => void;
+  input: string;
   isLoading: boolean;
   stop: () => void;
 }) {
@@ -31,7 +33,7 @@ export function ChatPlaygroundWrapper({
             >
               {children}
               <div className="flex items-center space-x-2">
-                <Button disabled={isLoading}>
+                <Button disabled={isLoading || input.length === 0}>
                   {isLoading && <Icons.spinner className="animate-spin" />}
                   {t("submit-button")}
                 </Button>
