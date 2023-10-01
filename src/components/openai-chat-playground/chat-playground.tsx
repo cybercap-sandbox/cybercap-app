@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect } from "react";
 import { useChat } from "ai/react";
 import { type Message as OpenAIMessage } from "ai";
 
 import { useTranslation } from "next-i18next";
-import { formatChatMembers, formatChatMessage } from "@/utils/chat-format";
 import { Separator } from "@/components//ui/separator";
 
 import { Textarea } from "@/components/ui/textarea";
@@ -16,6 +15,7 @@ import { ChatPlaygroundWrapper } from "@/components/openai-chat-playground/chat-
 import { useChatModelSelector } from "@/hooks/useChatModelSelector";
 import { useSaveChatMessage } from "@/hooks/useSaveMessage";
 import { useCreateChatSession } from "@/hooks/useCreateChatSession";
+import { MessagesContainer } from "./messages-container";
 
 export default function ChatPlayground() {
   const { t } = useTranslation("chat-playground");
@@ -100,22 +100,6 @@ export default function ChatPlayground() {
     }
   };
 
-  const messagesRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!messagesRef.current) return;
-    // Scroll to the bottom of the messages div
-    messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-  }, [messages]);
-
-  const formattedMessages = messages.map((m) => (
-    <div
-      key={m.id}
-      className="flex flex-col gap-5 rounded-lg border-2 px-1 py-3"
-    >
-      {formatChatMembers(m.role)} {formatChatMessage(m.content)}
-    </div>
-  ));
-
   return (
     <ChatPlaygroundWrapper
       handleSubmitMessageFromUser={handleSubmitMessageFromUser}
@@ -130,12 +114,8 @@ export default function ChatPlayground() {
           className="h-full min-h-[200px] text-lg lg:min-h-[500px]"
           onKeyDown={handleKeyDown}
         />
-        <div
-          className="flex max-h-[500px] flex-col gap-5 overflow-auto rounded-md border bg-muted p-3"
-          ref={messagesRef}
-        >
-          {formattedMessages}
-        </div>
+
+        <MessagesContainer messages={messages} />
         <div className="row-start-1 row-end-2 flex flex-col gap-3 lg:row-start-auto lg:row-end-auto">
           {modelsList && (
             <ModelSelector
