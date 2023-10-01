@@ -12,7 +12,7 @@ export function CreateChatSessionButton() {
     <>
       <Button
         type="button"
-        variant={"outline"}
+        variant={"default"}
         className="relative w-full"
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={handleCreateSessionOnServer}

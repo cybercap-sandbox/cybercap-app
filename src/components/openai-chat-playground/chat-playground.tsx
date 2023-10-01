@@ -134,25 +134,27 @@ export default function ChatPlayground() {
       isLoading={isLoading}
       stop={stop}
     >
-      <div className="grid h-full grid-rows-[auto_200px_200px] gap-6 lg:grid-cols-[1fr_1fr_200px] lg:grid-rows-1">
+      <div className="grid h-full grid-rows-[auto_200px_200px] gap-6 lg:grid-cols-[1fr_1fr_250px] lg:grid-rows-1">
         <Textarea
           value={input}
           onChange={handleInputChange}
           placeholder={t("message-placeholder")}
-          className="h-full min-h-[200px] text-lg lg:min-h-[500px]"
+          className="max-h-[45vh] min-h-[200px] text-lg lg:min-h-[500px]"
           onKeyDown={handleKeyDown}
         />
 
         <MessagesContainer messages={messages} />
-        <div className="row-start-1 row-end-2 flex flex-col gap-3 lg:row-start-auto lg:row-end-auto">
+        <div className="row-start-1 row-end-2 flex max-h-[45vh] flex-col gap-3 lg:row-start-auto lg:row-end-auto">
           {modelsList && (
-            <ModelSelector
-              currentModel={currentModel}
-              setCurrentModel={setCurrentModel}
-              modelsList={modelsListString}
-            />
+            <>
+              <ModelSelector
+                currentModel={currentModel}
+                setCurrentModel={setCurrentModel}
+                modelsList={modelsListString}
+              />
+              <Separator />
+            </>
           )}
-          <Separator />
           <ChatSessionBar />
         </div>
       </div>

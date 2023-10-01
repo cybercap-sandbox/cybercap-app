@@ -30,7 +30,6 @@ export function useChatSession() {
       type: "addChatSessionAndMakeActive",
       payload: tempChatSession,
     });
-    console.log(allChatSessions);
 
     // create a chat session in db and update context
     const newChatFromDb = await createSessionMutation.mutateAsync({

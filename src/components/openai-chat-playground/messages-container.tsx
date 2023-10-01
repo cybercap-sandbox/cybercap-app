@@ -20,7 +20,7 @@ export function MessagesContainer({ messages }: { messages: OpenAIMessage[] }) {
   ));
   return (
     <div
-      className="flex max-h-[500px] flex-col gap-5 overflow-auto rounded-md border bg-muted p-3"
+      className="flex max-h-[45vh] min-h-full flex-col gap-5 overflow-auto rounded-md border bg-muted p-3"
       ref={messagesRef}
     >
       {formattedMessages}

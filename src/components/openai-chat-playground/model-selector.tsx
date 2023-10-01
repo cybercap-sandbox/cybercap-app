@@ -45,7 +45,7 @@ export function ModelSelector({
             variant="outline"
             role="combobox"
             aria-expanded={popoverOpen}
-            className="w-[200px] justify-between"
+            className="w-full justify-between"
           >
             {currentModel
               ? modelsList.find((model) => model === currentModel)

@@ -11,25 +11,22 @@ export function ChatSessionBar() {
   );
 
   const sessionList = allChatSessions.map((chatSession) => (
-    <div
-      key={chatSession.id}
-      className="flex w-full flex-col gap-2 overflow-auto"
-    >
+    <div key={chatSession.id} className=" w-full  overflow-auto">
       <ChatSessionItem chatSession={chatSession} />
     </div>
   ));
 
   return (
-    <>
+    <div className=" flex max-h-[200px] flex-col gap-4 lg:max-h-[45vh] ">
       {!isLoadingFromServer && <CreateChatSessionButton />}
+      {isLoadingFromServer && (
+        <div className="flex items-center justify-center">
+          <Icons.spinner className="animate-spin" fill="black" />
+        </div>
+      )}
       <div className="h-full w-full overflow-auto">
-        {isLoadingFromServer && (
-          <div className="flex items-center justify-center">
-            <Icons.spinner className="animate-spin" fill="black" />
-          </div>
-        )}
-        {sessionList}
+        <div className="flex flex-col gap-1 overflow-auto">{sessionList}</div>
       </div>
-    </>
+    </div>
   );
 }
