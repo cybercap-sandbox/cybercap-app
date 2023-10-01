@@ -6,5 +6,6 @@
     "stop-button": "Stop",
     "model-selector-title": "Model",
     "user-badge": "You",
-    "assistance-badge": "AI Assistant"
+    "assistance-badge": "AI Assistant",
+    "create-session-button": "+ Chat Session"
 }

@@ -8,9 +8,8 @@ export function useChatMessage({
   activeSession: ChatSessionWithMessages | undefined;
 }) {
   const saveMessageInDbMutation = api.chatSession.saveMessage.useMutation();
-
+  const saveMessageIsLoading = saveMessageInDbMutation.isLoading;
   const saveChatMessageInDb = async (message: OpenAIMessage) => {
-    console.log(message);
     if (!activeSession?.id) return;
     if (!message.content) return;
     await saveMessageInDbMutation.mutateAsync({
@@ -20,5 +19,5 @@ export function useChatMessage({
     });
   };
 
-  return { saveChatMessageInDb };
+  return { saveChatMessageInDb, saveMessageIsLoading };
 }

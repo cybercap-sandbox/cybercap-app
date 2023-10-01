@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useChat } from "ai/react";
 import { type Message as OpenAIMessage } from "ai";
 
@@ -22,15 +29,14 @@ import { MessagesContainer } from "./messages-container";
 
 export default function ChatPlayground() {
   const { t } = useTranslation("chat-playground");
-  const { allChatSessions, dispatchChatSessions } = useContext(
-    AllChatSessionsContext
-  );
-
+  const { allChatSessions, dispatchChatSessions, isLoadingFromServer } =
+    useContext(AllChatSessionsContext);
   const [activeSession, setActiveSession] = useState<
     ChatSessionWithMessages | undefined
   >();
-
   const { saveChatMessageInDb } = useChatMessage({ activeSession });
+  const { handleCreateSession, renameChatSession, chatSessionIsLoading } =
+    useChatSession();
 
   const { currentModel, setCurrentModel, modelsList, modelsListString } =
     useChatModelSelector();
@@ -75,21 +81,26 @@ export default function ChatPlayground() {
     }
     setActiveSession(activeSessionInContext);
   }, [allChatSessions, dispatchChatSessions, setMessages, activeSession?.id]);
-  const { handleCreateSession, renameChatSession } = useChatSession();
+
+  // create a new session and set it as active when user starts typing
+  const handleInputChangeByUser = async (
+    e: ChangeEvent<HTMLTextAreaElement> | ChangeEvent<HTMLInputElement>
+  ) => {
+    // Create a new session if there is no active session
+    handleInputChange(e);
+    if (!activeSession && !chatSessionIsLoading) {
+      const newSession = await handleCreateSession();
+      setActiveSession(newSession);
+    }
+  };
 
   const handleSubmitMessageFromUser = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
-    // prevent empty messages
-    if (!input) return;
+    // prevent empty messages and execution when loading
+    if (!input || chatSessionIsLoading || isLoadingFromServer) return;
     // Create a new session if there is no active session
-    console.log(activeSession);
-
-    if (!activeSession) {
-      await handleCreateSession();
-    }
-    console.log(activeSession);
     if (!activeSession?.id) return;
 
     handleSubmit(e);
@@ -131,14 +142,15 @@ export default function ChatPlayground() {
   return (
     <ChatPlaygroundWrapper
       handleSubmitMessageFromUser={handleSubmitMessageFromUser}
-      isLoading={isLoading}
+      isLoading={isLoading || chatSessionIsLoading || isLoadingFromServer}
       stop={stop}
       input={input}
     >
       <div className="grid h-full grid-rows-[auto_200px_200px] gap-6 lg:grid-cols-[1fr_1fr_250px] lg:grid-rows-1">
         <Textarea
+          disabled={isLoading || isLoadingFromServer}
           value={input}
-          onChange={handleInputChange}
+          onChange={handleInputChangeByUser}
           placeholder={t("message-placeholder")}
           className="max-h-[45vh] min-h-[200px] text-lg lg:min-h-[500px]"
           onKeyDown={handleKeyDown}

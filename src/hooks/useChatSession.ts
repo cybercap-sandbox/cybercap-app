@@ -14,8 +14,7 @@ export function useChatSession() {
   const updateSessionMutation = api.chatSession.updateChatSession.useMutation();
 
   const handleCreateSession = async (name?: string) => {
-    const newChatSessionName =
-      name ?? `Chat session ${new Date().toLocaleString()}`;
+    const newChatSessionName = name ?? ` ${new Date().toLocaleString()}`;
     // create a temporary chat session in context
     const tempChatSession = {
       id: nanoid(10),
@@ -63,6 +62,12 @@ export function useChatSession() {
       name: newChatSessionName,
     });
   };
-
-  return { handleCreateSession, createSessionMutation, renameChatSession };
+  const chatSessionIsLoading =
+    createSessionMutation.isLoading || updateSessionMutation.isLoading;
+  return {
+    handleCreateSession,
+    createSessionMutation,
+    renameChatSession,
+    chatSessionIsLoading,
+  };
 }

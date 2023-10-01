@@ -9,6 +9,7 @@ export function ChatSessionBar() {
   const { allChatSessions, isLoadingFromServer } = useContext(
     AllChatSessionsContext
   );
+  console.log(isLoadingFromServer);
 
   const sessionList = allChatSessions.map((chatSession) => (
     <div key={chatSession.id} className=" w-full  overflow-auto">
