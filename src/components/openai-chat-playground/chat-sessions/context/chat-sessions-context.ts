@@ -37,11 +37,9 @@ export function chatSessionsReducer(
       ];
 
     case "deleteChatSession": {
-      const newSessions = allChatSessions.filter(
+      return allChatSessions.filter(
         (session) => session.id !== action.payload.id
       );
-
-      return newSessions;
     }
     case "updateChatSession": {
       console.log("updateChatSession");

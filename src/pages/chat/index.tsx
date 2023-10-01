@@ -5,13 +5,13 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 import { useSession } from "next-auth/react";
 
-import ChatPlayground from "@/components/openai-playground/chat-playground";
+import ChatPlayground from "@/components/openai-chat-playground/chat-playground";
 import { Layout } from "@/components/layout";
 import {
   AllChatSessionsContext,
   type ChatSessionWithMessages,
   chatSessionsReducer,
-} from "@/components/openai-playground/chat-sessions/context/chat-sessions-context";
+} from "@/components/openai-chat-playground/chat-sessions/context/chat-sessions-context";
 import { api } from "@/utils/api";
 
 export default function Page(

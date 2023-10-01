@@ -6,11 +6,11 @@ import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
-import { ImageGenerationPromptForm } from "@/components/openai-playground/image-promp-form";
+import { ImageGenerationPromptForm } from "@/components/openai-images-playground/image-promp-form";
 import { api } from "@/utils/api";
 import { Layout } from "@/components/layout";
-import { type imgGenFormSchema } from "@/components/openai-playground/image-promp-form";
-import { ImgGallery } from "@/components/openai-playground/image-gallery";
+import { type imgGenFormSchema } from "@/components/openai-images-playground/image-promp-form";
+import { ImgGallery } from "@/components/openai-images-playground/image-gallery";
 import { useSaveImageRequest } from "@/hooks/saveImageRequest";
 
 export type GenerateImageParams = {

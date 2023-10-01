@@ -1,7 +1,7 @@
 import {
   AllChatSessionsContext,
   type ChatSessionWithMessages,
-} from "@/components/openai-playground/chat-sessions/context/chat-sessions-context";
+} from "@/components/openai-chat-playground/chat-sessions/context/chat-sessions-context";
 import { api } from "@/utils/api";
 import { nanoid } from "ai";
 import { useContext } from "react";

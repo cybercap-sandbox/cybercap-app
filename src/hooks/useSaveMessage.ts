@@ -1,4 +1,4 @@
-import { type ChatSessionWithMessages } from "@/components/openai-playground/chat-sessions/context/chat-sessions-context";
+import { type ChatSessionWithMessages } from "@/components/openai-chat-playground/chat-sessions/context/chat-sessions-context";
 import { api } from "@/utils/api";
 import { type Message as OpenAIMessage } from "ai";
 
