@@ -1,9 +1,9 @@
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { useCreateChatSession } from "@/hooks/useCreateChatSession";
+import { useChatSession } from "@/hooks/useChatSession";
 
 export function CreateChatSessionButton() {
-  const { handleCreateSession, createSessionMutation } = useCreateChatSession();
+  const { handleCreateSession, createSessionMutation } = useChatSession();
   const handleCreateSessionOnServer = async () => {
     await handleCreateSession();
   };

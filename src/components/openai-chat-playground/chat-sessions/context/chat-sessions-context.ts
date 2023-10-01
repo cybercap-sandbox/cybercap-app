@@ -1,6 +1,5 @@
 import { createContext } from "react";
 import type { ChatMessage, ChatSession } from "@prisma/client";
-import { setFirstSessionActive } from "./chat-sessions-reducer-functions";
 import { type Message } from "ai";
 
 export function chatSessionsReducer(
@@ -9,20 +8,15 @@ export function chatSessionsReducer(
 ) {
   switch (action.type) {
     case "loadAllChatSessions":
-      return action.payload.map((session, index) => {
-        if (index === 0) {
-          return {
-            ...session,
-            isActive: true,
-          };
-        }
+      return action.payload.map((session) => {
         return {
           ...session,
           isActive: false,
         };
       });
     case "addChatSessionAndMakeActive":
-      return [
+      console.log(action.payload);
+      const newSessions = [
         {
           ...action.payload,
           isActive: true,
@@ -35,6 +29,8 @@ export function chatSessionsReducer(
           };
         }),
       ];
+      console.log(newSessions);
+      return newSessions;
 
     case "deleteChatSession": {
       return allChatSessions.filter(
@@ -49,6 +45,7 @@ export function chatSessionsReducer(
         }
         return session;
       });
+      console.log(newSessions);
       return newSessions;
     }
     case "addMessageToSession": {
@@ -64,6 +61,7 @@ export function chatSessionsReducer(
       return newSessions;
     }
     case "setActiveChatSession": {
+      if (!action.payload?.id) return allChatSessions;
       const newSessions = allChatSessions.map((session) => {
         if (session.id === action.payload.id) {
           return {
@@ -77,11 +75,6 @@ export function chatSessionsReducer(
         };
       });
       return newSessions;
-    }
-    case "setFirstSessionActive": {
-      return setFirstSessionActive({
-        allSessions: allChatSessions,
-      });
     }
   }
 }
@@ -127,12 +120,7 @@ type ALL_CHAT_SESSIONS_ACTION_TYPE =
     }
   | {
       type: "setActiveChatSession";
-      payload: {
-        id: string;
-      };
-    }
-  | {
-      type: "setFirstSessionActive";
+      payload: ChatSessionWithMessages;
     };
 
 export type ChatSessionWithMessages = ChatSession & {

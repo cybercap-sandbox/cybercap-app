@@ -2,7 +2,7 @@ import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-export function useSaveImageRequest() {
+export function useImageGenerationRequest() {
   const [userRequestId, setUserRequestId] = useState<string | undefined>(
     undefined
   );

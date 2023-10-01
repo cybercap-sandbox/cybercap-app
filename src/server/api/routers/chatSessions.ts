@@ -53,6 +53,7 @@ export const chatSessionRouter = createTRPCRouter({
           id: input.id,
         },
         data: {
+          updatedAt: new Date(),
           name: input.name,
         },
       });

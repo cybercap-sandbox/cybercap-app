@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useChat } from "ai/react";
 import { type Message as OpenAIMessage } from "ai";
 
@@ -10,11 +10,14 @@ import { Separator } from "@/components//ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { ModelSelector } from "@/components/openai-chat-playground/model-selector";
 import { ChatSessionBar } from "@/components/openai-chat-playground/chat-sessions/chat-sessions-bar";
-import { AllChatSessionsContext } from "@/components/openai-chat-playground/chat-sessions/context/chat-sessions-context";
+import {
+  AllChatSessionsContext,
+  ChatSessionWithMessages,
+} from "@/components/openai-chat-playground/chat-sessions/context/chat-sessions-context";
 import { ChatPlaygroundWrapper } from "@/components/openai-chat-playground/chat-playground-wrapper";
 import { useChatModelSelector } from "@/hooks/useChatModelSelector";
-import { useSaveChatMessage } from "@/hooks/useSaveMessage";
-import { useCreateChatSession } from "@/hooks/useCreateChatSession";
+import { useChatMessage } from "@/hooks/useChatMessage";
+import { useChatSession } from "@/hooks/useChatSession";
 import { MessagesContainer } from "./messages-container";
 
 export default function ChatPlayground() {
@@ -22,8 +25,12 @@ export default function ChatPlayground() {
   const { allChatSessions, dispatchChatSessions } = useContext(
     AllChatSessionsContext
   );
-  const activeSession = allChatSessions.find((s) => s.isActive);
-  const { saveOpenAiMessage } = useSaveChatMessage({ activeSession });
+
+  const [activeSession, setActiveSession] = useState<
+    ChatSessionWithMessages | undefined
+  >();
+
+  const { saveChatMessageInDb } = useChatMessage({ activeSession });
 
   const { currentModel, setCurrentModel, modelsList, modelsListString } =
     useChatModelSelector();
@@ -39,7 +46,7 @@ export default function ChatPlayground() {
     initialMessages: activeSession?.messages ?? [],
     body: { model: currentModel },
     onFinish: async (message) => {
-      await saveOpenAiMessage(message);
+      await saveChatMessageInDb(message);
       if (activeSession)
         dispatchChatSessions({
           type: "addMessageToSession",
@@ -50,16 +57,26 @@ export default function ChatPlayground() {
         });
     },
   });
-  const { handleCreateSession } = useCreateChatSession();
 
-  // Set messages from active session to openAI messages
+  // Set messages from active session to openAI messages only when the active session changes
   useEffect(() => {
-    console.log(activeSession);
+    let activeSessionInContext;
+    if (allChatSessions.length > 0) {
+      activeSessionInContext = allChatSessions.find((s) => s.isActive);
+    }
+    if (!activeSessionInContext || !activeSessionInContext?.messages)
+      setMessages([]);
+    // set messages from active session to openAI messages user switch session
+    if (
+      activeSessionInContext?.messages &&
+      activeSessionInContext.id !== activeSession?.id
+    ) {
+      setMessages(activeSessionInContext.messages);
+    }
+    setActiveSession(activeSessionInContext);
+  }, [allChatSessions, dispatchChatSessions, setMessages, activeSession?.id]);
 
-    if (!activeSession) setMessages([]);
-    if (activeSession?.messages) setMessages(activeSession.messages);
-  }, [activeSession, setMessages]);
-
+  const { handleCreateSession, renameChatSession } = useChatSession();
   const handleSubmitMessageFromUser = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
@@ -67,18 +84,24 @@ export default function ChatPlayground() {
     // prevent empty messages
     if (!input) return;
     // Create a new session if there is no active session
+    console.log(activeSession);
+
     if (!activeSession) {
       await handleCreateSession();
     }
+    console.log(activeSession);
     if (!activeSession?.id) return;
 
     handleSubmit(e);
     // Save message from user to db
+
     console.log(input);
-    await saveOpenAiMessage({
-      content: input,
-      role: "user",
-    } as OpenAIMessage);
+    // Rename session if it's the first message
+    if (activeSession.messages && activeSession.messages.length === 0) {
+      await renameChatSession(input, activeSession.id);
+    }
+
+    // add message to context
     dispatchChatSessions({
       type: "addMessageToSession",
       payload: {
@@ -89,6 +112,11 @@ export default function ChatPlayground() {
         sessionId: activeSession.id,
       },
     });
+
+    await saveChatMessageInDb({
+      content: input,
+      role: "user",
+    } as OpenAIMessage);
   };
 
   // Handle ctrl+enter to submit

@@ -37,9 +37,9 @@ export function ChatSessionItem({
   return (
     <Button
       type="button"
-      variant={"ghost"}
+      variant={"outline"}
       className={cn(
-        "relative flex w-full justify-between px-2",
+        "relative flex w-full justify-between rounded-none px-2",
         chatSession.isActive && "bg-gray-200"
       )}
       onClick={() => {

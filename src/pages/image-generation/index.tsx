@@ -11,7 +11,7 @@ import { api } from "@/utils/api";
 import { Layout } from "@/components/layout";
 import { type imgGenFormSchema } from "@/components/openai-images-playground/image-promp-form";
 import { ImgGallery } from "@/components/openai-images-playground/image-gallery";
-import { useSaveImageRequest } from "@/hooks/saveImageRequest";
+import { useImageGenerationRequest } from "@/hooks/useImageGenerationRequest";
 
 export type GenerateImageParams = {
   prompt: string;
@@ -29,7 +29,7 @@ export default function Page(
   const [generatedImages, setGeneratedImages] = useState<
     (string | undefined)[]
   >([]);
-  const { saveUserRequest, isMutationLoading } = useSaveImageRequest();
+  const { saveUserRequest, isMutationLoading } = useImageGenerationRequest();
 
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {
