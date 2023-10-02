@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 
 import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
 import { useTranslation } from "next-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { getNameAbbreviation } from "@/utils/name-abbreviation";
+import { LoginLink } from "./login-link";
 
 export function AuthStatus() {
   const { data: session, status } = useSession();
@@ -36,18 +36,16 @@ export function AuthStatus() {
         )}
       </div>
       {status === "authenticated" && (
-        <Button variant={"secondary"} onClick={() => signOut()}>
+        <Button
+          variant={"secondary"}
+          onClick={() => signOut()}
+          className=" transition-all hover:bg-secondary/80 hover:ring-1 hover:ring-primary
+        active:scale-90"
+        >
           {t("auth-status.logout")}
         </Button>
       )}
-      {status === "unauthenticated" && (
-        <Link
-          className="inline-flex h-10 items-center justify-center rounded-md bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground ring-offset-background  transition-colors hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          href={"/auth/signin"}
-        >
-          {t("auth-status.login")}
-        </Link>
-      )}
+      {status === "unauthenticated" && <LoginLink />}
       {status === "loading" && (
         <Icons.spinner className="animate-spin" fill="black" />
       )}

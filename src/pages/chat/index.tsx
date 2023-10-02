@@ -21,6 +21,7 @@ import {
   chatSessionsReducer,
 } from "@/components/openai-chat-playground/chat-sessions/context/chat-sessions-context";
 import { api } from "@/utils/api";
+import { LoginRequiredMessage } from "@/components/layout/login-required-message";
 
 export default function Page(
   _props: InferGetStaticPropsType<typeof getStaticProps>
@@ -53,7 +54,6 @@ export default function Page(
     });
     setIsLoadedFromServer(true);
   }, [chatSessionsFromServer.data, dispatchChatSessions, isLoadedFromServer]);
-  if (status !== "authenticated") return null;
 
   return (
     <AllChatSessionsContext.Provider
@@ -70,7 +70,8 @@ export default function Page(
       </Head>
       <Layout>
         <main className="bg-new-red flex items-center justify-center">
-          <ChatPlayground />
+          {status === "authenticated" && <ChatPlayground />}
+          {status === "unauthenticated" && <LoginRequiredMessage />}
         </main>
       </Layout>
     </AllChatSessionsContext.Provider>
@@ -84,7 +85,7 @@ export const getStaticProps: GetStaticProps = async ({
   props: {
     ...(await serverSideTranslations(
       locale ?? defaultLocale ?? "en",
-      ["chat-playground", "top-panel"],
+      ["chat-playground", "top-panel", "common"],
       null,
       ["en", "fr"]
     )),

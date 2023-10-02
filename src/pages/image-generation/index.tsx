@@ -12,6 +12,8 @@ import { Layout } from "@/components/layout";
 import { type imgGenFormSchema } from "@/components/openai-images-playground/image-promp-form";
 import { ImgGallery } from "@/components/openai-images-playground/image-gallery";
 import { useImageGenerationRequest } from "@/hooks/useImageGenerationRequest";
+import { useSession } from "next-auth/react";
+import { LoginRequiredMessage } from "@/components/layout/login-required-message";
 
 export type GenerateImageParams = {
   prompt: string;
@@ -22,6 +24,7 @@ export default function Page(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
   const { t } = useTranslation("image-generation");
+  const { status } = useSession();
 
   const [imgGenStatus, setImgGenStatus] = useState<
     "idle" | "pending" | "fulfilled" | "rejected"
@@ -78,14 +81,17 @@ export default function Page(
       </Head>
       <Layout>
         <main className="bg-new-red container flex items-center justify-center ">
-          <div className="mt-16 grid w-full grid-cols-1 gap-8 md:grid-cols-[300px_1fr]">
-            <ImageGenerationPromptForm
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              submitHandler={submitHandler}
-              isLoading={isMutating}
-            />
-            <ImgGallery images={generatedImages as string[]} />
-          </div>
+          {status === "authenticated" && (
+            <div className="mt-16 grid w-full grid-cols-1 gap-8 md:grid-cols-[300px_1fr]">
+              <ImageGenerationPromptForm
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                submitHandler={submitHandler}
+                isLoading={isMutating}
+              />
+              <ImgGallery images={generatedImages as string[]} />
+            </div>
+          )}
+          {status === "unauthenticated" && <LoginRequiredMessage />}
         </main>
       </Layout>
     </>
@@ -99,7 +105,7 @@ export const getStaticProps: GetStaticProps = async ({
   props: {
     ...(await serverSideTranslations(
       locale ?? defaultLocale ?? "en",
-      ["image-generation", "top-panel"],
+      ["image-generation", "top-panel", "common"],
       null,
       ["en", "fr"]
     )),
