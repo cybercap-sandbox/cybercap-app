@@ -8,12 +8,14 @@ export function ChatPlaygroundWrapper({
   input,
   isLoading,
   stop,
+  reload,
 }: {
   children: React.ReactNode;
   handleSubmitMessageFromUser: (e: React.FormEvent<HTMLFormElement>) => void;
   input: string;
   isLoading: boolean;
   stop: () => void;
+  reload: () => void;
 }) {
   const { t } = useTranslation("chat-playground");
 
@@ -33,16 +35,30 @@ export function ChatPlaygroundWrapper({
             >
               {children}
               <div className="flex items-center space-x-2">
-                <Button disabled={isLoading || input.length === 0}>
-                  {isLoading && <Icons.spinner className="animate-spin" />}
+                <Button
+                  disabled={isLoading || input.length === 0}
+                  className="relative px-8"
+                >
+                  {isLoading && (
+                    <div className="absolute left-3">
+                      <Icons.spinner className="animate-spin" />
+                    </div>
+                  )}
                   {t("submit-button")}
                 </Button>
                 <Button
-                  variant={"secondary"}
+                  variant={"destructive"}
                   onClick={stop}
                   disabled={!isLoading}
                 >
                   {t("stop-button")}
+                </Button>
+                <Button
+                  variant={"secondary"}
+                  onClick={reload}
+                  disabled={isLoading}
+                >
+                  {t("reload-button")}
                 </Button>
               </div>
             </form>

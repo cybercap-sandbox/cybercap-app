@@ -48,6 +48,7 @@ export default function ChatPlayground() {
     handleSubmit,
     isLoading,
     stop,
+    reload,
   } = useChat({
     initialMessages: activeSession?.messages ?? [],
     body: { model: currentModel },
@@ -109,6 +110,7 @@ export default function ChatPlayground() {
     console.log(input);
     // Rename session if it's the first message
     if (activeSession.messages && activeSession.messages.length === 0) {
+      // rename only if active session name
       await renameChatSession(input, activeSession.id);
     }
 
@@ -144,6 +146,7 @@ export default function ChatPlayground() {
       handleSubmitMessageFromUser={handleSubmitMessageFromUser}
       isLoading={isLoading || chatSessionIsLoading || isLoadingFromServer}
       stop={stop}
+      reload={reload}
       input={input}
     >
       <div className="grid h-full grid-rows-[auto_200px_200px] gap-6 lg:grid-cols-[1fr_1fr_250px] lg:grid-rows-1">
@@ -168,7 +171,7 @@ export default function ChatPlayground() {
               <Separator />
             </>
           )}
-          <ChatSessionBar />
+          <ChatSessionBar stop={stop} />
         </div>
       </div>
     </ChatPlaygroundWrapper>
