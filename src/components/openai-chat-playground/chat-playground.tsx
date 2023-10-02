@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type ChangeEvent, useContext, useEffect, useState } from "react";
 import { useChat } from "ai/react";
 import { type Message as OpenAIMessage } from "ai";
 
@@ -19,7 +12,7 @@ import { ModelSelector } from "@/components/openai-chat-playground/model-selecto
 import { ChatSessionBar } from "@/components/openai-chat-playground/chat-sessions/chat-sessions-bar";
 import {
   AllChatSessionsContext,
-  ChatSessionWithMessages,
+  type ChatSessionWithMessages,
 } from "@/components/openai-chat-playground/chat-sessions/context/chat-sessions-context";
 import { ChatPlaygroundWrapper } from "@/components/openai-chat-playground/chat-playground-wrapper";
 import { useChatModelSelector } from "@/hooks/useChatModelSelector";
