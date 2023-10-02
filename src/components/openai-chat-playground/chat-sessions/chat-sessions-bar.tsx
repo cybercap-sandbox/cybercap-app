@@ -5,15 +5,13 @@ import { CreateChatSessionButton } from "./create-session-button";
 import { useContext } from "react";
 import { AllChatSessionsContext } from "./context/chat-sessions-context";
 
-export function ChatSessionBar() {
+export function ChatSessionBar({ stop }: { stop: () => void }) {
   const { allChatSessions, isLoadingFromServer } = useContext(
     AllChatSessionsContext
   );
-  console.log(isLoadingFromServer);
-
   const sessionList = allChatSessions.map((chatSession) => (
     <div key={chatSession.id} className=" w-full  overflow-auto">
-      <ChatSessionItem chatSession={chatSession} />
+      <ChatSessionItem chatSession={chatSession} stop={stop} />
     </div>
   ));
 

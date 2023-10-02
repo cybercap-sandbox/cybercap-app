@@ -48,7 +48,7 @@ export const chatSessionRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.prisma.chatSession.update({
+      return await ctx.prisma.chatSession.updateMany({
         where: {
           id: input.id,
         },
