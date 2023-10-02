@@ -2,7 +2,7 @@ import { cn } from "@/utils/class-merge";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { api } from "@/utils/api";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import {
   AllChatSessionsContext,
   type ChatSessionWithMessages,
@@ -28,6 +28,7 @@ export function ChatSessionItem({
   const deleteSessionMutation = api.chatSession.deleteChatSession.useMutation();
   const { dispatchChatSessions } = useContext(AllChatSessionsContext);
 
+  const inputRef = useRef<HTMLInputElement>(null);
   const { renameChatSession } = useChatSession();
 
   const handleDeleteSession = async (id: string) => {
@@ -43,6 +44,14 @@ export function ChatSessionItem({
     await deleteSessionMutation.mutateAsync({ id });
   };
 
+  const handleStartEditing = () => {
+    setIsEditing(true);
+    setNewName(chatSession.name!);
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
+  };
+
   const handleEditSession = async (id: string) => {
     setIsEditing(false);
     if (!newName) return;
@@ -52,6 +61,9 @@ export function ChatSessionItem({
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       await handleEditSession(chatSession.id);
+    }
+    if (e.key === "Escape") {
+      setIsEditing(false);
     }
   };
 
@@ -64,6 +76,7 @@ export function ChatSessionItem({
         onChange={(e) => setNewName(e.target.value)}
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onKeyDown={handleKeyDown}
+        ref={inputRef}
       />
       <span
         className="h-max rounded-none px-2 py-3 hover:bg-gray-200"
@@ -104,10 +117,7 @@ export function ChatSessionItem({
                 <span
                   className="h-max rounded-sm px-2 py-2 hover:bg-gray-200"
                   // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                  onClick={() => {
-                    setIsEditing(!isEditing);
-                    setNewName(chatSession.name!);
-                  }}
+                  onClick={handleStartEditing}
                 >
                   <Icons.pen className="h-4 w-4" />
                 </span>

@@ -107,7 +107,6 @@ export default function ChatPlayground() {
     handleSubmit(e);
     // Save message from user to db
 
-    console.log(input);
     // Rename session if it's the first message
     if (activeSession.messages && activeSession.messages.length === 0) {
       // rename only if active session name
@@ -161,6 +160,7 @@ export default function ChatPlayground() {
           placeholder={t("message-placeholder")}
           className="max-h-[45vh] min-h-[200px] text-lg lg:min-h-[500px]"
           onKeyDown={handleKeyDown}
+          onFocus={handleInputChangeByUser}
         />
 
         <MessagesContainer messages={messages} />
