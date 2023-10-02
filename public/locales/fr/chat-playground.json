@@ -7,5 +7,6 @@
     "model-selector-title": "Modèle",
     "user-badge": "Toi",
     "assistance-badge": "Assistant IA",
-    "create-session-button": "+ Séance de discussion"
+    "create-session-button": "+ Séance de discussion",
+    "reload-button": "Régénérer"
 }

@@ -6,16 +6,20 @@ export function ChatPlaygroundWrapper({
   children,
   handleSubmitMessageFromUser,
   input,
-  isLoading,
+  generationIsLoading,
+  mutationIsLoading,
   stop,
   reload,
+  reloadAvailable,
 }: {
   children: React.ReactNode;
   handleSubmitMessageFromUser: (e: React.FormEvent<HTMLFormElement>) => void;
   input: string;
-  isLoading: boolean;
+  generationIsLoading: boolean;
+  mutationIsLoading: boolean;
   stop: () => void;
   reload: () => void;
+  reloadAvailable: boolean;
 }) {
   const { t } = useTranslation("chat-playground");
 
@@ -36,11 +40,15 @@ export function ChatPlaygroundWrapper({
               {children}
               <div className="flex items-center space-x-2">
                 <Button
-                  disabled={isLoading || input.length === 0}
-                  className="relative px-8"
+                  disabled={
+                    generationIsLoading ||
+                    mutationIsLoading ||
+                    input.length === 0
+                  }
+                  className="relative pl-10 pr-10"
                 >
-                  {isLoading && (
-                    <div className="absolute left-3">
+                  {(generationIsLoading || mutationIsLoading) && (
+                    <div className="absolute left-4">
                       <Icons.spinner className="animate-spin" />
                     </div>
                   )}
@@ -49,17 +57,20 @@ export function ChatPlaygroundWrapper({
                 <Button
                   variant={"destructive"}
                   onClick={stop}
-                  disabled={!isLoading}
+                  disabled={!generationIsLoading}
                 >
                   {t("stop-button")}
                 </Button>
-                <Button
-                  variant={"secondary"}
-                  onClick={reload}
-                  disabled={isLoading}
-                >
-                  {t("reload-button")}
-                </Button>
+                {reloadAvailable && (
+                  <Button
+                    variant={"secondary"}
+                    onClick={reload}
+                    disabled={generationIsLoading}
+                  >
+                    <Icons.update className="mr-2 h-4 w-4" />
+                    {t("reload-button")}
+                  </Button>
+                )}
               </div>
             </form>
           </div>

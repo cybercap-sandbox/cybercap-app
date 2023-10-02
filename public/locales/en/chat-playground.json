@@ -7,5 +7,6 @@
     "model-selector-title": "Model",
     "user-badge": "You",
     "assistance-badge": "AI Assistant",
-    "create-session-button": "+ Chat Session"
+    "create-session-button": "+ Chat Session",
+    "reload-button": "Regenerate"
 }
