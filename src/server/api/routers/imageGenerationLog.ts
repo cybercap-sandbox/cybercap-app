@@ -6,7 +6,7 @@ import {
 } from "@/server/api/trpc";
 import { nanoid } from "ai";
 import { env } from "@/env.mjs";
-import { uploadImagesToBucket } from "@/utils/minio/file-uploader";
+import { saveImageInBucket } from "@/utils/minio/file-uploader";
 
 export const imageGenerationLogRouter = createTRPCRouter({
   saveUserRequest: publicProcedure
@@ -43,7 +43,11 @@ export const imageGenerationLogRouter = createTRPCRouter({
         name: `${input.imageGenerationRequestId}-${nanoid()}`,
       }));
       console.log(imagesWithNames);
-      uploadImagesToBucket(imagesWithNames, bucketName);
+      await saveImageInBucket({
+        image: imagesWithNames[0].image,
+        bucketName,
+        fileName: imagesWithNames[0].name,
+      });
 
       await ctx.prisma.generatedImages.createMany({
         data: input.imagesWithNames.map((generatedImage) => ({

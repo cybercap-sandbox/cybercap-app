@@ -6,6 +6,7 @@ import { useState } from "react";
 import type * as z from "zod";
 import { type imgGenFormSchema } from "@/components/openai-playground/image-promp-form";
 import { ImgGallery } from "@/components/openai-playground/image-gallery";
+import { useSaveImageRequest } from "@/hooks/saveImageRequest";
 
 export type GenerateImageParams = {
   prompt: string;
