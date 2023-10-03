@@ -19,6 +19,8 @@ export default function Home() {
   const [generatedImages, setGeneratedImages] = useState<
     (string | undefined)[]
   >([]);
+  const { saveUserRequest, isMutationLoading, saveGeneratedImages } =
+    useSaveImageRequest();
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {
       // console.log("pending");
@@ -28,13 +30,13 @@ export default function Home() {
       // console.log(error);
       setImgGenStatus("rejected");
     },
-    onSuccess: (data) => {
-      // console.log("success");
+    onSuccess: async (data) => {
       if (!data.response) return;
       setImgGenStatus("fulfilled");
-      const imgUrls = data.response?.map((d) => d.url);
-      if (!imgUrls) return;
-      setGeneratedImages((prev) => [...imgUrls, ...prev]);
+      const imgJson = data.response?.map((d) => d.b64_json!);
+      console.log(imgJson);
+      await saveGeneratedImages(imgJson);
+      // setGeneratedImages((prev) => [...imgUrls, ...prev]);
     },
   });
 
