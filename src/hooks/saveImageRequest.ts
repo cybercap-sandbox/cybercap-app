@@ -1,6 +1,9 @@
 import { api } from "@/utils/api";
+import { saveImageInBucket } from "@/utils/minio/file-uploader";
 import { useSession } from "next-auth/react";
+import { env } from "@/env.mjs";
 import { useState } from "react";
+import { nanoid } from "ai";
 
 export function useSaveImageRequest() {
   const [userRequestId, setUserRequestId] = useState<string | undefined>(
@@ -43,7 +46,7 @@ export function useSaveImageRequest() {
     setUserRequestId(userRequest.id);
   };
 
-  const saveGeneratedImages = async (images: string[]) => {
+  const uploadImagesToBucketAndSaveInfoInDb = async (images: string[]) => {
     if (userRequestId) {
       await saveGeneratedImagesMutation.mutateAsync({
         imageGenerationRequestId: userRequestId,
@@ -51,12 +54,13 @@ export function useSaveImageRequest() {
       });
     }
   };
+
   const isQueryLoading = session && getGeneratedImagesQuery.isLoading;
   const isMutationLoading =
     saveGeneratedImagesMutation.isLoading || saveUserRequestMutation.isLoading;
   return {
     saveUserRequest,
-    saveGeneratedImages,
+    saveGeneratedImages: uploadImagesToBucketAndSaveInfoInDb,
     isQueryLoading,
     isMutationLoading,
   };

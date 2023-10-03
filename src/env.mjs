@@ -28,6 +28,15 @@ export const env = createEnv({
 
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
+
+    MINIO_ACCESS_KEY: z.string().min(1),
+    MINIO_SECRET_KEY: z.string().min(1),
+    MINIO_DISTRIBUTED_MODE_ENABLED: z.boolean().optional(),
+
+    MINIO_ENDPOINT: z.string().min(1),
+    MINIO_PORT: z.number(),
+    MINIO_USE_SSL: z.boolean(),
+    MINIO_BUCKET_NAME: z.string().min(1),
   },
 
   /**
@@ -54,6 +63,16 @@ export const env = createEnv({
     AZURE_AD_TENANT_ID: process.env.AZURE_AD_TENANT_ID,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+
+    MINIO_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
+    MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
+    MINIO_DISTRIBUTED_MODE_ENABLED:
+      process.env.MINIO_DISTRIBUTED_MODE_ENABLED === "true",
+
+    MINIO_ENDPOINT: process.env.MINIO_ENDPOINT,
+    MINIO_PORT: Number(process.env.MINIO_PORT),
+    MINIO_USE_SSL: process.env.MINIO_USE_SSL === "true",
+    MINIO_BUCKET_NAME: process.env.MINIO_BUCKET_NAME,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
