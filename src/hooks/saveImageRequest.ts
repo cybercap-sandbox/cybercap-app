@@ -1,7 +1,5 @@
 import { api } from "@/utils/api";
-import { saveImageInBucket } from "@/utils/minio/file-uploader";
 import { useSession } from "next-auth/react";
-import { env } from "@/env.mjs";
 import { useState } from "react";
 import { nanoid } from "ai";
 
@@ -15,23 +13,34 @@ export function useSaveImageRequest() {
   const saveGeneratedImagesMutation =
     api.imageGenerationLog.saveGeneratedImages.useMutation();
 
-  const getGeneratedImagesQuery =
-    api.imageGenerationLog.getAllImagesGeneratedByUser.useQuery(
-      { numberOfImages: 10 },
-      {
-        enabled: !!session,
-      }
-    );
+  const saveGeneratedImageInBucketMutation =
+    api.imageGenerationLog.saveGeneratedImageIntoBucket.useMutation();
+  // const getImageFromBucketQuery =
+  //   api.imageGenerationLog.getGeneratedImageFromBucket.useMutation();
 
-  //   useEffect(() => {
-  //     if (!getGeneratedImagesQuery.data) return;
-  //     const requests = getGeneratedImagesQuery.data?.map(
-  //       (d) => d.generatedImages
-  //     );
-  //     if (!requests) return;
-  //     const images = requests.flat().map((d) => d.imageUrl);
-  //     setGeneratedImages(images);
-  //   }, [getGeneratedImagesQuery.data, setGeneratedImages]);
+  // const getGeneratedImagesQuery =
+  //   api.imageGenerationLog.getAllImagesGeneratedByUser.useQuery(
+  //     { numberOfImages: 10 },
+  //     {
+  //       enabled: !!session,
+  //     }
+  //   );
+
+  // useEffect(() => {
+  //   if (!getGeneratedImagesQuery.data) return;
+  //   const requests = getGeneratedImagesQuery.data?.map(
+  //     (d) => d.generatedImages
+  //   );
+  //   if (!requests) return;
+  //   const images = requests.flat().map((d) => d.imageUrl);
+  //   setGeneratedImages(images);
+  // }, [getGeneratedImagesQuery.data, setGeneratedImages]);
+
+  // useEffect(() => {
+  //   getGeneratedImgFromBucket("12345-fRF9pcz").then((img) => {
+  //     setGeneratedImages((prev) => [...prev, img]);
+  //   });
+  // }, []);
 
   const saveUserRequest = async ({
     value,
@@ -46,6 +55,21 @@ export function useSaveImageRequest() {
     setUserRequestId(userRequest.id);
   };
 
+  const saveGeneratedImageInBucket = async (fileUrl: string) => {
+    const fileName = `${nanoid()}.jpg`;
+
+    await saveGeneratedImageInBucketMutation.mutateAsync({
+      fileUrl,
+      fileName,
+    });
+  };
+
+  // const getGeneratedImgFromBucket = async (imageName: string) => {
+  //   const image = await getImageFromBucketMutation.mutateAsync({
+  //     imageName,
+  //   });
+  //   return image;
+  // };
   const uploadImagesToBucketAndSaveInfoInDb = async (images: string[]) => {
     if (userRequestId) {
       await saveGeneratedImagesMutation.mutateAsync({
@@ -55,13 +79,15 @@ export function useSaveImageRequest() {
     }
   };
 
-  const isQueryLoading = session && getGeneratedImagesQuery.isLoading;
+  // const isQueryLoading = session && getGeneratedImagesQuery.isLoading;
   const isMutationLoading =
     saveGeneratedImagesMutation.isLoading || saveUserRequestMutation.isLoading;
   return {
     saveUserRequest,
     saveGeneratedImages: uploadImagesToBucketAndSaveInfoInDb,
-    isQueryLoading,
+    saveGeneratedImageInBucket,
+    // getGeneratedImgFromBucket,
+    // isQueryLoading,
     isMutationLoading,
   };
 }

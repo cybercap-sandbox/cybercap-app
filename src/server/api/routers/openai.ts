@@ -51,7 +51,6 @@ export const openAiRouter = createTRPCRouter({
           prompt: input.prompt,
           n: input.numberOfImages,
           size: input.size,
-          response_format: "b64_json",
         })
         .then((response) => {
           // console.log(response);

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import pkg from "./next-i18next.config.js";
 const { i18n } = pkg;
 /**

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Icons } from "../icons";
 
 export function ImgGallery({ images }: { images: string[] }) {
+  console.log(images);
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {images.map((img, i) => (

@@ -6,7 +6,8 @@ import {
 } from "@/server/api/trpc";
 import { nanoid } from "ai";
 import { env } from "@/env.mjs";
-import { saveImageInBucket } from "@/utils/minio/file-uploader";
+import { getFileFromBucket, saveFileInBucket } from "@/utils/minio-management";
+const bucketName = env.MINIO_BUCKET_NAME;
 
 export const imageGenerationLogRouter = createTRPCRouter({
   saveUserRequest: publicProcedure
@@ -28,6 +29,37 @@ export const imageGenerationLogRouter = createTRPCRouter({
       });
     }),
 
+  saveGeneratedImageIntoBucket: publicProcedure
+    .input(
+      z.object({
+        fileUrl: z.string(),
+        fileName: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { fileUrl, fileName } = input;
+      console.log(fileUrl, fileName);
+      await saveFileInBucket({
+        fileUrl,
+        bucketName,
+        fileName,
+      });
+    }),
+
+  getGeneratedImageFromBucket: publicProcedure
+    .input(
+      z.object({
+        fileName: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const image = await getFileFromBucket({
+        bucketName,
+        fileName: input.fileName,
+      });
+      return image;
+    }),
+
   saveGeneratedImages: publicProcedure
     .input(
       z.object({
@@ -43,19 +75,20 @@ export const imageGenerationLogRouter = createTRPCRouter({
         name: `${input.imageGenerationRequestId}-${nanoid()}`,
       }));
       console.log(imagesWithNames);
-      await saveImageInBucket({
+      console.log(imagesWithNames[0].image);
+      await saveFileInBucket({
         image: imagesWithNames[0].image,
         bucketName,
         fileName: imagesWithNames[0].name,
       });
 
-      await ctx.prisma.generatedImages.createMany({
-        data: input.imagesWithNames.map((generatedImage) => ({
-          imageName: generatedImage.name,
-          imageBucketName: input.bucketName,
-          imageGenerationRequestId: input.imageGenerationRequestId,
-        })),
-      });
+      // await ctx.prisma.generatedImages.createMany({
+      //   data: input.imagesWithNames.map((generatedImage) => ({
+      //     imageName: generatedImage.name,
+      //     imageBucketName: input.bucketName,
+      //     imageGenerationRequestId: input.imageGenerationRequestId,
+      //   })),
+      // });
     }),
 
   getAllImagesGeneratedByUser: protectedProcedure
