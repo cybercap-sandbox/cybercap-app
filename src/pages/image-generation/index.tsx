@@ -18,6 +18,7 @@ export type GenerateImageParams = {
   numberOfImages: number;
   size: "256x256" | "512x512" | "1024x1024";
 };
+
 export default function Page(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
@@ -29,6 +30,7 @@ export default function Page(
   const [generatedImages, setGeneratedImages] = useState<
     (string | undefined)[]
   >([]);
+  const [skeletonCount, setSkeletonCount] = useState<number>(0);
 
   const { saveUserRequest, isMutationLoading, saveGeneratedImages } =
     useSaveImageRequest();
@@ -46,6 +48,7 @@ export default function Page(
       // get image urls from openai response
       const imgUrls = data.response?.map((d) => d.url!);
       // add new images to the top of the list to show them first
+      setSkeletonCount(0);
       setGeneratedImages((prev) => [...imgUrls, ...prev]);
       // save images to bucket and info to db
       await saveGeneratedImages(imgUrls);
@@ -54,6 +57,7 @@ export default function Page(
 
   const submitHandler = async (value: z.infer<typeof imgGenFormSchema>) => {
     if (imgGenStatus === "pending") return;
+    setSkeletonCount(value.n);
     //save user request to db and get id
     await saveUserRequest({ value });
 
@@ -79,9 +83,12 @@ export default function Page(
             <ImageGenerationPromptForm
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
               submitHandler={submitHandler}
-              isLoading={false}
+              isLoading={isMutating}
             />
-            <ImgGallery images={generatedImages as string[]} />
+            <ImgGallery
+              skeletonCount={skeletonCount}
+              images={generatedImages as string[]}
+            />
           </div>
         </main>
       </Layout>

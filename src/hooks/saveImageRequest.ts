@@ -1,12 +1,13 @@
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { nanoid } from "ai";
 
 export function useSaveImageRequest() {
   const [userRequestId, setUserRequestId] = useState<string | undefined>(
     undefined
   );
+  const imageFormat = "jpg";
   const { data: session } = useSession();
   const saveUserRequestMutation =
     api.imageGenerationLog.saveUserRequest.useMutation();
@@ -15,34 +16,27 @@ export function useSaveImageRequest() {
 
   const saveGeneratedImageInBucketMutation =
     api.imageGenerationLog.saveGeneratedImageIntoBucket.useMutation();
-  const imageFormat = "jpg";
 
   // const getImageFromBucketQuery =
   //   api.imageGenerationLog.getGeneratedImageFromBucket.useMutation();
 
-  // const getGeneratedImagesQuery =
-  //   api.imageGenerationLog.getAllImagesGeneratedByUser.useQuery(
-  //     { numberOfImages: 10 },
-  //     {
-  //       enabled: !!session,
-  //     }
-  //   );
+  const getGeneratedImagesQuery =
+    api.imageGenerationLog.getAllImagesGeneratedByUser.useQuery(
+      { numberOfImages: 10 },
+      {
+        enabled: !!session,
+      }
+    );
 
-  // useEffect(() => {
-  //   if (!getGeneratedImagesQuery.data) return;
-  //   const requests = getGeneratedImagesQuery.data?.map(
-  //     (d) => d.generatedImages
-  //   );
-  //   if (!requests) return;
-  //   const images = requests.flat().map((d) => d.imageUrl);
-  //   setGeneratedImages(images);
-  // }, [getGeneratedImagesQuery.data, setGeneratedImages]);
-
-  // useEffect(() => {
-  //   getGeneratedImgFromBucket("12345-fRF9pcz").then((img) => {
-  //     setGeneratedImages((prev) => [...prev, img]);
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (!getGeneratedImagesQuery.data) return;
+    const requests = getGeneratedImagesQuery.data?.map(
+      (d) => d.generatedImages
+    );
+    if (!requests) return;
+    const images = requests.flat().map((d) => d.imageName);
+    // setGeneratedImages(images);
+  }, [getGeneratedImagesQuery.data]);
 
   const saveUserRequest = async ({
     value,
@@ -55,16 +49,6 @@ export function useSaveImageRequest() {
       numberOfImages: value.n,
     });
     setUserRequestId(userRequest.id);
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const saveGeneratedImageInBucket = async (fileUrl: string) => {
-    const fileName = `${session?.user.id}-${nanoid()}.jpg`;
-
-    await saveGeneratedImageInBucketMutation.mutateAsync({
-      fileUrl,
-      fileName,
-    });
   };
 
   // const getGeneratedImgFromBucket = async (imageName: string) => {
