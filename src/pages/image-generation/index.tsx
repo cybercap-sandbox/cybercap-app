@@ -1,5 +1,5 @@
 import type * as z from "zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Head from "next/head";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 
@@ -12,7 +12,6 @@ import { Layout } from "@/components/layout";
 import { type imgGenFormSchema } from "@/components/openai-playground/image-promp-form";
 import { ImgGallery } from "@/components/openai-playground/image-gallery";
 import { useSaveImageRequest } from "@/hooks/saveImageRequest";
-import { testImg64 } from "@/data/img-test";
 
 export type GenerateImageParams = {
   prompt: string;
@@ -31,12 +30,8 @@ export default function Page(
     (string | undefined)[]
   >([]);
 
-  const {
-    saveUserRequest,
-    saveGeneratedImageInBucket,
-    saveGeneratedImages,
-    // getGeneratedImgFromBucket,
-  } = useSaveImageRequest();
+  const { saveUserRequest, isMutationLoading, saveGeneratedImages } =
+    useSaveImageRequest();
 
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {
@@ -45,45 +40,32 @@ export default function Page(
     onError: () => {
       setImgGenStatus("rejected");
     },
-    onSuccess: (data) => {
-      if (!data.response) return;
+    onSuccess: async (data) => {
       setImgGenStatus("fulfilled");
-      // const imgUrls = data.response?.map((d) => d.url!);
-      // await imgUrls.forEach(async (url) => {
-      //   await saveGeneratedImageInBucket(url);
-      // });
-      // setGeneratedImages((prev) => [...imgUrls, ...prev]);
+      if (!data.response) return;
+      // get image urls from openai response
+      const imgUrls = data.response?.map((d) => d.url!);
+      // add new images to the top of the list to show them first
+      setGeneratedImages((prev) => [...imgUrls, ...prev]);
+      // save images to bucket and info to db
+      await saveGeneratedImages(imgUrls);
     },
   });
 
-  const generateImg = ({
-    prompt,
-    numberOfImages,
-    size,
-  }: GenerateImageParams) => {
+  const submitHandler = async (value: z.infer<typeof imgGenFormSchema>) => {
     if (imgGenStatus === "pending") return;
+    //save user request to db and get id
+    await saveUserRequest({ value });
+
+    // call openai api
     generateImageMutation.mutate({
-      prompt,
-      numberOfImages,
-      size,
+      prompt: value.prompt,
+      numberOfImages: value.n,
+      size: value.size,
     });
   };
 
-  const submitHandler = async (value: z.infer<typeof imgGenFormSchema>) => {
-    // generateImg({
-    //   prompt: value.prompt,
-    //   numberOfImages: value.n,
-    //   size: value.size,
-    // });
-    await saveGeneratedImageInBucket(
-      "https://images.pexels.com/photos/1519088/pexels-photo-1519088.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-    );
-
-    //save user request and get id
-    // await saveUserRequest({ value });
-  };
-
-  // const isMutating = imgGenStatus === "pending" || isMutationLoading;
+  const isMutating = imgGenStatus === "pending" || isMutationLoading;
   return (
     <>
       <Head>

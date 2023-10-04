@@ -4,7 +4,6 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { nanoid } from "ai";
 import { env } from "@/env.mjs";
 import { getFileFromBucket, saveFileInBucket } from "@/utils/minio-management";
 const bucketName = env.MINIO_BUCKET_NAME;
@@ -63,32 +62,19 @@ export const imageGenerationLogRouter = createTRPCRouter({
   saveGeneratedImages: publicProcedure
     .input(
       z.object({
-        imageGenerationRequestId: z.string(),
-        generatedImages: z.array(z.string()),
+        userRequestId: z.string(),
+        imageNames: z.array(z.string()),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const bucketName = env.MINIO_BUCKET_NAME;
-
-      const imagesWithNames = input.generatedImages.map((img) => ({
-        image: img,
-        name: `${input.imageGenerationRequestId}-${nanoid()}`,
-      }));
-      console.log(imagesWithNames);
-      console.log(imagesWithNames[0].image);
-      await saveFileInBucket({
-        image: imagesWithNames[0].image,
-        bucketName,
-        fileName: imagesWithNames[0].name,
+      const { userRequestId } = input;
+      await ctx.prisma.generatedImages.createMany({
+        data: input.imageNames.map((imageName) => ({
+          imageName: imageName,
+          imageBucketName: bucketName,
+          imageGenerationRequestId: userRequestId,
+        })),
       });
-
-      // await ctx.prisma.generatedImages.createMany({
-      //   data: input.imagesWithNames.map((generatedImage) => ({
-      //     imageName: generatedImage.name,
-      //     imageBucketName: input.bucketName,
-      //     imageGenerationRequestId: input.imageGenerationRequestId,
-      //   })),
-      // });
     }),
 
   getAllImagesGeneratedByUser: protectedProcedure

@@ -15,6 +15,8 @@ export function useSaveImageRequest() {
 
   const saveGeneratedImageInBucketMutation =
     api.imageGenerationLog.saveGeneratedImageIntoBucket.useMutation();
+  const imageFormat = "jpg";
+
   // const getImageFromBucketQuery =
   //   api.imageGenerationLog.getGeneratedImageFromBucket.useMutation();
 
@@ -55,8 +57,9 @@ export function useSaveImageRequest() {
     setUserRequestId(userRequest.id);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const saveGeneratedImageInBucket = async (fileUrl: string) => {
-    const fileName = `${nanoid()}.jpg`;
+    const fileName = `${session?.user.id}-${nanoid()}.jpg`;
 
     await saveGeneratedImageInBucketMutation.mutateAsync({
       fileUrl,
@@ -70,13 +73,33 @@ export function useSaveImageRequest() {
   //   });
   //   return image;
   // };
-  const uploadImagesToBucketAndSaveInfoInDb = async (images: string[]) => {
-    if (userRequestId) {
-      await saveGeneratedImagesMutation.mutateAsync({
-        imageGenerationRequestId: userRequestId,
-        generatedImages: images,
+  const uploadImagesToBucketAndSaveInfoInDb = async (imageUrls: string[]) => {
+    console.log("imageUrls", imageUrls);
+    if (!userRequestId) return;
+    console.log("userRequestId", userRequestId);
+    // generate image names
+    const imagesInfo = imageUrls.map((imageUrl) => {
+      const fileName = `${session?.user.id}-${nanoid()}.${imageFormat}`;
+      return {
+        fileUrl: imageUrl,
+        fileName,
+      };
+    });
+
+    // upload images to bucket
+    for (const image of imagesInfo) {
+      await saveGeneratedImageInBucketMutation.mutateAsync({
+        fileUrl: image.fileUrl,
+        fileName: image.fileName,
       });
     }
+
+    // save image info in db
+    const imageNames = imagesInfo.map((info) => info.fileName);
+    await saveGeneratedImagesMutation.mutateAsync({
+      userRequestId,
+      imageNames,
+    });
   };
 
   // const isQueryLoading = session && getGeneratedImagesQuery.isLoading;
@@ -85,7 +108,6 @@ export function useSaveImageRequest() {
   return {
     saveUserRequest,
     saveGeneratedImages: uploadImagesToBucketAndSaveInfoInDb,
-    saveGeneratedImageInBucket,
     // getGeneratedImgFromBucket,
     // isQueryLoading,
     isMutationLoading,

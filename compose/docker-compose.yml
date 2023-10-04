@@ -18,6 +18,7 @@ services:
       # openssl rand -base64 32
       - NEXTAUTH_SECRET=dnupaXm2lOB00SJpuZbN2wuKplbjC4fUq5mOnZIqwkw=
       - NEXTAUTH_URL=http://localhost:3000
+
       - MINIO_ENDPOINT=minio
       - MINIO_PORT=9000
       - MINIO_ACCESS_KEY=minio
