@@ -1,7 +1,6 @@
 import * as Minio from "minio";
 import axios from "axios";
 import { env } from "@/env.mjs";
-import * as http from "http";
 
 const minioClient = new Minio.Client({
   endPoint: env.MINIO_ENDPOINT,
@@ -10,6 +9,18 @@ const minioClient = new Minio.Client({
   secretKey: env.MINIO_SECRET_KEY,
   useSSL: env.MINIO_USE_SSL ?? false,
 });
+
+// check if bucket exists and create it if not
+void (async () => {
+  await createBucketIfNotExists(env.MINIO_BUCKET_NAME);
+})();
+
+export async function createBucketIfNotExists(bucketName: string) {
+  const bucketExists = await minioClient.bucketExists(bucketName);
+  if (!bucketExists) {
+    await minioClient.makeBucket(bucketName);
+  }
+}
 
 export async function saveFileInBucket({
   fileUrl,
@@ -24,65 +35,17 @@ export async function saveFileInBucket({
   const response = await axios.get(fileUrl, {
     responseType: "arraybuffer",
   });
-  // console.log(response.data);
-  console.log("endPoint", env.MINIO_ENDPOINT);
-  console.log("port", env.MINIO_PORT);
-  console.log("accessKey", env.MINIO_ACCESS_KEY);
-  console.log("secretKey", env.MINIO_SECRET_KEY);
-  console.log("useSSL", env.MINIO_USE_SSL);
-  console.log("bucketName", bucketName);
-  console.log("fileName", fileName);
 
-  // // Upload image to MinIO
-  await minioClient.putObject(bucketName, fileName, response.data);
-
-  // Download image from URL
-  // const url = new URL(fileUrl);
-  // const options = {
-  //   hostname: url.hostname,
-  //   port: url.port,
-  //   path: url.pathname,
-  //   headers: {
-  //     "User-Agent": "Mozilla/5.0",
-  //   },
-  // };
-  // const request = http.get(options, (response) => {
-  //   const chunks: Buffer[] = [];
-  //   response.on("data", (chunk) => {
-  //     chunks.push(chunk);
-  //   });
-  //   response.on("end", () => {
-  //     const buffer = Buffer.concat(chunks);
-  //     // Upload image to MinIO
-  //     void minioClient.putObject(bucketName, fileName, buffer);
-  //   });
-  // });
-  // request.end();
+  // Upload image to MinIO
+  await minioClient.putObject(bucketName, fileName, response.data as Buffer);
 }
 
-export function getFileFromBucket({
+export async function getFileFromBucket({
   bucketName,
   fileName,
 }: {
   bucketName: string;
   fileName: string;
 }) {
-  return new Promise<string>((resolve, reject) => {
-    minioClient.getObject(bucketName, fileName, (err, dataStream) => {
-      if (err) {
-        reject(err);
-      }
-      const chunks: any[] = [];
-      dataStream?.on("data", (chunk) => {
-        chunks.push(chunk);
-      });
-      dataStream?.on("end", () => {
-        const image = Buffer.concat(chunks);
-        resolve(image.toString("base64"));
-      });
-      dataStream?.on("error", (err) => {
-        reject(err);
-      });
-    });
-  });
+  return await minioClient.getObject(bucketName, fileName);
 }
