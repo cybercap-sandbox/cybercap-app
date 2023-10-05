@@ -37,6 +37,7 @@ export function useSaveImageRequest(
     const imageNamesList = getGeneratedImagesQuery.data.map(
       (image) => image.imageName
     );
+    console.log("imageNamesList", imageNamesList);
     if (!imageNamesList) return;
     console.log("imageUrlsList", imageNamesList);
 
@@ -48,7 +49,6 @@ export function useSaveImageRequest(
           });
         })
       );
-      console.log("imagesFromBucket", imagesFromBucket);
 
       setGeneratedImages(imagesFromBucket);
     };

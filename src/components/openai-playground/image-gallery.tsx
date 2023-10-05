@@ -3,6 +3,10 @@ import Link from "next/link";
 import { Icons } from "../icons";
 import { useState } from "react";
 
+const getUrlToDownloadImage = (imgUrl: string) => {
+  return `/api/download_from_bucket/${encodeURIComponent(imgUrl)}`;
+};
+
 export function ImgGallery({
   images,
   skeletonCount,
@@ -28,8 +32,8 @@ export function ImgGallery({
         <div key={i} className="group relative h-fit w-fit ">
           <div className="absolute inset-0 hidden rounded-lg bg-black/50 group-hover:block">
             <Link
-              {...{ target: "_blank", rel: "noopener noreferrer" }}
-              href={img}
+              download={"image"}
+              href={`${getUrlToDownloadImage(img)}`}
               className="absolute inset-0 flex items-center justify-center gap-5 text-2xl font-bold text-white underline"
             >
               <Icons.download className="h-8 w-8" fill="white" />

@@ -62,6 +62,25 @@ export const imageGenerationLogRouter = createTRPCRouter({
       return image;
     }),
 
+  downloadGeneratedImageFromBucket: publicProcedure
+    .input(
+      z.object({
+        fileUrl: z.string(),
+        fileName: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      console.log;
+      const response = await fetch(input.fileUrl);
+      // return a new response but use 'content-disposition' to suggest saving the file to the user's computer
+      return new Response(response.body, {
+        headers: {
+          ...response.headers, // copy the previous headers
+          "content-disposition": `attachment; filename="${input.fileName}"`,
+        },
+      });
+    }),
+
   saveGeneratedImages: publicProcedure
     .input(
       z.object({
