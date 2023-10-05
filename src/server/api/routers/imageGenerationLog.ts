@@ -6,7 +6,6 @@ import {
 } from "@/server/api/trpc";
 import { env } from "@/env.mjs";
 import {
-  getFileFromBucket,
   getPresignedUrlForFile,
   saveFileInBucket,
 } from "@/utils/minio-management";
@@ -88,17 +87,19 @@ export const imageGenerationLogRouter = createTRPCRouter({
       })
     )
     .query(({ input, ctx }) => {
-      return ctx.prisma.imageGenerationRequest.findMany({
-        take: input.numberOfImages,
+      return ctx.prisma.generatedImages.findMany({
         orderBy: {
           createdAt: "desc",
         },
         where: {
-          userId: ctx.session.user.id,
+          ImageGenerationRequest: {
+            userId: ctx.session?.user.id,
+          },
         },
-        include: {
-          generatedImages: true,
+        select: {
+          imageName: true,
         },
+        take: input.numberOfImages,
       });
     }),
 });

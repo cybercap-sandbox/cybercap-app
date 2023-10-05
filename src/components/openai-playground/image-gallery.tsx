@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icons } from "../icons";
+import { useState } from "react";
 
 export function ImgGallery({
   images,
@@ -10,6 +11,13 @@ export function ImgGallery({
   skeletonCount: number;
 }) {
   const imgArray = Array.from({ length: skeletonCount }, (_, i) => i);
+  const defaultImgListWithStatus = images.map((img) => ({
+    url: img,
+    loaded: false,
+  }));
+  const [imgListWithStatus, setImgListWithStatus] = useState(
+    defaultImgListWithStatus
+  );
 
   return (
     <div className="grid  grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
