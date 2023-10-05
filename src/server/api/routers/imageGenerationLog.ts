@@ -5,7 +5,11 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import { env } from "@/env.mjs";
-import { getFileFromBucket, saveFileInBucket } from "@/utils/minio-management";
+import {
+  getFileFromBucket,
+  getPresignedUrlForFile,
+  saveFileInBucket,
+} from "@/utils/minio-management";
 const bucketName = env.MINIO_BUCKET_NAME;
 
 export const imageGenerationLogRouter = createTRPCRouter({
@@ -52,7 +56,7 @@ export const imageGenerationLogRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
-      const image = await getFileFromBucket({
+      const image = await getPresignedUrlForFile({
         bucketName,
         fileName: input.fileName,
       });

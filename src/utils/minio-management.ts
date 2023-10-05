@@ -49,3 +49,14 @@ export async function getFileFromBucket({
 }) {
   return await minioClient.getObject(bucketName, fileName);
 }
+
+export async function getPresignedUrlForFile({
+  bucketName,
+  fileName,
+}: {
+  bucketName: string;
+  fileName: string;
+}) {
+  const url = await minioClient.presignedGetObject(bucketName, fileName);
+  return url;
+}

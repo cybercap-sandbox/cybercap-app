@@ -1,9 +1,11 @@
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { nanoid } from "ai";
 
-export function useSaveImageRequest() {
+export function useSaveImageRequest(
+  setGeneratedImages: Dispatch<SetStateAction<(string | undefined)[]>>
+) {
   const [userRequestId, setUserRequestId] = useState<string | undefined>(
     undefined
   );
@@ -17,14 +19,16 @@ export function useSaveImageRequest() {
   const saveGeneratedImageInBucketMutation =
     api.imageGenerationLog.saveGeneratedImageIntoBucket.useMutation();
 
-  // const getImageFromBucketQuery =
-  //   api.imageGenerationLog.getGeneratedImageFromBucket.useMutation();
+  const getImageUrlFromBucket =
+    api.imageGenerationLog.getGeneratedImageFromBucket.useMutation();
 
   const getGeneratedImagesQuery =
     api.imageGenerationLog.getAllImagesGeneratedByUser.useQuery(
       { numberOfImages: 10 },
       {
         enabled: !!session,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
       }
     );
 
@@ -34,9 +38,26 @@ export function useSaveImageRequest() {
       (d) => d.generatedImages
     );
     if (!requests) return;
-    const images = requests.flat().map((d) => d.imageName);
-    // setGeneratedImages(images);
-  }, [getGeneratedImagesQuery.data]);
+    const imageUrlsList = requests.flat().map((image) => image.imageName);
+    console.log("imageUrlsList", imageUrlsList);
+
+    const fetchImages = async () => {
+      const imagesFromBucket = await Promise.all(
+        imageUrlsList.map((image) => {
+          return getImageUrlFromBucket.mutateAsync({
+            fileName: image,
+          });
+        })
+      );
+      console.log("imagesFromBucket", imagesFromBucket);
+
+      setGeneratedImages(imagesFromBucket);
+    };
+    void fetchImages();
+    // getImageUrlFromBucket is not a dependency because it is a mutation
+    // if we add it as a dependency, it will cause an infinite loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getGeneratedImagesQuery.data, setGeneratedImages]);
 
   const saveUserRequest = async ({
     value,
@@ -51,12 +72,13 @@ export function useSaveImageRequest() {
     setUserRequestId(userRequest.id);
   };
 
-  // const getGeneratedImgFromBucket = async (imageName: string) => {
-  //   const image = await getImageFromBucketMutation.mutateAsync({
-  //     imageName,
-  //   });
-  //   return image;
-  // };
+  const getGeneratedImgFromBucket = async (imageName: string) => {
+    const image = await getImageUrlFromBucket.mutateAsync({
+      fileName: imageName,
+    });
+    return image;
+  };
+
   const uploadImagesToBucketAndSaveInfoInDb = async (imageUrls: string[]) => {
     console.log("imageUrls", imageUrls);
     if (!userRequestId) return;
@@ -92,7 +114,7 @@ export function useSaveImageRequest() {
   return {
     saveUserRequest,
     saveGeneratedImages: uploadImagesToBucketAndSaveInfoInDb,
-    // getGeneratedImgFromBucket,
+    getGeneratedImgFromBucket,
     // isQueryLoading,
     isMutationLoading,
   };

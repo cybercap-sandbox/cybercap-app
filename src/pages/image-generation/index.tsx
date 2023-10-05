@@ -33,7 +33,7 @@ export default function Page(
   const [skeletonCount, setSkeletonCount] = useState<number>(0);
 
   const { saveUserRequest, isMutationLoading, saveGeneratedImages } =
-    useSaveImageRequest();
+    useSaveImageRequest(setGeneratedImages);
 
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {

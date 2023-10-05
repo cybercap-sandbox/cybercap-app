@@ -42,6 +42,13 @@ const config = {
         pathname: "/**/*",
         port: "",
       },
+      // for minio images
+      {
+        hostname: "minio",
+        protocol: "http",
+        pathname: "/**/*",
+        port: "9000",
+      },
     ],
   },
 };
