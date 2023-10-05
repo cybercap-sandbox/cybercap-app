@@ -10,7 +10,10 @@ import { ImageGenerationPromptForm } from "@/components/openai-playground/image-
 import { api } from "@/utils/api";
 import { Layout } from "@/components/layout";
 import { type imgGenFormSchema } from "@/components/openai-playground/image-promp-form";
-import { ImgGallery } from "@/components/openai-playground/image-gallery";
+import {
+  type ImageWithStatus,
+  ImgGallery,
+} from "@/components/openai-playground/image-gallery";
 import { useSaveImageRequest } from "@/hooks/saveImageRequest";
 
 export type GenerateImageParams = {
@@ -27,10 +30,9 @@ export default function Page(
   const [imgGenStatus, setImgGenStatus] = useState<
     "idle" | "pending" | "fulfilled" | "rejected"
   >("idle");
-  const [generatedImages, setGeneratedImages] = useState<
-    (string | undefined)[]
-  >([]);
-  const [skeletonCount, setSkeletonCount] = useState<number>(0);
+  const [generatedImages, setGeneratedImages] = useState<ImageWithStatus[]>(
+    [] as ImageWithStatus[]
+  );
 
   const { saveUserRequest, isMutationLoading, saveGeneratedImages } =
     useSaveImageRequest(setGeneratedImages);
@@ -47,9 +49,16 @@ export default function Page(
       if (!data.response) return;
       // get image urls from openai response
       const imgUrls = data.response?.map((d) => d.url!);
+      const imgListWithStatus: ImageWithStatus[] = imgUrls.map((url) => ({
+        url,
+        loaded: false,
+      }));
       // add new images to the top of the list to show them first
-      setSkeletonCount(0);
-      setGeneratedImages((prev) => [...imgUrls, ...prev]);
+      // and remove the skeleton images
+      setGeneratedImages((prev) => [
+        ...imgListWithStatus,
+        ...prev.filter((_) => _.url !== ""),
+      ]);
       // save images to bucket and info to db
       await saveGeneratedImages(imgUrls);
     },
@@ -57,7 +66,12 @@ export default function Page(
 
   const submitHandler = async (value: z.infer<typeof imgGenFormSchema>) => {
     if (imgGenStatus === "pending") return;
-    setSkeletonCount(value.n);
+    // setSkeletonCount(value.n);
+    const skeletonImages: ImageWithStatus[] = Array.from(
+      { length: value.n },
+      () => ({ url: "", loaded: false })
+    );
+    setGeneratedImages((prev) => [...skeletonImages, ...prev]);
     //save user request to db and get id
     await saveUserRequest({ value });
 
@@ -86,8 +100,8 @@ export default function Page(
               isLoading={isMutating}
             />
             <ImgGallery
-              skeletonCount={skeletonCount}
-              images={generatedImages as string[]}
+              images={generatedImages}
+              setImagesWithStatus={setGeneratedImages}
             />
           </div>
         </main>

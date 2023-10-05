@@ -2,9 +2,10 @@ import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { nanoid } from "ai";
+import { type ImageWithStatus } from "@/components/openai-playground/image-gallery";
 
 export function useSaveImageRequest(
-  setGeneratedImages: Dispatch<SetStateAction<(string | undefined)[]>>
+  setGeneratedImages: Dispatch<SetStateAction<ImageWithStatus[]>>
 ) {
   const [userRequestId, setUserRequestId] = useState<string | undefined>(
     undefined
@@ -49,8 +50,13 @@ export function useSaveImageRequest(
           });
         })
       );
-
-      setGeneratedImages(imagesFromBucket);
+      const imagesWithStatus: ImageWithStatus[] = imagesFromBucket.map(
+        (image) => ({
+          url: image,
+          loaded: false,
+        })
+      );
+      setGeneratedImages(imagesWithStatus);
     };
     void fetchImages();
 
