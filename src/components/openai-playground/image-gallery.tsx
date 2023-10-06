@@ -27,9 +27,9 @@ export function ImgGallery({
   };
 
   return (
-    <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid h-fit w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 ">
       {images.map((img, i) => (
-        <div key={i} className="group relative h-full w-full">
+        <div key={i} className="group relative ">
           {!img.loaded && <ImageSkeleton />}
           {img.loaded && <DownloadLayer imgUrl={img.url} />}
           {img.url && (
