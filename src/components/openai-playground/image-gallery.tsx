@@ -26,11 +26,13 @@ export function ImgGallery({
     );
   };
 
-  console.log(images);
   return (
-    <div className="grid min-h-[70vh] w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {images.map((img, i) => (
-        <div key={i} className="group relative h-full w-full">
+        <div
+          key={i}
+          className="group relative flex h-full w-full items-center justify-center"
+        >
           {!img.loaded && <ImageSkeleton />}
           {img.loaded && <DownloadLayer imgUrl={img.url} />}
           {img.url && (
@@ -67,7 +69,7 @@ export function DownloadLayer({ imgUrl }: { imgUrl: string }) {
 }
 export function ImageSkeleton() {
   return (
-    <div className="absolute aspect-square h-full w-full animate-pulse rounded-lg bg-gray-500">
+    <div className=" aspect-square h-full w-full animate-pulse rounded-lg bg-gray-500">
       &nbsp;
     </div>
   );

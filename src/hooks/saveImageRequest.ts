@@ -28,8 +28,6 @@ export function useSaveImageRequest(
       { numberOfImages: 9 },
       {
         enabled: !!session,
-        refetchOnMount: false,
-        refetchOnWindowFocus: false,
       }
     );
 
@@ -40,6 +38,7 @@ export function useSaveImageRequest(
     );
     if (!imageNamesList) return;
 
+    // get image urls from bucket
     const fetchImages = async () => {
       const imagesFromBucket = await Promise.all(
         imageNamesList.map((image) => {
@@ -48,6 +47,7 @@ export function useSaveImageRequest(
           });
         })
       );
+      // set images urls in state
       const imagesWithStatus: ImageWithStatus[] = imagesFromBucket.map(
         (image) => ({
           url: image,
@@ -86,9 +86,7 @@ export function useSaveImageRequest(
   };
 
   const uploadImagesToBucketAndSaveInfoInDb = async (imageUrls: string[]) => {
-    console.log("imageUrls", imageUrls);
     if (!userRequestId) return;
-    console.log("userRequestId", userRequestId);
     // generate image names
     const imagesInfo = imageUrls.map((imageUrl) => {
       const fileName = `${session?.user.id}-${nanoid()}.${imageFormat}`;
@@ -114,14 +112,13 @@ export function useSaveImageRequest(
     });
   };
 
-  // const isQueryLoading = session && getGeneratedImagesQuery.isLoading;
   const isMutationLoading =
     saveGeneratedImagesMutation.isLoading || saveUserRequestMutation.isLoading;
+
   return {
     saveUserRequest,
     saveGeneratedImages: uploadImagesToBucketAndSaveInfoInDb,
     getGeneratedImgFromBucket,
-    // isQueryLoading,
     isMutationLoading,
   };
 }

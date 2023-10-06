@@ -34,7 +34,7 @@ export default function Page(
     [] as ImageWithStatus[]
   );
 
-  const { saveUserRequest, isMutationLoading, saveGeneratedImages } =
+  const { saveUserRequest, saveGeneratedImages } =
     useSaveImageRequest(setGeneratedImages);
 
   const generateImageMutation = api.openai.generateImage.useMutation({
@@ -66,7 +66,8 @@ export default function Page(
 
   const submitHandler = async (value: z.infer<typeof imgGenFormSchema>) => {
     if (imgGenStatus === "pending") return;
-    // setSkeletonCount(value.n);
+    // add the same number of generated images as skeleton images to the top of the list
+    // while waiting for the response from openai
     const skeletonImages: ImageWithStatus[] = Array.from(
       { length: value.n },
       () => ({ url: "", loaded: false })
@@ -83,7 +84,7 @@ export default function Page(
     });
   };
 
-  const isMutating = imgGenStatus === "pending" || isMutationLoading;
+  const isLoading = imgGenStatus === "pending";
   return (
     <>
       <Head>
@@ -97,7 +98,7 @@ export default function Page(
             <ImageGenerationPromptForm
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
               submitHandler={submitHandler}
-              isLoading={isMutating}
+              isLoading={isLoading}
             />
             <ImgGallery
               images={generatedImages}

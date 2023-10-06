@@ -47,8 +47,6 @@ export async function getFileFromBucket({
   bucketName: string;
   fileName: string;
 }) {
-  console.log(minioClient);
-
   return await minioClient.getObject(bucketName, fileName);
 }
 

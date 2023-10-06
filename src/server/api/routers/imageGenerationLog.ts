@@ -40,7 +40,6 @@ export const imageGenerationLogRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const { fileUrl, fileName } = input;
-      console.log(fileUrl, fileName);
       await saveFileInBucket({
         fileUrl,
         bucketName,
@@ -69,8 +68,7 @@ export const imageGenerationLogRouter = createTRPCRouter({
         fileName: z.string(),
       })
     )
-    .mutation(async ({ input, ctx }) => {
-      console.log;
+    .mutation(async ({ input }) => {
       const response = await fetch(input.fileUrl);
       // return a new response but use 'content-disposition' to suggest saving the file to the user's computer
       return new Response(response.body, {
