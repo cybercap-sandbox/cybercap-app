@@ -99,10 +99,11 @@ export const imageGenerationLogRouter = createTRPCRouter({
       });
     }),
 
-  getAllImagesGeneratedByUser: protectedProcedure
+  getImagesGeneratedByUser: protectedProcedure
     .input(
       z.object({
         numberOfImages: z.number().default(10),
+        skip: z.number().default(0),
       })
     )
     .query(({ input, ctx }) => {
@@ -119,6 +120,7 @@ export const imageGenerationLogRouter = createTRPCRouter({
           imageName: true,
         },
         take: input.numberOfImages,
+        skip: input.skip,
       });
     }),
 });

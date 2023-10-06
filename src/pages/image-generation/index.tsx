@@ -101,7 +101,7 @@ export default function Page(
             />
             <ImgGallery
               images={generatedImages}
-              setImagesWithStatus={setGeneratedImages}
+              setImages={setGeneratedImages}
             />
           </div>
         </main>

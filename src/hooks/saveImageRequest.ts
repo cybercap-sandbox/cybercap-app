@@ -24,7 +24,7 @@ export function useSaveImageRequest(
     api.imageGenerationLog.getGeneratedImageFromBucket.useMutation();
 
   const getGeneratedImagesQuery =
-    api.imageGenerationLog.getAllImagesGeneratedByUser.useQuery(
+    api.imageGenerationLog.getImagesGeneratedByUser.useQuery(
       { numberOfImages: 9 },
       {
         enabled: !!session,
@@ -38,9 +38,7 @@ export function useSaveImageRequest(
     const imageNamesList = getGeneratedImagesQuery.data.map(
       (image) => image.imageName
     );
-    console.log("imageNamesList", imageNamesList);
     if (!imageNamesList) return;
-    console.log("imageUrlsList", imageNamesList);
 
     const fetchImages = async () => {
       const imagesFromBucket = await Promise.all(
@@ -64,6 +62,8 @@ export function useSaveImageRequest(
     // if we add it as a dependency, it will cause an infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getGeneratedImagesQuery.data, setGeneratedImages]);
+
+  // const handleLoadMoreImages = async (numOfImages: number) => {
 
   const saveUserRequest = async ({
     value,
