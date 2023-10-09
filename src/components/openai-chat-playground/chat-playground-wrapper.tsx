@@ -1,5 +1,5 @@
 import { useTranslation } from "next-i18next";
-import { Icons } from "@/components/icons";
+import { CircleNotch, ArrowsClockwise } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 
 export function ChatPlaygroundWrapper({
@@ -49,7 +49,7 @@ export function ChatPlaygroundWrapper({
                 >
                   {(generationIsLoading || mutationIsLoading) && (
                     <div className="absolute left-4">
-                      <Icons.spinner className="animate-spin" />
+                      <CircleNotch size={18} className="animate-spin" />
                     </div>
                   )}
                   {t("submit-button")}
@@ -67,7 +67,7 @@ export function ChatPlaygroundWrapper({
                     onClick={reload}
                     disabled={generationIsLoading}
                   >
-                    <Icons.update className="mr-2 h-4 w-4" />
+                    <ArrowsClockwise size={18} className="mr-2" />
                     {t("reload-button")}
                   </Button>
                 )}

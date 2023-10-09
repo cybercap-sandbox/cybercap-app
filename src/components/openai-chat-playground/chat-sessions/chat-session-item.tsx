@@ -1,6 +1,6 @@
 import { cn } from "@/utils/class-merge";
 import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/icons";
+import { Trash, Pen, Check } from "@phosphor-icons/react";
 import { api } from "@/utils/api";
 import { useContext, useRef, useState } from "react";
 import {
@@ -83,7 +83,7 @@ export function ChatSessionItem({
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={() => handleEditSession(chatSession.id)}
       >
-        <Icons.ok className="h-4 w-4" />
+        <Check size={16} />
       </span>
     </div>
   );
@@ -119,7 +119,7 @@ export function ChatSessionItem({
                   // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onClick={handleStartEditing}
                 >
-                  <Icons.pen className="h-4 w-4" />
+                  <Pen size={16} />
                 </span>
 
                 <span
@@ -127,7 +127,7 @@ export function ChatSessionItem({
                   // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onClick={() => handleDeleteSession(chatSession.id)}
                 >
-                  <Icons.trash className="h-4 w-4" />
+                  <Trash size={16} />
                 </span>
               </div>
             )}

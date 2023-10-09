@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CircleNotch } from "@phosphor-icons/react";
 import {
   Select,
   SelectContent,
@@ -10,7 +11,6 @@ import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
-import { Icons } from "../icons";
 
 const locales = [
   {
@@ -55,7 +55,7 @@ export function LocaleSelect() {
   };
 
   if (isLoading) {
-    return <Icons.spinner className="animate-spin" fill="black" />;
+    return <CircleNotch size={24} className="animate-spin" />;
   }
   if (status === "loading") {
     return null;

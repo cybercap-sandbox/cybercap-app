@@ -4,6 +4,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { i18n, useTranslation } from "next-i18next";
+import { CircleNotch } from "@phosphor-icons/react";
 import {
   Form,
   FormControl,
@@ -21,7 +22,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
 const sizeOptions = [
@@ -125,7 +125,7 @@ export function ImageGenerationPromptForm({
           )}
         />
         <Button disabled={isLoading} type="submit">
-          {isLoading && <Icons.spinner className="animate-spin" />}
+          {isLoading && <CircleNotch size={18} className="animate-spin" />}
           {t("submit-button")}
         </Button>
       </form>

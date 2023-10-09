@@ -2,9 +2,9 @@
 
 import { signOut, useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
+import { CircleNotch } from "@phosphor-icons/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/icons";
 import { getNameAbbreviation } from "@/utils/name-abbreviation";
 import { LoginLink } from "./login-link";
 
@@ -47,7 +47,7 @@ export function AuthStatus() {
       )}
       {status === "unauthenticated" && <LoginLink />}
       {status === "loading" && (
-        <Icons.spinner className="animate-spin" fill="black" />
+        <CircleNotch size={24} className="animate-spin" />
       )}
     </>
   );

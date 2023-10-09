@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { Icons } from "@/components/icons";
+import { CircleNotch } from "@phosphor-icons/react";
 import { ChatSessionItem } from "./chat-session-item";
 import { CreateChatSessionButton } from "./create-session-button";
 import { useContext } from "react";
@@ -20,7 +20,7 @@ export function ChatSessionBar({ stop }: { stop: () => void }) {
       {!isLoadingFromServer && <CreateChatSessionButton />}
       {isLoadingFromServer && (
         <div className="flex items-center justify-center">
-          <Icons.spinner className="animate-spin" fill="black" />
+          <CircleNotch size={24} className="animate-spin" />
         </div>
       )}
       <div className="h-full w-full overflow-auto">

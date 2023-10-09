@@ -1,4 +1,5 @@
 import { Trans } from "next-i18next";
+import { User } from "@phosphor-icons/react";
 import { Badge } from "@/components/ui/badge";
 import { Icons } from "@/components/icons";
 
@@ -9,7 +10,7 @@ export const formatChatMembers = (
   if (role === "user")
     formatted = (
       <>
-        <Icons.user className="h-4 w-4" />
+        <User size={16} />
         <Badge>
           <Trans ns="chat-playground" i18nKey="user-badge" />
         </Badge>

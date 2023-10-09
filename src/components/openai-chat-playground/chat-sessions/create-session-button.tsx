@@ -1,4 +1,4 @@
-import { Icons } from "@/components/icons";
+import { CircleNotch } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { useChatSession } from "@/hooks/useChatSession";
 import { useTranslation } from "react-i18next";
@@ -21,7 +21,7 @@ export function CreateChatSessionButton() {
       >
         {chatSessionIsLoading && (
           <div className="absolute left-5">
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" fill="black" />
+            <CircleNotch size={18} className="mr-2 animate-spin" />
           </div>
         )}
         {t("create-session-button")}

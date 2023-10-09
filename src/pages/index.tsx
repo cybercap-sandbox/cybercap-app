@@ -3,9 +3,9 @@ import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
+import { CircleNotch } from "@phosphor-icons/react";
 import { roboto_font } from "@/components/layout/logo";
 import { Layout } from "@/components/layout";
-import { Icons } from "@/components/icons";
 
 export default function Page(
   _props: InferGetStaticPropsType<typeof getStaticProps>
@@ -27,7 +27,7 @@ export default function Page(
           </h1>
           <p>{t("playground-description")}</p>
           {status === "loading" && (
-            <Icons.spinner className="h-5 w-5 animate-spin" />
+            <CircleNotch size={24} className="animate-spin" />
           )}
           {status === "authenticated" && (
             <>

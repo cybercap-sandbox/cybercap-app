@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Icons } from "../icons";
+import { Download } from "@phosphor-icons/react";
 
 export function ImgGallery({ images }: { images: string[] }) {
   return (
@@ -13,7 +13,7 @@ export function ImgGallery({ images }: { images: string[] }) {
               href={img}
               className="absolute inset-0 flex items-center justify-center gap-5 text-2xl font-bold text-white underline"
             >
-              <Icons.download className="h-8 w-8" fill="white" />
+              <Download size={32} />
               Download
             </Link>
           </div>
