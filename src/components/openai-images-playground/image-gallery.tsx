@@ -1,8 +1,8 @@
 import { type Dispatch, type SetStateAction } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Download } from "@phosphor-icons/react";
 import { useTranslation } from "next-i18next";
-import { Icons } from "../icons";
 import { cn } from "@/utils/class-merge";
 
 function getUrlToDownloadImage(imgUrl: string) {
@@ -58,7 +58,7 @@ export function DownloadLayer({ imgUrl }: { imgUrl: string }) {
         href={`${getUrlToDownloadImage(imgUrl)}`}
         className="absolute inset-0 flex items-center justify-center gap-5 text-2xl font-bold text-white underline"
       >
-        <Icons.download className="h-8 w-8" fill="white" />
+        <Download size={32} />
         {t("download-button")}
       </Link>
     </div>

@@ -2,9 +2,9 @@ import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 import { nanoid } from "ai";
-import { type ImageWithStatus } from "@/components/openai-playground/image-gallery";
+import { type ImageWithStatus } from "@/components/openai-images-playground/image-gallery";
 
-export function useSaveImageRequest(
+export function useImageGenerationRequest(
   setGeneratedImages: Dispatch<SetStateAction<ImageWithStatus[]>>
 ) {
   const [userRequestId, setUserRequestId] = useState<string | undefined>(
@@ -39,7 +39,7 @@ export function useSaveImageRequest(
     if (!imageNamesList) return;
 
     // get image urls from bucket
-    const fetchImages = async () => {
+    async function fetchImages() {
       const imagesFromBucket = await Promise.all(
         imageNamesList.map((image) => {
           return getImageUrlFromBucket.mutateAsync({
@@ -55,7 +55,7 @@ export function useSaveImageRequest(
           loaded: false,
         }));
       setGeneratedImages(imagesWithStatus);
-    };
+    }
     void fetchImages();
 
     // getImageUrlFromBucket is not a dependency because it is a mutation

@@ -3,7 +3,7 @@ import { openAiRouter } from "./routers/openai";
 import { openAiModels } from "./routers/openAiModels";
 import { userRouter } from "./routers/user";
 import { imageGenerationLogRouter } from "./routers/imageGenerationLog";
-
+import { chatSessionRouter } from "./routers/chatSessions";
 /**
  * This is the primary router for your server.
  *
@@ -14,6 +14,7 @@ export const appRouter = createTRPCRouter({
   openAiModels: openAiModels,
   user: userRouter,
   imageGenerationLog: imageGenerationLogRouter,
+  chatSession: chatSessionRouter,
 });
 
 // export type definition of API

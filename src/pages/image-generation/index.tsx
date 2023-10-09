@@ -5,16 +5,18 @@ import type { GetStaticProps, InferGetStaticPropsType } from "next";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import { useSession } from "next-auth/react";
 
-import { ImageGenerationPromptForm } from "@/components/openai-playground/image-promp-form";
+import { ImageGenerationPromptForm } from "@/components/openai-images-playground/image-promp-form";
 import { api } from "@/utils/api";
 import { Layout } from "@/components/layout";
-import { type imgGenFormSchema } from "@/components/openai-playground/image-promp-form";
+import { type imgGenFormSchema } from "@/components/openai-images-playground/image-promp-form";
 import {
   type ImageWithStatus,
   ImgGallery,
-} from "@/components/openai-playground/image-gallery";
-import { useSaveImageRequest } from "@/hooks/saveImageRequest";
+} from "@/components/openai-images-playground/image-gallery";
+import { useImageGenerationRequest } from "@/hooks/useImageGenerationRequest";
+import { LoginRequiredMessage } from "@/components/layout/login-required-message";
 
 export type GenerateImageParams = {
   prompt: string;
@@ -26,6 +28,7 @@ export default function Page(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
   const { t } = useTranslation("image-generation");
+  const { status } = useSession();
 
   const [imgGenStatus, setImgGenStatus] = useState<
     "idle" | "pending" | "fulfilled" | "rejected"
@@ -35,7 +38,7 @@ export default function Page(
   );
 
   const { saveUserRequest, saveGeneratedImages } =
-    useSaveImageRequest(setGeneratedImages);
+    useImageGenerationRequest(setGeneratedImages);
 
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {
@@ -94,17 +97,20 @@ export default function Page(
       </Head>
       <Layout>
         <main className="bg-new-red container flex items-center justify-center ">
-          <div className="mt-16 grid w-full grid-cols-1 gap-8 md:grid-cols-[300px_1fr]">
-            <ImageGenerationPromptForm
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              submitHandler={submitHandler}
-              isLoading={isLoading}
-            />
-            <ImgGallery
-              images={generatedImages}
-              setImages={setGeneratedImages}
-            />
-          </div>
+          {status === "authenticated" && (
+            <div className="mt-16 grid w-full grid-cols-1 gap-8 md:grid-cols-[300px_1fr]">
+              <ImageGenerationPromptForm
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                submitHandler={submitHandler}
+                isLoading={isLoading}
+              />
+              <ImgGallery
+                images={generatedImages}
+                setImages={setGeneratedImages}
+              />
+            </div>
+          )}
+          {status === "unauthenticated" && <LoginRequiredMessage />}
         </main>
       </Layout>
     </>
@@ -118,7 +124,7 @@ export const getStaticProps: GetStaticProps = async ({
   props: {
     ...(await serverSideTranslations(
       locale ?? defaultLocale ?? "en",
-      ["image-generation", "top-panel"],
+      ["image-generation", "top-panel", "common"],
       null,
       ["en", "fr"]
     )),

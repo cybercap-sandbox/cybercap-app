@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useTranslation } from "next-i18next";
+import { CircleNotch } from "@phosphor-icons/react";
 import { cn } from "@/utils/class-merge";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -43,8 +44,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         className="relative"
       >
         {isLoading.google && (
-          <div className="absolute left-5">
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" fill="black" />
+          <div className="absolute left-5 mr-2">
+            <CircleNotch size={18} className="animate-spin" />
           </div>
         )}
         <Icons.google className="mr-2 h-4 w-4" />
@@ -59,8 +60,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         className="relative"
       >
         {isLoading.microsoft && (
-          <div className="absolute left-5">
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" fill="black" />
+          <div className="absolute left-5 mr-2">
+            <CircleNotch size={18} className="animate-spin" />
           </div>
         )}
         <Icons.microsoft className="mr-2 h-4 w-4" />
