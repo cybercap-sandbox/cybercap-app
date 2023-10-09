@@ -5,9 +5,9 @@ import { useTranslation } from "next-i18next";
 import { Icons } from "../icons";
 import { cn } from "@/utils/class-merge";
 
-const getUrlToDownloadImage = (imgUrl: string) => {
+function getUrlToDownloadImage(imgUrl: string) {
   return `/api/download_from_bucket/${encodeURIComponent(imgUrl)}`;
-};
+}
 export type ImageWithStatus = { url: string; loaded: boolean };
 
 export function ImgGallery({
@@ -17,14 +17,14 @@ export function ImgGallery({
   images: ImageWithStatus[];
   setImages: Dispatch<SetStateAction<ImageWithStatus[]>>;
 }) {
-  const handleChangeImgLoadingStatus = (index: number) => {
+  function handleChangeImgLoadingStatus(index: number) {
     setImagesWithStatus((prev) =>
       prev.map((img, i) => {
         if (index === i) return { ...img, loaded: true };
         return img;
       })
     );
-  };
+  }
 
   return (
     <div className="grid h-fit w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 ">

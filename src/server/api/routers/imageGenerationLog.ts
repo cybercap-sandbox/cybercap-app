@@ -8,8 +8,8 @@ import { env } from "@/env.mjs";
 import {
   getPresignedUrlForFile,
   saveFileInBucket,
-} from "@/utils/minio-management";
-const bucketName = env.MINIO_BUCKET_NAME;
+} from "@/utils/s3-files-management";
+const bucketName = env.S3_BUCKET_NAME;
 
 export const imageGenerationLogRouter = createTRPCRouter({
   saveUserRequest: publicProcedure

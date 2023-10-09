@@ -48,12 +48,12 @@ export function useSaveImageRequest(
         })
       );
       // set images urls in state
-      const imagesWithStatus: ImageWithStatus[] = imagesFromBucket.map(
-        (image) => ({
-          url: image,
+      const imagesWithStatus: ImageWithStatus[] = imagesFromBucket
+        .filter((image) => !!image)
+        .map((image) => ({
+          url: image ?? "",
           loaded: false,
-        })
-      );
+        }));
       setGeneratedImages(imagesWithStatus);
     };
     void fetchImages();

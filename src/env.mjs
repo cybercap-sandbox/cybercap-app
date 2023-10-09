@@ -29,14 +29,13 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
 
-    MINIO_ENDPOINT: z.string().min(1),
-    MINIO_ACCESS_KEY: z.string().min(1),
-    MINIO_SECRET_KEY: z.string().min(1),
-    MINIO_BUCKET_NAME: z.string().min(1),
+    S3_ENDPOINT: z.string().min(1),
+    S3_ACCESS_KEY: z.string().min(1),
+    S3_SECRET_KEY: z.string().min(1),
+    S3_BUCKET_NAME: z.string().min(1),
 
-    MINIO_DISTRIBUTED_MODE_ENABLED: z.boolean().optional(),
-    MINIO_PORT: z.number().optional(),
-    MINIO_USE_SSL: z.boolean().optional(),
+    S3_PORT: z.string().optional(),
+    S3_USE_SSL: z.boolean().optional(),
   },
 
   /**
@@ -64,15 +63,13 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 
-    MINIO_ACCESS_KEY: process.env.MINIO_ACCESS_KEY,
-    MINIO_SECRET_KEY: process.env.MINIO_SECRET_KEY,
-    MINIO_DISTRIBUTED_MODE_ENABLED:
-      process.env.MINIO_DISTRIBUTED_MODE_ENABLED === "true",
-    MINIO_BUCKET_NAME: process.env.MINIO_BUCKET_NAME,
+    S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+    S3_SECRET_KEY: process.env.S3_SECRET_KEY,
+    S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
 
-    MINIO_ENDPOINT: process.env.MINIO_ENDPOINT,
-    MINIO_PORT: Number(process.env.MINIO_PORT),
-    MINIO_USE_SSL: process.env.MINIO_USE_SSL === "true",
+    S3_ENDPOINT: process.env.S3_ENDPOINT,
+    S3_PORT: process.env.S3_PORT,
+    S3_USE_SSL: process.env.S3_USE_SSL === "true",
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
