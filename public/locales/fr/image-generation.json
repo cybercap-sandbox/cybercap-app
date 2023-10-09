@@ -19,6 +19,6 @@
         "placeholder": "Sélectionnez une taille d'image"
       },
       "submit-button": "Soumettre",
-      "prompt-length-error": "L'invite doit comporter au moins 5 caractères"
-
+      "prompt-length-error": "L'invite doit comporter au moins 5 caractères",
+      "download-button": "Télécharger"
 }

@@ -3,7 +3,7 @@
 
 generator client {
     provider      = "prisma-client-js"
-    // engineType    = "binary"
+    // engineType    = "binary" // uncomment for docker deployment on Alpine 3.17 https://github.com/t3-oss/create-t3-app/issues/975
     binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -101,7 +101,8 @@ model ImageGenerationRequest {
 model GeneratedImages {
     id                       String                  @id @default(cuid())
     createdAt                DateTime                @default(now())
-    imageUrl                 String
+    imageName                String
+    imageBucketName          String
     ImageGenerationRequest   ImageGenerationRequest? @relation(fields: [imageGenerationRequestId], references: [id])
     imageGenerationRequestId String?
 }

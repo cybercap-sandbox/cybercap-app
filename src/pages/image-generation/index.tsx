@@ -5,14 +5,17 @@ import type { GetStaticProps, InferGetStaticPropsType } from "next";
 
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
+import { useSession } from "next-auth/react";
 
 import { ImageGenerationPromptForm } from "@/components/openai-images-playground/image-promp-form";
 import { api } from "@/utils/api";
 import { Layout } from "@/components/layout";
 import { type imgGenFormSchema } from "@/components/openai-images-playground/image-promp-form";
-import { ImgGallery } from "@/components/openai-images-playground/image-gallery";
+import {
+  type ImageWithStatus,
+  ImgGallery,
+} from "@/components/openai-images-playground/image-gallery";
 import { useImageGenerationRequest } from "@/hooks/useImageGenerationRequest";
-import { useSession } from "next-auth/react";
 import { LoginRequiredMessage } from "@/components/layout/login-required-message";
 
 export type GenerateImageParams = {
@@ -20,6 +23,7 @@ export type GenerateImageParams = {
   numberOfImages: number;
   size: "256x256" | "512x512" | "1024x1024";
 };
+
 export default function Page(
   _props: InferGetStaticPropsType<typeof getStaticProps>
 ) {
@@ -29,10 +33,12 @@ export default function Page(
   const [imgGenStatus, setImgGenStatus] = useState<
     "idle" | "pending" | "fulfilled" | "rejected"
   >("idle");
-  const [generatedImages, setGeneratedImages] = useState<
-    (string | undefined)[]
-  >([]);
-  const { saveUserRequest, isMutationLoading } = useImageGenerationRequest();
+  const [generatedImages, setGeneratedImages] = useState<ImageWithStatus[]>(
+    [] as ImageWithStatus[]
+  );
+
+  const { saveUserRequest, saveGeneratedImages } =
+    useImageGenerationRequest(setGeneratedImages);
 
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {
@@ -41,37 +47,47 @@ export default function Page(
     onError: () => {
       setImgGenStatus("rejected");
     },
-    onSuccess: (data) => {
-      if (!data.response) return;
+    onSuccess: async (data) => {
       setImgGenStatus("fulfilled");
+      if (!data.response) return;
+      // get image urls from openai response
       const imgUrls = data.response?.map((d) => d.url!);
-      setGeneratedImages((prev) => [...imgUrls, ...prev]);
+      const imgListWithStatus: ImageWithStatus[] = imgUrls.map((url) => ({
+        url,
+        loaded: false,
+      }));
+      // add new images to the top of the list to show them first
+      // and remove the skeleton images
+      setGeneratedImages((prev) => [
+        ...imgListWithStatus,
+        ...prev.filter((_) => _.url !== ""),
+      ]);
+      // save images to bucket and info to db
+      await saveGeneratedImages(imgUrls);
     },
   });
 
-  const generateImg = ({
-    prompt,
-    numberOfImages,
-    size,
-  }: GenerateImageParams) => {
-    if (imgGenStatus === "pending") return;
-    generateImageMutation.mutate({
-      prompt,
-      numberOfImages,
-      size,
-    });
-  };
   const submitHandler = async (value: z.infer<typeof imgGenFormSchema>) => {
-    generateImg({
+    if (imgGenStatus === "pending") return;
+    // add the same number of generated images as skeleton images to the top of the list
+    // while waiting for the response from openai
+    const skeletonImages: ImageWithStatus[] = Array.from(
+      { length: value.n },
+      () => ({ url: "", loaded: false })
+    );
+    setGeneratedImages((prev) => [...skeletonImages, ...prev]);
+    //save user request to db and get id
+    await saveUserRequest({ value });
+
+    // call openai api
+    generateImageMutation.mutate({
       prompt: value.prompt,
       numberOfImages: value.n,
       size: value.size,
     });
-    //save user request and get id
-    await saveUserRequest({ value });
   };
 
-  const isMutating = imgGenStatus === "pending" || isMutationLoading;
+  const isLoading = imgGenStatus === "pending";
   return (
     <>
       <Head>
@@ -86,9 +102,12 @@ export default function Page(
               <ImageGenerationPromptForm
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 submitHandler={submitHandler}
-                isLoading={isMutating}
+                isLoading={isLoading}
               />
-              <ImgGallery images={generatedImages as string[]} />
+              <ImgGallery
+                images={generatedImages}
+                setImages={setGeneratedImages}
+              />
             </div>
           )}
           {status === "unauthenticated" && <LoginRequiredMessage />}
