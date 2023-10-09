@@ -124,8 +124,12 @@ export function ImageGenerationPromptForm({
             </FormItem>
           )}
         />
-        <Button disabled={isLoading} type="submit">
-          {isLoading && <CircleNotch size={18} className="animate-spin" />}
+        <Button disabled={isLoading} type="submit" className="relative px-10">
+          {isLoading && (
+            <div className="absolute left-4">
+              <CircleNotch size={18} className="animate-spin" />
+            </div>
+          )}
           {t("submit-button")}
         </Button>
       </form>

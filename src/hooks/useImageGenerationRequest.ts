@@ -39,7 +39,7 @@ export function useImageGenerationRequest(
     if (!imageNamesList) return;
 
     // get image urls from bucket
-    const fetchImages = async () => {
+    async function fetchImages() {
       const imagesFromBucket = await Promise.all(
         imageNamesList.map((image) => {
           return getImageUrlFromBucket.mutateAsync({
@@ -55,7 +55,7 @@ export function useImageGenerationRequest(
           loaded: false,
         }));
       setGeneratedImages(imagesWithStatus);
-    };
+    }
     void fetchImages();
 
     // getImageUrlFromBucket is not a dependency because it is a mutation
