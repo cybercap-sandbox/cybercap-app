@@ -53,7 +53,6 @@ export const openAiRouter = createTRPCRouter({
           size: input.size,
         })
         .then((response) => {
-          // console.log(response);
           return {
             response: response?.data,
           };

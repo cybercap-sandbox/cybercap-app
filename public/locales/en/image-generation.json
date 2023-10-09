@@ -19,5 +19,6 @@
         "placeholder": "Select an image size"
       },
       "submit-button": "Submit",
-      "prompt-length-error": "Prompt must be at least 5 characters long"
+      "prompt-length-error": "Prompt must be at least 5 characters long",
+      "download-button": "Download"
 }
