@@ -25,6 +25,12 @@ services:
       - S3_SECRET_KEY=miniosecret
       - S3_BUCKET_NAME=cybercap-generated-images
       - S3_USE_SSL=false
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AZURE_AD_CLIENT_ID=${AZURE_AD_CLIENT_ID}
+      - AZURE_AD_CLIENT_SECRET=${AZURE_AD_CLIENT_SECRET}
+      - AZURE_AD_TENANT_ID=${AZURE_AD_TENANT_ID}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
     links:
       - db
       - minio
