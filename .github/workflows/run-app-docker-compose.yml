@@ -41,9 +41,7 @@ jobs:
         run: |
           cd compose
           docker compose up -d
-          docker logs -f compose-web-1
           sleep 30
-          docker ps
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           AZURE_AD_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
