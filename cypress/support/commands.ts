@@ -35,3 +35,17 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add("mockLogin", () => {
+  const sessionToken = "e2e-session-token";
+
+  cy.session("next-auth.session-token", () => {
+    cy.setCookie("next-auth.session-token", sessionToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      domain: "localhost",
+    });
+  });
+  cy.intercept("/api/auth/session").as("session");
+});

@@ -34,10 +34,10 @@ export default function Page(
           )}
           {status === "authenticated" && (
             <>
-              <p>
+              <p data-cy={"welcomeName"}>
                 {t("p-welcome-name")} {session?.user?.name}!
               </p>
-              <p>
+              <p data-cy={"welcomeEmail"}>
                 {t("p-welcome-email")} {session?.user?.email}.
               </p>
             </>
