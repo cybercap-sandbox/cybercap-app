@@ -14,12 +14,14 @@ export function AuthStatus() {
   const nameAbbreviation = getNameAbbreviation(session?.user?.name ?? "");
   return (
     <>
-      <div className="hidden lg:block" data-cy={"userInfo"}>
+      <div className="hidden lg:block" data-cy={"userInfoContainer"}>
         {status === "authenticated" && (
           <div className="flex items-center gap-2">
             <Avatar>
               <AvatarImage src={session?.user?.image ?? ""} />
-              <AvatarFallback>{nameAbbreviation}</AvatarFallback>
+              <AvatarFallback data-cy={"nameAbbreviation"}>
+                {nameAbbreviation}
+              </AvatarFallback>
             </Avatar>
             {session?.user?.name && (
               <span className="whitespace-nowrap text-lg">

@@ -11,15 +11,18 @@ import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
+import { useMediaQuery } from "react-responsive";
 
 const locales = [
   {
     value: "en",
     label: "English",
+    mobileLabel: "EN",
   },
   {
     value: "fr",
     label: "French",
+    mobileLabel: "FR",
   },
 ];
 
@@ -31,7 +34,7 @@ export function LocaleSelect() {
   const userInterfaceLanguageMutation =
     api.user.setInterfaceLanguage.useMutation();
   // load from the user's preferences
-
+  const isMobile = useMediaQuery({ maxWidth: 767 });
   const updateLocale = useCallback(
     async (newLocale: string) => {
       if (router.locale === newLocale) {
@@ -66,7 +69,7 @@ export function LocaleSelect() {
     }
     setIsLoading(false);
   };
-
+  console.log(isMobile);
   if (isLoading) {
     return <CircleNotch size={24} className="animate-spin" />;
   }
@@ -80,13 +83,13 @@ export function LocaleSelect() {
       onValueChange={onToggleLanguageClick}
       value={i18n.language}
     >
-      <SelectTrigger className="w-24" data-cy={"localeSelect"}>
+      <SelectTrigger className="w-fit" data-cy={"localeSelect"}>
         <SelectValue placeholder="Locale" />
       </SelectTrigger>
       <SelectContent>
         {locales.map((locale) => (
           <SelectItem key={locale.value} value={locale.value}>
-            {locale.label}
+            {isMobile ? locale.mobileLabel : locale.label}
           </SelectItem>
         ))}
       </SelectContent>
