@@ -38,6 +38,9 @@
 
 Cypress.Commands.add("loginWithMockUser", () => {
   const sessionToken = "e2e-session-token";
+  // reset and seed the database prior to creating cookie
+  cy.exec("npx prisma db push --force-reset");
+  cy.exec("npx prisma db seed");
 
   cy.session("next-auth.session-token", () => {
     cy.setCookie("next-auth.session-token", sessionToken, {

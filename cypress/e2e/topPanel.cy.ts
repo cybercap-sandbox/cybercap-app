@@ -3,6 +3,7 @@
 describe("Checks top panel content", () => {
   beforeEach(() => {
     cy.visit("/");
+    cy.url().should("include", "/");
   });
 
   it("Checks if logo is available and links to the main page", () => {
@@ -18,7 +19,7 @@ describe("Checks top panel content", () => {
     cy.dataCy("mobileLogo").should("be.visible");
   });
 
-  it("Checks if the proper menu is available", () => {
+  it("Checks if the menu is available for different screens", () => {
     cy.viewport("macbook-15");
     cy.dataCy("desktopNavbar").should("be.visible");
     cy.dataCy("mobileNavbar").should("not.be.visible");
@@ -36,7 +37,6 @@ describe("Checks top panel content", () => {
     const loginLink = "/auth/signin";
     // logout button and user info should not exist
     cy.dataCy("logoutButton").should("not.exist");
-    cy.dataCy("userInfo").should("not.be.visible");
 
     // login button should be visible and lead to the login page
     cy.dataCy("loginLink")
@@ -49,12 +49,34 @@ describe("Checks top panel content", () => {
     cy.url().should("include", loginLink);
   });
 
-  it("Checks if logout button and user info are available when user is authorized", () => {
+  it("Checks if logout button is available and works when user is authorized", () => {
     cy.loginWithMockUser();
 
     // login button should not exist
     cy.dataCy("loginLink").should("not.exist");
     // logout button and user info should be visible
     cy.dataCy("logoutButton").should("be.visible");
+
+    // log out
+    cy.dataCy("logoutButton").click();
+    cy.intercept("/api/auth/signout").as("signout");
+    cy.wait("@signout");
+
+    // check if the user is logged out
+    cy.dataCy("loginLink").should("be.visible");
+    // logout button and user info should not exist
+    cy.dataCy("logoutButton").should("not.exist");
+  });
+
+  it("Checks if user info is available when user is authorized", () => {
+    cy.loginWithMockUser();
+
+    // user info should be visible on desktop screen and not visible on mobile screen
+    cy.viewport("macbook-15");
+    cy.dataCy("userInfoContainer").should("exist");
+    cy.dataCy("nameAbbreviation").should("have.text", "TU");
+
+    cy.viewport("iphone-6");
+    cy.dataCy("userInfoContainer").should("not.be.visible");
   });
 });
