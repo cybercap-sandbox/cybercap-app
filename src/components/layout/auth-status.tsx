@@ -14,7 +14,7 @@ export function AuthStatus() {
   const nameAbbreviation = getNameAbbreviation(session?.user?.name ?? "");
   return (
     <>
-      <div className="hidden lg:block">
+      <div className="hidden lg:block" data-cy={"userInfo"}>
         {status === "authenticated" && (
           <div className="flex items-center gap-2">
             <Avatar>
@@ -37,6 +37,7 @@ export function AuthStatus() {
       </div>
       {status === "authenticated" && (
         <Button
+          data-cy={"logoutButton"}
           variant={"secondary"}
           onClick={() => signOut()}
           className=" transition-all hover:bg-secondary/80 hover:ring-1 hover:ring-primary

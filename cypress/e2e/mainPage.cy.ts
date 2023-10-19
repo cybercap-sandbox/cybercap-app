@@ -3,8 +3,8 @@
 describe("Checks main page content", () => {
   beforeEach(() => {
     cy.visit("/");
-    cy.get("[data-cy=welcomeHeader]").as("welcomeHeader");
-    cy.get("[data-cy=welcomeText]").as("welcomeText");
+    cy.dataCy("welcomeHeader").as("welcomeHeader");
+    cy.dataCy("welcomeText").as("welcomeText");
   });
 
   it("Checks if favicon is available", () => {
@@ -18,9 +18,6 @@ describe("Checks main page content", () => {
   });
 
   it("Checks main page content", () => {
-    cy.get("@welcomeHeader").then((welcomeHeader) => {
-      console.log(welcomeHeader.text());
-    });
     cy.get("@welcomeHeader").should("have.text", "Welcome to CyberCap");
 
     cy.get("@welcomeText").should(
@@ -32,13 +29,11 @@ describe("Checks main page content", () => {
 
 describe("Test authorized user", function () {
   beforeEach(function () {
-    cy.mockLogin();
-    cy.visit("/");
-    cy.wait("@session");
+    cy.loginWithMockUser();
 
     cy.fixture("testUser").as("user");
-    cy.get("[data-cy=welcomeName]").as("welcomeName");
-    cy.get("[data-cy=welcomeEmail]").as("welcomeEmail");
+    cy.dataCy("welcomeName").as("welcomeName");
+    cy.dataCy("welcomeEmail").as("welcomeEmail");
   });
 
   it("Shows user name and email on the main page", function () {

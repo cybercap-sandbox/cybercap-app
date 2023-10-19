@@ -80,7 +80,7 @@ export function LocaleSelect() {
       onValueChange={onToggleLanguageClick}
       value={i18n.language}
     >
-      <SelectTrigger className="w-24">
+      <SelectTrigger className="w-24" data-cy={"localeSelect"}>
         <SelectValue placeholder="Locale" />
       </SelectTrigger>
       <SelectContent>

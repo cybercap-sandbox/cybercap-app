@@ -9,7 +9,7 @@ async function main() {
     },
     update: {},
     create: {
-      name: "e2e",
+      name: "Test User",
       email: "e2e@example.com",
       sessions: {
         create: {

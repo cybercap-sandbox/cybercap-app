@@ -36,7 +36,7 @@
 //   }
 // }
 
-Cypress.Commands.add("mockLogin", () => {
+Cypress.Commands.add("loginWithMockUser", () => {
   const sessionToken = "e2e-session-token";
 
   cy.session("next-auth.session-token", () => {
@@ -48,4 +48,10 @@ Cypress.Commands.add("mockLogin", () => {
     });
   });
   cy.intercept("/api/auth/session").as("session");
+  cy.visit("/");
+  cy.wait("@session");
+});
+
+Cypress.Commands.add("dataCy", (value) => {
+  return cy.get(`[data-cy=${value}]`);
 });

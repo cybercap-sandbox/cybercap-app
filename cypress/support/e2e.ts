@@ -26,7 +26,8 @@ declare global {
        * Custom command to select DOM element by data-cy attribute.
        * @example cy.dataCy('greeting')
        */
-      loginByGoogleApi(): Chainable<JQuery<HTMLElement>>;
+      dataCy(value: string): Chainable<JQuery<HTMLElement>>;
+      loginWithMockUser(): Chainable<JQuery<HTMLElement>>;
     }
   }
 }
