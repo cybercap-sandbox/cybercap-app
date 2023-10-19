@@ -6,5 +6,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+    //set 20 seconds for working with slow or emulated environment
+    defaultCommandTimeout: 20000,
   },
 });

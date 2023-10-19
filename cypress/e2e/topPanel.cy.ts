@@ -74,6 +74,10 @@ describe("Checks top panel content", () => {
     // user info should be visible on desktop screen and not visible on mobile screen
     cy.viewport("macbook-15");
     cy.dataCy("userInfoContainer").should("exist");
+    cy.fixture("testUser").as("user");
+    cy.get("@user").then((user) => {
+      cy.dataCy("nameAbbreviation").should("have.text", user.abbreviatedName);
+    });
     cy.dataCy("nameAbbreviation").should("have.text", "TU");
 
     cy.viewport("iphone-6");

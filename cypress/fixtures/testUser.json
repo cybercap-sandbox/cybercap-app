@@ -1,5 +1,6 @@
 {
     "name": "Test User",
+    "abbreviatedName": "TU",
     "email": "e2e@example.com",
     "sessionToken": "e2e-session-token"
 }
