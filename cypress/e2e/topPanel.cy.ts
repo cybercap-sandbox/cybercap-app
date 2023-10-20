@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { type TestUser } from "./mainPage.cy";
+
 describe("Checks top panel content", () => {
   beforeEach(() => {
     cy.visit("/");
@@ -74,11 +76,9 @@ describe("Checks top panel content", () => {
     // user info should be visible on desktop screen and not visible on mobile screen
     cy.viewport("macbook-15");
     cy.dataCy("userInfoContainer").should("exist");
-    cy.fixture("testUser").as("user");
-    cy.get("@user").then((user) => {
+    cy.fixture<TestUser>("testUser").then((user) => {
       cy.dataCy("nameAbbreviation").should("have.text", user.abbreviatedName);
     });
-    cy.dataCy("nameAbbreviation").should("have.text", "TU");
 
     cy.viewport("iphone-6");
     cy.dataCy("userInfoContainer").should("not.be.visible");

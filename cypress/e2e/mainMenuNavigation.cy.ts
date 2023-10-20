@@ -1,12 +1,19 @@
 /// <reference types="cypress" />
 
+export type MenuItem = {
+  key: string;
+  englishLabel: string;
+  frenchLabel: string;
+  href: string;
+};
+
 describe("Checks top panel content", () => {
   beforeEach(() => {
     cy.visit("/");
     cy.url().should("include", "/");
   });
   it("Checks each link in the desktop main menu has the expected text and leads to the expected page", () => {
-    cy.fixture("mainMenu").then((mainMenu) => {
+    cy.fixture<MenuItem[]>("mainMenu").then((mainMenu) => {
       mainMenu.forEach((item) => {
         cy.dataCy(`desktop-navbar-${item.key}`)
           .should("have.attr", "href", item.href)
