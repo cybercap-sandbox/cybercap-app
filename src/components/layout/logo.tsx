@@ -16,10 +16,12 @@ export function Logo({
 }) {
   return (
     <Link
+      data-cy={"logoLink"}
       href={"/"}
       className="flex items-center justify-center duration-100 hover:scale-110"
     >
       <span
+        data-cy={"logoTitle"}
         className={cn(
           "font-bold ",
           variant === "white" ? "text-white" : "text-black",
