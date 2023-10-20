@@ -69,7 +69,6 @@ export function LocaleSelect() {
     }
     setIsLoading(false);
   };
-  console.log(isMobile);
   if (isLoading) {
     return <CircleNotch size={24} className="animate-spin" />;
   }
