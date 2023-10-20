@@ -60,5 +60,8 @@ jobs:
         run: |
           curl localhost:3000
 
+      - name: Install all dependencies to run browsers for end-to-end testing in local CI/CD simulations
+        if: ${{ env.ACT }}
+        run: sudo apt-get update && apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libnss3 libxss1 libasound2 libxtst6 xauth xvfb
       - name: Cypress run
         uses: cypress-io/github-action@v6
