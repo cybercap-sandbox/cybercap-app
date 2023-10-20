@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Test
 on:
   push:
     branches: [main]
@@ -19,7 +19,7 @@ env:
   GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
   GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 jobs:
-  build-and-deploy:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:

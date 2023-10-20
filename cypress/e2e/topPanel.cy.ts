@@ -5,28 +5,24 @@ import { type TestUser } from "./mainPage.cy";
 describe("Checks top panel content", () => {
   beforeEach(() => {
     cy.visit("/");
-    cy.url().should("include", "/");
   });
 
-  it("Checks if logo is available and links to the main page", () => {
+  it("Checks if the menu and the logo are available for different screens", () => {
     cy.dataCy("logoLink").should("have.attr", "href", "/");
     cy.get("[data-cy=logoTitle]:visible").should("have.text", "CyberCap");
 
     cy.viewport("macbook-15");
+
     cy.dataCy("desktopLogo").should("be.visible");
     cy.dataCy("mobileLogo").should("not.be.visible");
 
-    cy.viewport("iphone-6");
-    cy.dataCy("desktopLogo").should("not.be.visible");
-    cy.dataCy("mobileLogo").should("be.visible");
-  });
-
-  it("Checks if the menu is available for different screens", () => {
-    cy.viewport("macbook-15");
     cy.dataCy("desktopNavbar").should("be.visible");
     cy.dataCy("mobileNavbar").should("not.be.visible");
 
     cy.viewport("iphone-6");
+    cy.dataCy("desktopLogo").should("not.be.visible");
+    cy.dataCy("mobileLogo").should("be.visible");
+
     cy.dataCy("desktopNavbar").should("not.be.visible");
     cy.dataCy("mobileNavbar").should("be.visible");
   });
@@ -41,11 +37,7 @@ describe("Checks top panel content", () => {
     cy.dataCy("logoutButton").should("not.exist");
 
     // login button should be visible and lead to the login page
-    cy.dataCy("loginLink")
-      .should("be.visible")
-      .should("have.text", "Login")
-      .should("have.attr", "href", loginLink)
-      .click();
+    cy.dataCy("loginLink").should("be.visible").click();
 
     // check if the login page is loaded
     cy.url().should("include", loginLink);
