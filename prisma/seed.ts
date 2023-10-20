@@ -1,6 +1,35 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+export const sessionToken = "e2e-session-token";
 async function main() {
+  // Test user
+  const testUser = await prisma.user.upsert({
+    where: {
+      email: "e2e@example.com",
+    },
+    update: {},
+    create: {
+      name: "Test User",
+      email: "e2e@example.com",
+      sessions: {
+        create: {
+          expires: new Date("3000-01-01"),
+          sessionToken,
+        },
+      },
+      accounts: {
+        create: {
+          type: "oauth",
+          provider: "google",
+          providerAccountId: "e2e-google-id",
+          access_token: "e2e-google-access-token",
+          token_type: "Bearer",
+          refresh_token: "e2e-google-refresh-token",
+        },
+      },
+    },
+  });
+
   //Text models
   const gpt4 = await prisma.openAIModels.upsert({
     where: {

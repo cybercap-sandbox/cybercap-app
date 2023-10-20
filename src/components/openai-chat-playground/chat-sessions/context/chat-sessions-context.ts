@@ -15,7 +15,6 @@ export function chatSessionsReducer(
         };
       });
     case "addChatSessionAndMakeActive":
-      console.log(action.payload);
       const newSessions = [
         {
           ...action.payload,
@@ -29,7 +28,6 @@ export function chatSessionsReducer(
           };
         }),
       ];
-      console.log(newSessions);
       return newSessions;
 
     case "deleteChatSession": {
@@ -38,14 +36,12 @@ export function chatSessionsReducer(
       );
     }
     case "updateChatSession": {
-      console.log("updateChatSession");
       const newSessions = allChatSessions.map((session) => {
         if (session.id === action.payload.id) {
           return action.payload;
         }
         return session;
       });
-      console.log(newSessions);
       return newSessions;
     }
     case "addMessageToSession": {

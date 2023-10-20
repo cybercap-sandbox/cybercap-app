@@ -2,6 +2,8 @@ import * as React from "react";
 import { useTranslation } from "next-i18next";
 import Link from "next/link";
 import { cn } from "@/utils/class-merge";
+import { List } from "@phosphor-icons/react";
+
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -20,7 +22,8 @@ export function MobileNavbar() {
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger>
-            {t("mobile-menu-label")}
+            {/* {t("mobile-menu-label")} */}
+            <List size={24} />
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className=" w-fit p-2">

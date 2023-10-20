@@ -5,6 +5,7 @@ export function LoginLink() {
   const { t } = useTranslation("top-panel");
   return (
     <Link
+      data-cy={"loginLink"}
       className="inline-flex h-10 items-center justify-center
    rounded-md bg-secondary px-4 py-2 text-sm font-medium
     text-secondary-foreground 
