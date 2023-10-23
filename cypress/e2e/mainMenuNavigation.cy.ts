@@ -35,8 +35,9 @@ describe("Checks top panel content", () => {
     mainMenu.forEach((item) => {
       cy.dataCy(`desktop-navbar-${item.key}`)
         .should("have.attr", "href", item.href)
-        .should("have.text", item.englishLabel)
-        .click();
+        .should("have.text", item.englishLabel);
+      // click on the link
+      cy.dataCy(`desktop-navbar-${item.key}`).click();
 
       // check if the login page is loaded
       cy.url().should("include", item.href);
