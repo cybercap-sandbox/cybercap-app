@@ -4,9 +4,10 @@ RUN mkdir app
 
 COPY ../prisma ./app
 COPY ../package.json ./app
+COPY ../package-lock.json ./app
 WORKDIR /app
 
-RUN npm install
+RUN npm ci
 RUN npm install next -g
 
 CMD ["npm", "run", "dev"]
