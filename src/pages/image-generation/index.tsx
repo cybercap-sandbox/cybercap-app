@@ -46,12 +46,13 @@ export default function Page(
     },
     onError: () => {
       setImgGenStatus("rejected");
+      console.error("Error while generating images");
     },
     onSuccess: async (data) => {
       setImgGenStatus("fulfilled");
-      if (!data.response) return;
+      if (!data) return;
       // get image urls from openai response
-      const imgUrls = data.response?.map((d) => d.url!);
+      const imgUrls = data.map((d) => d.url!);
       const imgListWithStatus: ImageWithStatus[] = imgUrls.map((url) => ({
         url,
         loaded: false,

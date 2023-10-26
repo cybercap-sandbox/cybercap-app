@@ -47,7 +47,7 @@ describe("Test chat playground", function () {
     cy.intercept("POST", "/api/chat", "Hi! How can I help you?").as(
       "chatMessage"
     );
-    cy.dataCy("submitPromptButton").click();
+    cy.dataCy("submitChatPromptButton").click();
 
     // should be 1 message from the user and 1 from the assistant
     cy.wait("@chatMessage");

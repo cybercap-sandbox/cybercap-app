@@ -64,7 +64,11 @@ export function ImageGenerationPromptForm({
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8"
+        data-cy={"imageGenerationForm"}
+      >
         <FormField
           control={form.control}
           name="prompt"
@@ -72,7 +76,11 @@ export function ImageGenerationPromptForm({
             <FormItem>
               <FormLabel>{t("prompt.label")}</FormLabel>
               <FormControl>
-                <Input placeholder={t("prompt.placeholder")} {...field} />
+                <Input
+                  data-cy={"imageGenerationPromptInput"}
+                  placeholder={t("prompt.placeholder")}
+                  {...field}
+                />
               </FormControl>
               <FormDescription>{t("prompt.description")}</FormDescription>
               <FormMessage />
@@ -124,7 +132,12 @@ export function ImageGenerationPromptForm({
             </FormItem>
           )}
         />
-        <Button disabled={isLoading} type="submit" className="relative px-10">
+        <Button
+          disabled={isLoading}
+          type="submit"
+          className="relative px-10"
+          data-cy={"submitImageGenerationPromptButton"}
+        >
           {isLoading && (
             <div className="absolute left-4">
               <CircleNotch size={18} className="animate-spin" />

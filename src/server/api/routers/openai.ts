@@ -20,17 +20,20 @@ export const openAiRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
-      const response = await openai.images
-        .generate({
+      let response;
+      try {
+        response;
+        const obj = await openai.images.generate({
           prompt: input.prompt,
           n: input.numberOfImages,
           size: input.size,
-        })
-        .then((response) => {
-          return {
-            response: response?.data,
-          };
         });
+        response = obj.data;
+      } catch (error) {
+        console.error(error);
+        response = [] as OpenAI.Images.Image[];
+      }
+
       return response;
     }),
 });
