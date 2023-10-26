@@ -12,6 +12,7 @@ export function CreateChatSessionButton() {
   return (
     <>
       <Button
+        data-cy={"createChatSessionButton"}
         type="button"
         variant={"default"}
         className="relative w-full"

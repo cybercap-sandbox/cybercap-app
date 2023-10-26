@@ -77,11 +77,13 @@ export function ChatSessionItem({
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onKeyDown={handleKeyDown}
         ref={inputRef}
+        data-cy={"renameChatSessionInput"}
       />
       <span
         className="h-max rounded-none px-2 py-3 hover:bg-gray-200"
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={() => handleEditSession(chatSession.id)}
+        data-cy={"renameChatSessionSubmitButton"}
       >
         <Check size={16} />
       </span>
@@ -116,6 +118,7 @@ export function ChatSessionItem({
               <div className="flex items-center justify-center gap-1">
                 <span
                   className="h-max rounded-sm px-2 py-2 hover:bg-gray-200"
+                  data-cy={"renameChatSessionButton"}
                   // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onClick={handleStartEditing}
                 >
@@ -124,6 +127,7 @@ export function ChatSessionItem({
 
                 <span
                   className="h-max rounded-sm px-2 py-2 hover:bg-gray-200"
+                  data-cy={"deleteChatSessionButton"}
                   // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onClick={() => handleDeleteSession(chatSession.id)}
                 >
