@@ -27,7 +27,7 @@ describe("Test chat playground", function () {
     cy.dataCy("modelSelectItem").should("have.length", 5);
   });
 
-  it("Should create a new chat session when there is no active session and user clicks on the prompt textarea", function () {
+  it("Click on the prompt textarea should create a new chat session when there is no active session", function () {
     // wait for user chat sessions to load from the server
 
     cy.intercept(
@@ -40,7 +40,7 @@ describe("Test chat playground", function () {
     cy.dataCy("chatSessionItem").should("have.length", 1);
   });
 
-  it("Checks creation of a new chat session, sending a prompt to api and showing chat messages", function () {
+  it("Checks sending a prompt to api and showing chat messages", function () {
     cy.dataCy("promptInput").click();
     cy.dataCy("promptInput").type("Hello, how are you?");
 
