@@ -3,7 +3,7 @@ type IconProps = React.HTMLAttributes<SVGElement> & {
 };
 
 export const Icons = {
-  openapi: (props: IconProps) => (
+  openai: (props: IconProps) => (
     <svg
       viewBox="0 0 24 24"
       fill="currentColor"
