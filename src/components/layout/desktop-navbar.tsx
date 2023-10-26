@@ -24,9 +24,8 @@ export function DesktopNavbar() {
               data-cy={`desktop-navbar-${item.key}`}
               className={cn(
                 navigationMenuTriggerStyle(),
-                pathname === item.href
-                  ? " border  text-accent-foreground"
-                  : "text-accent-foreground"
+                "border text-accent-foreground",
+                pathname !== item.href && "border-transparent"
               )}
               href={item.href}
             >
