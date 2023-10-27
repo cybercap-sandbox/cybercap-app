@@ -36,6 +36,9 @@ export const env = createEnv({
 
     S3_PORT: z.string().optional(),
     S3_USE_SSL: z.boolean().optional(),
+
+    ROLLBAR_PUBLIC_CLIENT_TOKEN: z.string().min(1),
+    ROLLBAR_SERVER_TOKEN: z.string().min(1),
   },
 
   /**
@@ -70,6 +73,9 @@ export const env = createEnv({
     S3_ENDPOINT: process.env.S3_ENDPOINT,
     S3_PORT: process.env.S3_PORT,
     S3_USE_SSL: process.env.S3_USE_SSL === "true",
+
+    ROLLBAR_PUBLIC_CLIENT_TOKEN: process.env.ROLLBAR_PUBLIC_CLIENT_TOKEN,
+    ROLLBAR_SERVER_TOKEN: process.env.ROLLBAR_SERVER_TOKEN,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
