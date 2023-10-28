@@ -101,8 +101,7 @@ model ImageGenerationRequest {
 model GeneratedImages {
     id                       String                  @id @default(cuid())
     createdAt                DateTime                @default(now())
-    imageName                String
-    imageBucketName          String
+    imageUrl                 String
     ImageGenerationRequest   ImageGenerationRequest? @relation(fields: [imageGenerationRequestId], references: [id])
     imageGenerationRequestId String?
 }

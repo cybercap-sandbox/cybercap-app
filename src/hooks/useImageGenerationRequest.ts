@@ -1,8 +1,8 @@
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
-import { nanoid } from "ai";
 import { type ImageWithStatus } from "@/components/openai-images-playground/image-gallery";
+import type { PutBlobResult } from "@vercel/blob";
 
 export function useImageGenerationRequest(
   setGeneratedImages: Dispatch<SetStateAction<ImageWithStatus[]>>
@@ -10,60 +10,37 @@ export function useImageGenerationRequest(
   const [userRequestId, setUserRequestId] = useState<string | undefined>(
     undefined
   );
-  const imageFormat = "jpg";
   const { data: session } = useSession();
   const saveUserRequestMutation =
     api.imageGenerationLog.saveUserRequest.useMutation();
   const saveGeneratedImagesMutation =
     api.imageGenerationLog.saveGeneratedImages.useMutation();
 
-  const saveGeneratedImageInBucketMutation =
-    api.imageGenerationLog.saveGeneratedImageIntoBucket.useMutation();
-
-  const getImageUrlFromBucket =
-    api.imageGenerationLog.getGeneratedImageFromBucket.useMutation();
-
   const getGeneratedImagesQuery =
     api.imageGenerationLog.getImagesGeneratedByUser.useQuery(
       { numberOfImages: 9 },
       {
+        refetchOnWindowFocus: false,
         enabled: !!session,
       }
     );
 
   useEffect(() => {
     if (!getGeneratedImagesQuery.data) return;
-    const imageNamesList = getGeneratedImagesQuery.data.map(
-      (image) => image.imageName
+    const imageUrlList = getGeneratedImagesQuery.data.map(
+      (image) => image.imageUrl
     );
-    if (!imageNamesList) return;
+    if (!imageUrlList) return;
 
-    // get image urls from bucket
-    async function fetchImages() {
-      const imagesFromBucket = await Promise.all(
-        imageNamesList.map((image) => {
-          return getImageUrlFromBucket.mutateAsync({
-            fileName: image,
-          });
-        })
-      );
-      // set images urls in state
-      const imagesWithStatus: ImageWithStatus[] = imagesFromBucket
-        .filter((image) => !!image)
-        .map((image) => ({
-          url: image ?? "",
-          loaded: false,
-        }));
-      setGeneratedImages(imagesWithStatus);
-    }
-    void fetchImages();
-
-    // getImageUrlFromBucket is not a dependency because it is a mutation
-    // if we add it as a dependency, it will cause an infinite loop
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // set images urls in state
+    const imagesWithStatus: ImageWithStatus[] = imageUrlList
+      .filter((image) => !!image)
+      .map((image) => ({
+        url: image ?? "",
+        loaded: false,
+      }));
+    setGeneratedImages(imagesWithStatus);
   }, [getGeneratedImagesQuery.data, setGeneratedImages]);
-
-  // const handleLoadMoreImages = async (numOfImages: number) => {
 
   const saveUserRequest = async ({
     value,
@@ -78,38 +55,34 @@ export function useImageGenerationRequest(
     setUserRequestId(userRequest.id);
   };
 
-  const getGeneratedImgFromBucket = async (imageName: string) => {
-    const image = await getImageUrlFromBucket.mutateAsync({
-      fileName: imageName,
+  const uploadImageToVercel = async (fileUrl: string) => {
+    console.log("fileUrl", fileUrl);
+    const response = await fetch(`/api/files/upload`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ fileUrl }),
     });
-    return image;
+
+    console.log("response", response);
+    const newBlob = (await response.json()) as PutBlobResult;
+    return newBlob.url;
   };
 
-  const uploadImagesToBucketAndSaveInfoInDb = async (imageUrls: string[]) => {
+  const uploadImagesToStorageAndSaveInfoInDb = async (
+    imageTempUrls: string[]
+  ) => {
     if (!userRequestId) return;
-    // generate image names
-    const imagesInfo = imageUrls.map((imageUrl) => {
-      const fileName = `${session?.user.id}-${nanoid()}.${imageFormat}`;
-      return {
-        fileUrl: imageUrl,
-        fileName,
-      };
-    });
 
-    // upload images to bucket
-    for (const image of imagesInfo) {
-      await saveGeneratedImageInBucketMutation.mutateAsync({
-        fileUrl: image.fileUrl,
-        fileName: image.fileName,
+    // upload images and save info
+    for (const imageTempUrl of imageTempUrls) {
+      const fileUrl = await uploadImageToVercel(imageTempUrl);
+      await saveGeneratedImagesMutation.mutateAsync({
+        userRequestId,
+        imageUrl: fileUrl,
       });
     }
-
-    // save image info in db
-    const imageNames = imagesInfo.map((info) => info.fileName);
-    await saveGeneratedImagesMutation.mutateAsync({
-      userRequestId,
-      imageNames,
-    });
   };
 
   const isMutationLoading =
@@ -117,8 +90,7 @@ export function useImageGenerationRequest(
 
   return {
     saveUserRequest,
-    saveGeneratedImages: uploadImagesToBucketAndSaveInfoInDb,
-    getGeneratedImgFromBucket,
+    saveGeneratedImages: uploadImagesToStorageAndSaveInfoInDb,
     isMutationLoading,
   };
 }
