@@ -21,20 +21,23 @@ export default function Page(
       </Head>
       <Layout>
         <main className="bg-new-red container items-center justify-center">
-          <h1 className="py-5 text-center text-4xl font-bold">
+          <h1
+            className="py-5 text-center text-4xl font-bold"
+            data-cy={"welcomeHeader"}
+          >
             {t("welcome-header")}
             <span className={roboto_font.className}>CyberCap</span>
           </h1>
-          <p>{t("playground-description")}</p>
+          <p data-cy={"welcomeText"}>{t("playground-description")}</p>
           {status === "loading" && (
-            <CircleNotch size={24} className="animate-spin" />
+            <CircleNotch size={24} className="mt-3 animate-spin" />
           )}
           {status === "authenticated" && (
             <>
-              <p>
+              <p data-cy={"welcomeName"}>
                 {t("p-welcome-name")} {session?.user?.name}!
               </p>
-              <p>
+              <p data-cy={"welcomeEmail"}>
                 {t("p-welcome-email")} {session?.user?.email}.
               </p>
             </>

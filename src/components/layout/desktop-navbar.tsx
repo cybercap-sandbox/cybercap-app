@@ -21,6 +21,7 @@ export function DesktopNavbar() {
         {menuItems.map((item) => (
           <NavigationMenuItem key={item.href}>
             <Link
+              data-cy={`desktop-navbar-${item.key}`}
               className={cn(
                 navigationMenuTriggerStyle(),
                 pathname === item.href

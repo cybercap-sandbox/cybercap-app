@@ -17,6 +17,14 @@ services:
       # You can generate a new secret on the command line with:
       # openssl rand -base64 32
       - NEXTAUTH_SECRET=dnupaXm2lOB00SJpuZbN2wuKplbjC4fUq5mOnZIqwkw=
+
+      - NEXTAUTH_URL=http://localhost:3000
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AZURE_AD_CLIENT_ID=${AZURE_AD_CLIENT_ID}
+      - AZURE_AD_CLIENT_SECRET=${AZURE_AD_CLIENT_SECRET}
+      - AZURE_AD_TENANT_ID=${AZURE_AD_TENANT_ID}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
     links:
       - db
     depends_on:
