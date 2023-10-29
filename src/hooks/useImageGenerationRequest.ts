@@ -87,10 +87,12 @@ export function useImageGenerationRequest(
 
   const isMutationLoading =
     saveGeneratedImagesMutation.isLoading || saveUserRequestMutation.isLoading;
-
+  const initialLoadingGeneratedImages =
+    getGeneratedImagesQuery.isInitialLoading;
   return {
     saveUserRequest,
     saveGeneratedImages: uploadImagesToStorageAndSaveInfoInDb,
     isMutationLoading,
+    initialLoadingGeneratedImages,
   };
 }

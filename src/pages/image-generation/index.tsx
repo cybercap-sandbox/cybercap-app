@@ -1,5 +1,5 @@
 import type * as z from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 
@@ -37,8 +37,21 @@ export default function Page(
     [] as ImageWithStatus[]
   );
 
-  const { saveUserRequest, saveGeneratedImages } =
-    useImageGenerationRequest(setGeneratedImages);
+  const {
+    saveUserRequest,
+    saveGeneratedImages,
+    initialLoadingGeneratedImages,
+  } = useImageGenerationRequest(setGeneratedImages);
+
+  useEffect(() => {
+    if (initialLoadingGeneratedImages) {
+      setGeneratedImages(() => [
+        ...Array.from({ length: 3 }, () => ({ url: "", loaded: false })),
+      ]);
+    } else {
+      setGeneratedImages((prev) => [...prev.filter((_) => _.url !== "")]);
+    }
+  }, [initialLoadingGeneratedImages]);
 
   const generateImageMutation = api.openai.generateImage.useMutation({
     onMutate: () => {
