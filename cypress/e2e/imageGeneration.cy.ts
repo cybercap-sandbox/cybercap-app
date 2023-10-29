@@ -50,10 +50,9 @@ describe("Test image generation playground", function () {
     ]).as("imageGeneration");
 
     // save image to S3 bucket request
-    cy.intercept(
-      "POST",
-      "/api/trpc/imageGenerationLog.saveGeneratedImageIntoBucket*"
-    ).as("saveGeneratedImageIntoBucket");
+    cy.intercept("POST", "/api/files/upload*").as(
+      "saveGeneratedImageIntoBucket"
+    );
 
     // save image data to db request
     cy.intercept(
