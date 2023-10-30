@@ -10,7 +10,11 @@ export function ChatSessionBar({ stop }: { stop: () => void }) {
     AllChatSessionsContext
   );
   const sessionList = allChatSessions.map((chatSession) => (
-    <div key={chatSession.id} className=" w-full  overflow-auto">
+    <div
+      key={chatSession.id}
+      className="w-full  overflow-auto"
+      data-cy="chatSessionItem"
+    >
       <ChatSessionItem chatSession={chatSession} stop={stop} />
     </div>
   ));

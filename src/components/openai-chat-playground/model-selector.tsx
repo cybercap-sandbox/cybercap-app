@@ -42,6 +42,7 @@ export function ModelSelector({
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <Button
+            data-cy={"modelSelectButton"}
             variant="outline"
             role="combobox"
             aria-expanded={popoverOpen}
@@ -57,10 +58,14 @@ export function ModelSelector({
           <Command>
             <CommandInput placeholder="Search model..." />
             <CommandEmpty>No model found.</CommandEmpty>
-            <CommandGroup className="max-h-64 overflow-y-auto">
+            <CommandGroup
+              className="max-h-64 overflow-y-auto"
+              data-cy={"modelSelectList"}
+            >
               {modelsList.map((model) => (
                 <CommandItem
                   key={model}
+                  data-cy={`modelSelectItem`}
                   onSelect={(currentValue) => {
                     setCurrentModel(
                       currentValue === currentModel ? "" : currentValue

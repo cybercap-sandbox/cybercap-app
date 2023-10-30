@@ -12,6 +12,7 @@ export function MessagesContainer({ messages }: { messages: OpenAIMessage[] }) {
 
   const formattedMessages = messages.map((m) => (
     <div
+      data-cy={"chatMessage"}
       key={m.id}
       className="flex flex-col gap-5 rounded-lg border-2 px-1 py-3"
     >

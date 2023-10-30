@@ -39,8 +39,7 @@ jobs:
 
       - name: Launch services with docker compose
         run: |
-          cd compose
-          docker compose up -d
+          docker compose -f ./compose/docker-compose.yml up -d
           sleep 30
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

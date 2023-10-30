@@ -19,7 +19,7 @@ export const formatChatMembers = (
   else if (role === "assistant")
     formatted = (
       <>
-        <Icons.openapi className="h-4 w-4" />
+        <Icons.openai className="h-4 w-4" />
         <Badge>
           <Trans ns="chat-playground" i18nKey="assistance-badge" />
         </Badge>
@@ -27,7 +27,12 @@ export const formatChatMembers = (
     );
 
   return (
-    <div className="flex items-center justify-center gap-4">{formatted}</div>
+    <div
+      data-cy="chatMemberType"
+      className="flex items-center justify-center gap-4"
+    >
+      {formatted}
+    </div>
   );
 };
 

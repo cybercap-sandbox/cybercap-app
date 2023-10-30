@@ -147,6 +147,7 @@ export default function ChatPlayground() {
     >
       <div className="grid h-full grid-rows-[auto_200px_200px] gap-6 lg:grid-cols-[1fr_1fr_250px] lg:grid-rows-1">
         <Textarea
+          data-cy="promptInput"
           disabled={isLoading || isLoadingFromServer}
           value={input}
           onChange={handleInputChangeByUser}

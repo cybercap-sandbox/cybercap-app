@@ -51,9 +51,11 @@ describe("Checks top panel content", () => {
     // logout button and user info should be visible
     cy.dataCy("logoutButton").should("be.visible");
 
+    // wait for load to make sure the correct CSRF token is sent as a POST request to /api/auth/signout
+    cy.wait(3000);
     // log out
+    cy.intercept("/api/auth/csrf").as("signout");
     cy.dataCy("logoutButton").click();
-    cy.intercept("/api/auth/signout").as("signout");
     cy.wait("@signout");
 
     // check if the user is logged out

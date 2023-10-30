@@ -40,6 +40,7 @@ export function ChatPlaygroundWrapper({
               {children}
               <div className="flex items-center space-x-2">
                 <Button
+                  data-cy={"submitChatPromptButton"}
                   disabled={
                     generationIsLoading ||
                     mutationIsLoading ||
