@@ -17,14 +17,8 @@ services:
       # You can generate a new secret on the command line with:
       # openssl rand -base64 32
       - NEXTAUTH_SECRET=dnupaXm2lOB00SJpuZbN2wuKplbjC4fUq5mOnZIqwkw=
-      - NEXTAUTH_URL=http://localhost:3000
 
-      - S3_ENDPOINT=minio
-      - S3_PORT=9000
-      - S3_ACCESS_KEY=minio
-      - S3_SECRET_KEY=miniosecret
-      - S3_BUCKET_NAME=cybercap-generated-images
-      - S3_USE_SSL=false
+      - NEXTAUTH_URL=http://localhost:3000
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - AZURE_AD_CLIENT_ID=${AZURE_AD_CLIENT_ID}
       - AZURE_AD_CLIENT_SECRET=${AZURE_AD_CLIENT_SECRET}
@@ -33,10 +27,8 @@ services:
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
     links:
       - db
-      - minio
     depends_on:
       - db
-      - minio
   db:
     image: postgres:15.3
     container_name: postgres
@@ -49,13 +41,5 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
-  minio:
-    image: bitnami/minio:latest
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      - minio_storage:/data
 volumes:
   postgres-data:
-  minio_storage:
