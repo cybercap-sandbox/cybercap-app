@@ -44,6 +44,8 @@ jobs:
           AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          ROLLBAR_PUBLIC_CLIENT_TOKEN: ${{ secrets.ROLLBAR_PUBLIC_CLIENT_TOKEN }}
+          ROLLBAR_SERVER_TOKEN: ${{ secrets.ROLLBAR_SERVER_TOKEN }}
 
       - name: Create DB from schema
         run: npx prisma db push
