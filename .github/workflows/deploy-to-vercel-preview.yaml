@@ -31,8 +31,6 @@ jobs:
 
       - name: Create DB from schema
         run: npx prisma migrate deploy
-      - name: Seed DB
-        run: npx prisma db seed
 
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
