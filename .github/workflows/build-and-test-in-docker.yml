@@ -1,7 +1,7 @@
 name: Build and Test
 on:
   push:
-    branches: [main]
+    branches: "*"
 env:
   NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
   NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
