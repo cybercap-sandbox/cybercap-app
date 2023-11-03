@@ -14,10 +14,8 @@ env:
   ROLLBAR_PUBLIC_CLIENT_TOKEN: ${{ secrets.ROLLBAR_PUBLIC_CLIENT_TOKEN }}
   ROLLBAR_SERVER_TOKEN: ${{ secrets.ROLLBAR_SERVER_TOKEN }}
 on:
-  workflow_run:
-    workflows: [Build and Test]
-    types:
-      - completed
+  push:
+    branches: [main]
 jobs:
   Deploy-Preview:
     runs-on: ubuntu-latest
