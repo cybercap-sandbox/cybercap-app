@@ -6,18 +6,14 @@ env:
   NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
   NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
-  S3_PORT: ${{ secrets.S3_PORT }}
-  S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
-  S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
-  S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-  S3_USE_SSL: ${{ secrets.S3_USE_SSL }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   AZURE_AD_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
   AZURE_AD_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
   AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
   GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
   GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+  ROLLBAR_PUBLIC_CLIENT_TOKEN: ${{ secrets.ROLLBAR_PUBLIC_CLIENT_TOKEN }}
+  ROLLBAR_SERVER_TOKEN: ${{ secrets.ROLLBAR_SERVER_TOKEN }}
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -32,7 +28,7 @@ jobs:
           node-version: "18.x"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build app
         run: npm run build
@@ -48,6 +44,8 @@ jobs:
           AZURE_AD_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          ROLLBAR_PUBLIC_CLIENT_TOKEN: ${{ secrets.ROLLBAR_PUBLIC_CLIENT_TOKEN }}
+          ROLLBAR_SERVER_TOKEN: ${{ secrets.ROLLBAR_SERVER_TOKEN }}
 
       - name: Create DB from schema
         run: npx prisma db push
