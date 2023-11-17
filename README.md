@@ -1,28 +1,64 @@
-# Create T3 App
+## Overview
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This web app is designed to empower students with playground for prompt engineering using the OpenAI platform.
 
-## What's next? How do I make an app with this?
+Developed in collaboration with [CyberCap](https//cybercap.qc.ca/), a non-profit organization focused on the well-being of young people, the project aims to contribute to their social and professional integration into society.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Key Features
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- **Chat with AI Bot** Users can engage in conversations with an AI bot and the chat history is saved to a database.
+- **Image Generation** The app sends prompts to the OpenAI platform to generate images, which are then saved to a Vercel bucket.
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Tech Stack
 
-## Learn More
+- **Next.js**
+- **React.js**
+- **Typescript**
+- **Tailwind CSS**
+- **OpenAI API**
+- **Vercel AI SDK**
+- **Shadcn/ui**
+- **NextAuth.js**
+- **tRPC**
+- **Zod**
+- **React Hook Form**
+- **Prisma ORM**
+- **PostgreSQL**
+- **Vercel Blob Storage**
+- **i18next**
+- **GitHub Actions**
+- **Cypress**
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Authentication
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Implemented authentication with Google and Microsoft using NextAuth.js to provide a secure and seamless user experience.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Database
 
-## How do I deploy this?
+The database is modeled using Prisma ORM with PostgreSQL as the chosen database to ensure robust data management.
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Localization
+
+The app supports two languages, English and French, to enhance accessibility for a broader audience. i18next is employed for seamless implementation of localization.
+
+## CI/CD Implementation
+
+Three workflows are implemented for continuous integration and deployment
+
+1. **Testing with Cypress** Ensures the reliability of the application through end-to-end tests.
+2. **Preview on Vercel** Provides a preview of the app on Vercel for testing before deployment to production.
+3. **Deployment to Production** Automatically deploys the app to production on Vercel after successful testing and preview.
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env.local file
+
+- **DATABASE_URL** - The URL of the PostgreSQL database
+- **NEXTAUTH_SECRET** - A secret string used to encrypt the session
+- **NEXTAUTH_URL** - The URL of the app
+- **OPENAI_API_KEY** - The API key for the [OpenAI platform](https://platform.openai.com/docs/introduction)
+
+- **AZURE_AD_CLIENT_ID**, **AZURE_AD_CLIENT_SECRET**, **AZURE_AD_TENANT_ID** - The client ID, client secret, and tenant ID for the Microsoft app. More about this [here](https://next-auth.js.org/providers/azure-ad)
+- **GOOGLE_CLIENT_ID**, **GOOGLE_CLIENT_SECRET** - The client secret for the Google app. More about this [here](https://next-auth.js.org/providers/google)
+- **ACT** - A boolean value to run the workflow locally. [GitHub repo](https://github.com/nektos/act)
+- **ROLLBAR_PUBLIC_CLIENT_TOKEN**, **ROLLBAR_SERVER_TOKEN** - The server token for [Rollbar](https://rollbar.com)
